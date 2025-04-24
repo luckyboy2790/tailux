@@ -1,0 +1,18 @@
+.input-root,
+.input-wrapper {
+  @apply flex flex-col;
+}
+
+.form-input-base,
+.form-textarea-base {
+  @apply block w-full appearance-none bg-transparent tracking-wide outline-hidden transition-colors duration-200 ease-in-out placeholder:font-light focus:outline-hidden disabled:select-none;
+}
+
+.form-input,
+.form-textarea {
+  @apply rounded-lg border border-transparent px-3 py-2 text-start text-gray-800 placeholder:font-light placeholder:text-gray-600 dark:text-dark-100 dark:placeholder:text-dark-200;
+}
+
+.form-textarea {
+  @apply resize-none;
+}

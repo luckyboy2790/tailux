@@ -1,0 +1,11 @@
+.avatar-display {
+  @apply rounded-full text-base;
+}
+
+.avatar-image {
+  @apply object-cover object-center;
+}
+
+.avatar-dot {
+  @apply size-3.5 border-2 border-white dark:border-dark-700;
+}

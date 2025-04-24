@@ -1,0 +1,23 @@
+.skeleton {
+  @apply bg-gray-150 [--easing:var(--ease-elastic)] [--sk-color:#fff9] [--sk-to:translateX(100%)] [--sk-from:translateX(-100%)] rtl:[--sk-to:translateX(-100%)] rtl:[--sk-from:translateX(100%)] dark:bg-dark-600 dark:[--sk-color:var(--color-dark-400)];
+}
+
+.skeleton.animate-wave::before {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--sk-color),
+    transparent
+  );
+  animation: skeleton-wave 1.5s var(--easing) infinite;
+}
+
+@keyframes skeleton-wave {
+  0% {
+    transform: var(--sk-from);
+  }
+  50%,
+  100% {
+    transform: var(--sk-to);
+  }
+}

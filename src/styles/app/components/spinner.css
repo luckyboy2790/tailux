@@ -1,0 +1,11 @@
+.spinner-base {
+  @apply inline-flex size-7;
+}
+
+.spinner {
+  @apply border-3;
+}
+
+.spinner.is-elastic {
+  animation-timing-function: var(--ease-elastic);
+}

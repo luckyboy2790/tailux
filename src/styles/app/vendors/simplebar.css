@@ -1,0 +1,7 @@
+.simplebar-scrollbar:before {
+  @apply bg-gray-300/80! dark:bg-dark-400!;
+}
+
+.simplebar-content-wrapper {
+  @apply outline-hidden;
+}

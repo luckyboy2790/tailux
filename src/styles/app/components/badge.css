@@ -1,0 +1,9 @@
+.badge-base,
+.tag-base {
+  @apply inline-flex items-center justify-center align-baseline font-medium leading-none tracking-wide;
+}
+
+.badge,
+.tag {
+  @apply rounded-sm px-2 py-1 text-xs;
+}

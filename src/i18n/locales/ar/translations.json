@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "dashboards": {
+      "dashboards": "لوحات التحكم",
+      "home": "الرئيسية"
+    },
+    "settings": {
+      "settings": "الإعدادات",
+      "general": "عام",
+      "appearance": "المظهر"
+    }
+  }
+}

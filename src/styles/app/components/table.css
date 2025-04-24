@@ -1,0 +1,28 @@
+.table.is-hoverable
+  > .table-tbody
+  > .table-tr:hover:not(.row-selected)
+  > .table-td,
+.table.is-zebra > .table-tbody > .table-tr:nth-child(even) > .table-td {
+  @apply bg-gray-100 dark:bg-surface-2/50;
+}
+
+.table-td,
+.table-th {
+  @apply whitespace-nowrap px-4 py-3 sm:px-5;
+}
+
+.table.is-sticky .table-thead {
+  @apply sticky top-0 z-3;
+}
+
+.table.is-dense > .table-tbody > .table-tr > .table-td {
+  @apply px-2 py-1.5;
+}
+
+.table.is-dense > .table-thead > .table-tr > .table-th {
+  @apply px-2;
+}
+
+.table-th {
+  @apply uppercase;
+}

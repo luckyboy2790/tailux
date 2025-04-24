@@ -1,0 +1,31 @@
+/* Vendors Styles */
+@import "./vendors/simplebar.css";
+@import "./vendors/datepicker.css";
+@import "./vendors/quill.css";
+@import "./vendors/filepond.css";
+@import "./vendors/sonner.css";
+@import "./vendors/apexchart.css";
+
+/* Forms Styles */
+@import "./forms/input.css";
+@import "./forms/select.css";
+@import "./forms/range.css";
+@import "./forms/checkbox.css";
+@import "./forms/radio.css";
+@import "./forms/switch.css";
+@import "./forms/swap.css";
+
+/* Components Styles */
+@import "./components/steps.css";
+@import "./components/timeline.css";
+@import "./components/pagination.css";
+@import "./components/table.css";
+@import "./components/button.css";
+@import "./components/badge.css";
+@import "./components/spinner.css";
+@import "./components/progress.css";
+@import "./components/circlebar.css";
+@import "./components/avatar.css";
+@import "./components/mask.css";
+@import "./components/skeleton.css";
+@import "./components/scrollShadow.css";

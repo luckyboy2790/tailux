@@ -1,0 +1,98 @@
+.apexcharts-text {
+  @apply fill-current font-sans! text-gray-500 dark:text-dark-200;
+}
+
+.apexcharts-text.apexcharts-yaxis-label,
+.apexcharts-text.apexcharts-xaxis-label {
+  @apply fill-current! text-gray-400 dark:text-dark-300;
+}
+
+.apexcharts-legend-text {
+  @apply text-gray-500! dark:text-dark-200!;
+}
+
+.apexcharts-tooltip {
+  @apply border-gray-150! bg-white/[.85]! text-gray-700!
+     shadow-none! dark:border-dark-600! dark:bg-dark-700/[.85]! dark:text-dark-50!;
+}
+
+.apexcharts-tooltip-title {
+  @apply border-gray-150!  bg-gray-150! dark:border-transparent! dark:bg-dark-900!;
+}
+
+.apexcharts-xaxistooltip,
+.apexcharts-yaxistooltip {
+  @apply rounded-sm border-gray-300! bg-gray-150! text-gray-600! dark:border-dark-600!
+     dark:bg-dark-900! dark:text-dark-100!;
+}
+
+.apexcharts-xaxistooltip:before {
+  @apply border-b-current! text-gray-300 dark:text-dark-600!;
+}
+
+.apexcharts-xaxistooltip:after {
+  @apply border-b-current! text-gray-150 dark:text-dark-900;
+}
+
+.apexcharts-yaxistooltip:before {
+  @apply border-l-current! text-gray-300 dark:text-dark-600;
+}
+
+.apexcharts-yaxistooltip:after {
+  @apply border-l-current! text-gray-150 dark:text-dark-900;
+}
+
+.apexcharts-canvas .apexcharts-heatmap-rect,
+.apexcharts-canvas .apexcharts-xaxis-tick,
+.apexcharts-canvas line {
+  @apply stroke-current! text-gray-200 dark:text-dark-500;
+}
+
+.apexcharts-canvas .apexcharts-marker {
+  @apply stroke-current! text-gray-150 dark:text-dark-800;
+}
+
+.apexcharts-canvas .apexcharts-radialbar-track .apexcharts-radialbar-area {
+  @apply stroke-current! text-gray-150 dark:text-dark-900;
+}
+
+.apexcharts-canvas .apexcharts-datalabels-group .apexcharts-datalabel-label {
+  @apply fill-gray-600 font-sans dark:fill-dark-100;
+}
+
+.apexcharts-canvas .apexcharts-datalabels-group .apexcharts-datalabel-value,
+.apexcharts-canvas .apexcharts-datalabels .apexcharts-datalabel {
+  @apply fill-gray-500 font-sans dark:fill-dark-200;
+}
+
+.apexcharts-canvas .apexcharts-radar-series polygon {
+  @apply fill-gray-100 stroke-gray-200 dark:fill-dark-800 dark:stroke-dark-600;
+}
+
+.apexcharts-canvas .apexcharts-pie .apexcharts-pie-series .apexcharts-pie-area {
+  stroke: none;
+}
+
+.apexcharts-canvas line[stroke="transparent"] {
+  @apply hidden;
+}
+
+.apexcharts-menu {
+  @apply rounded-sm! border-gray-150! bg-white! dark:border-dark-500! dark:bg-dark-700!;
+}
+
+.apexcharts-menu .apexcharts-menu-item:hover {
+  @apply bg-gray-100! dark:bg-dark-600!;
+}
+
+.ax-transparent-gridline .apexcharts-gridline {
+  stroke: transparent !important;
+}
+
+.ax-rounded-b-lg .apexcharts-svg {
+  @apply rounded-b-lg;
+}
+
+.apexcharts-legend-marker {
+  @apply ltr:mr-2! rtl:ml-2!;
+}

@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "dashboards": {
+      "dashboards": "Tablero",
+      "home": "Inicio"
+    },
+    "settings": {
+      "settings": "Configuración",
+      "general": "General",
+      "appearance": "Apariencia"
+    },
+    "purchase": {
+      "purchase": "Compra",
+      "purchase_list": "Lista de Compras",
+      "add_purchase": "Nueva Compra",
+      "pending": "Compras pendientes",
+      "order": "Órdenes de compra"
+    },
+    "sale": {
+      "sale": "Venta",
+      "sale_list": "Lista de Ventas"
+    },
+    "payment": {
+      "pending": "Pagos pendientes",
+      "concurrent_payments": "Pagos concurrentes"
+    },
+    "product": {
+      "product": "Producto"
+    },
+    "order": {
+      "received": "Pedidos recibidos"
+    },
+    "report": {
+      "report": "Reporte",
+      "overview_chart": "Resumen",
+      "company_chart": "Configuración de la Empresa",
+      "store_chart": "Gráfico de la tienda",
+      "product_quantity_alert": "Alerta Cant. Producto",
+      "product_expiry_alert": "Alerta Caducidad Producto",
+      "expired_purchases_report": "Facturas Vencidas",
+      "product_report": "Reportes Productos",
+      "sales_report": "Reporte de Ventas",
+      "purchases_report": "Reporte de Compras",
+      "payment_report": "Reporte de Pagos",
+      "income_report": "Reporte de Ingresos",
+      "customers_report": "Reporte de Clientes",
+      "suppliers_report": "Reporte de Proveedores",
+      "users_report": "Reportes de Usuarios"
+    },
+    "people": {
+      "people": "Personas",
+      "customer": "Cliente",
+      "supplier": "Proveedore",
+      "user": "Usuario"
+    },
+    "setting": {
+      "setting": "Configuracion",
+      "company": "Empresa",
+      "store": "Tienda",
+      "site_status": "Estado del sitio"
+    },
+    "advanced_delete": {
+      "advanced_delete": "Eliminación avanzada"
+    }
+  }
+}

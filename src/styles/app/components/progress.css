@@ -1,0 +1,38 @@
+.progress-rail {
+  @apply relative flex h-2 w-full overflow-hidden rounded-full [--p-from:translateX(-100%)] [--p-to:translateX(0)] rtl:[--p-from:translateX(100%)];
+}
+
+.progress.is-indeterminate {
+  @apply absolute inset-0 origin-[100%_50%] [--p-from:translateX(-100%)_scaleX(.1)] [--p-to:translateX(100%)_scaleX(1)] rtl:origin-[50%_100%] rtl:[--p-from:translateX(100%)_scaleX(.1)] rtl:[--p-to:translateX(-100%)_scaleX(1)];
+  animation-name: progress-increase;
+  animation-duration: 1.5s;
+  animation-timing-function: cubic-bezier(0.53, 0.21, 0.29, 0.67);
+  animation-iteration-count: infinite;
+}
+
+.progress.is-active::before {
+  @apply absolute inset-0 rounded-sm bg-white content-[''];
+  animation: progress-active 2s cubic-bezier(0.55, 0.2, 0.3, 0.67) infinite;
+}
+
+@keyframes progress-increase {
+  from {
+    transform: var(--p-from);
+  }
+  to {
+    transform: var(--p-to);
+  }
+}
+
+@keyframes progress-active {
+  0% {
+    opacity: 0.5;
+    transform: var(--p-from);
+  }
+  90% {
+  }
+  100% {
+    opacity: 0;
+    transform: var(--p-to);
+  }
+}

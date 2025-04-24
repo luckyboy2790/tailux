@@ -1,0 +1,23 @@
+.filepond--credits {
+  @apply /* hidden*/ text-tiny! font-light! opacity-[.1]!;
+}
+
+.fp-grid .filepond--item {
+  width: calc(calc(1 / var(--fp-grid)) * 100% - 0.5rem);
+}
+
+.fp-bordered .filepond--panel-root {
+  @apply dark:border-dark-450! border-2 border-dashed border-gray-300! bg-transparent!;
+}
+
+.fp-filled .filepond--panel-root {
+  @apply bg-gray-150/80! dark:bg-dark-500/[.85]!;
+}
+
+.filepond--drop-label label {
+  @apply dark:text-dark-100 text-gray-600;
+}
+
+.filepond.label-icon .filepond--drop-label label {
+  @apply dark:text-dark-300 text-gray-400;
+}

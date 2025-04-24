@@ -1,0 +1,7 @@
+.btn {
+  @apply rounded-lg px-5 py-2 disabled:opacity-70 dark:disabled:opacity-60;
+}
+
+.btn-base {
+  @apply inline-flex cursor-pointer items-center justify-center text-center font-medium tracking-wide outline-hidden transition-all duration-200 focus:outline-hidden disabled:pointer-events-none disabled:select-none;
+}

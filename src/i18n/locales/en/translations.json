@@ -1,0 +1,66 @@
+{
+  "nav": {
+    "dashboards": {
+      "dashboards": "Dashboard",
+      "home": "Home"
+    },
+    "settings": {
+      "settings": "Settings",
+      "general": "General",
+      "appearance": "Appearance"
+    },
+    "purchase": {
+      "purchase": "Purchase",
+      "purchase_list": "Purchase List",
+      "add_purchase": "Add Purchase",
+      "pending": "Pending Purchases",
+      "order": "Purchase Orders"
+    },
+    "sale": {
+      "sale": "Sale",
+      "sale_list": "Sales List"
+    },
+    "payment": {
+      "pending": "Pending Payments",
+      "concurrent_payments": "Concurrent Payments"
+    },
+    "product": {
+      "product": "Product"
+    },
+    "order": {
+      "received": "Received Orders"
+    },
+    "report": {
+      "report": "Report",
+      "overview_chart": "Overview Chart",
+      "company_chart": "Company Chart",
+      "store_chart": "Store Chart",
+      "product_quantity_alert": "Product Quantity Alert",
+      "product_expiry_alert": "Product Expiry Alert",
+      "expired_purchases_report": "Expired Purchases Report",
+      "product_report": "Product Report",
+      "sales_report": "Sales Report",
+      "purchases_report": "Purchases Report",
+      "payment_report": "Payment Report",
+      "income_report": "Income Report",
+      "customers_report": "Customers Report",
+      "suppliers_report": "Suppliers Report",
+      "users_report": "Users Report"
+    },
+    "people": {
+      "people": "People",
+      "customer": "Customer",
+      "supplier": "Supplier",
+      "user": "User"
+    },
+    "setting": {
+      "setting": "Setting",
+      "company": "Company",
+      "store": "Store",
+      "site_status": "Site Status"
+    },
+    "advanced_delete": {
+      "advanced_delete": "Advanced Delete"
+    }
+  }
+}
