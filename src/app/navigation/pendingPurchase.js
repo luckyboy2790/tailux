@@ -9,7 +9,7 @@ const path = (root, item) => `${root}${item}`;
 export const pendingPurchase = {
   id: "pendingPurchase",
   type: NAV_TYPE_ROOT,
-  path: "/purchase",
+  path: "/pendingPurchase",
   title: "Pending Purchase",
   transKey: "nav.purchase.pending",
   Icon: DashboardsIcon,

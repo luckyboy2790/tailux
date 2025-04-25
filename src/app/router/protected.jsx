@@ -35,6 +35,29 @@ const protectedRoutes = {
             },
           ],
         },
+        {
+          path: "purchase",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/purchase/list" />,
+            },
+            {
+              path: "list",
+              lazy: async () => ({
+                Component: (await import("app/pages/purchase/purchaseList"))
+                  .default,
+              }),
+            },
+            {
+              path: "add",
+              lazy: async () => ({
+                Component: (await import("app/pages/purchase/addPurchase"))
+                  .default,
+              }),
+            },
+          ],
+        },
       ],
     },
     // The app layout supports only the main layout. Avoid using it for other layouts.

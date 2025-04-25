@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { useThemeContext } from "app/contexts/theme/context";
-import { Select } from "components/ui";
+import { DatePicker } from "components/shared/form/Datepicker";
 
 const options = {
   chart: {
@@ -81,11 +81,7 @@ const OverviewChart = () => {
         <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
           {t("nav.dashboards.date")} :
         </h3>
-        <Select
-          defaultValue="Potato"
-          className="w-64"
-          data={["Apple", "Orange", "Potato", "Tomato"]}
-        />
+        <DatePicker />
       </div>
       <Chart
         series={series}

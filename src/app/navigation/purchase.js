@@ -11,7 +11,7 @@ const path = (root, item) => `${root}${item}`;
 export const purchase = {
   id: "purchase",
   type: NAV_TYPE_ROOT,
-  path: "/purchases",
+  path: "/purchase",
   title: "Purchase",
   transKey: "nav.purchase.purchase",
   Icon: PurchaseIcon,
