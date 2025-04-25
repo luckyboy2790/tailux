@@ -2,7 +2,8 @@
   "nav": {
     "dashboards": {
       "dashboards": "Tablero",
-      "home": "Inicio"
+      "home": "Inicio",
+      "date": "Fecha"
     },
     "settings": {
       "settings": "Configuración",

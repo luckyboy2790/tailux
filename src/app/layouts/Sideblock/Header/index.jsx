@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 // Local Imports
 import SearchIcon from "assets/dualicons/search.svg?react";
-import { RightSidebar } from "components/template/RightSidebar";
+// import { RightSidebar } from "components/template/RightSidebar";
 import { LanguageSelector } from "components/template/LaguageSelector";
 import { Notifications } from "components/template/Notifications";
 import { Button } from "components/ui";
@@ -23,7 +23,7 @@ export function Header() {
   return (
     <header
       className={clsx(
-        "app-header transition-content sticky top-0 z-20 flex h-[65px] items-center gap-1 border-b border-gray-200 bg-white/80 px-(--margin-x) backdrop-blur-sm backdrop-saturate-150 dark:border-dark-600 max-sm:justify-between",
+        "app-header transition-content dark:border-dark-600 sticky top-0 z-20 flex h-[65px] items-center gap-1 border-b border-gray-200 bg-white/80 px-(--margin-x) backdrop-blur-sm backdrop-saturate-150 max-sm:justify-between",
         cardSkin === "bordered" ? "dark:bg-dark-900/80" : "dark:bg-dark-700/80",
       )}
     >
@@ -70,14 +70,14 @@ export function Header() {
                   isIcon
                   className="relative size-9 rounded-full sm:hidden"
                 >
-                  <SearchIcon className="size-6 text-gray-900 dark:text-dark-100" />
+                  <SearchIcon className="dark:text-dark-100 size-6 text-gray-900" />
                 </Button>
               </>
             )}
           />
         </div>
         <Notifications />
-        <RightSidebar />
+        {/* <RightSidebar /> */}
         <LanguageSelector />
         <Profile />
       </div>
