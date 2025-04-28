@@ -1,33 +1,36 @@
 import { PresentationChartBarIcon } from "@heroicons/react/24/outline";
-import { Select } from "components/ui";
+import { Select, Swap, SwapOff, SwapOn } from "components/ui";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { Avatar, Card } from "components/ui";
-import { useState } from "react";
+// import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const Overivew = () => {
   const { t } = useTranslation();
 
-  const [isShowed, setIsShowed] = useState(false);
+  // const [isShowed, setIsShowed] = useState(false);
 
-  const handleShow = () => {
-    setIsShowed((prev) => !prev);
-  };
+  // const handleShow = () => {
+  //   setIsShowed((prev) => !prev);
+  // };
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4">
       <div className="flex w-full items-center justify-end gap-4">
         <div className="flex h-full items-center justify-center">
-          {isShowed ? (
-            <EyeIcon
-              className="size-7 cursor-pointer stroke-[1.5] text-[#155dfc]"
-              onClick={handleShow}
-            />
-          ) : (
-            <EyeSlashIcon
-              className="size-7 cursor-pointer stroke-[1.5] text-[#155dfc]"
-              onClick={handleShow}
-            />
-          )}
+          <Swap defaultValue="on" effect="flip">
+            <SwapOn>
+              <EyeIcon
+                className="size-7 cursor-pointer stroke-[1.5] text-[#155dfc]"
+                // onClick={handleShow}
+              />
+            </SwapOn>
+            <SwapOff>
+              <EyeSlashIcon
+                className="size-7 cursor-pointer stroke-[1.5] text-[#155dfc]"
+                // onClick={handleShow}
+              />
+            </SwapOff>
+          </Swap>
         </div>
         <div className="flex items-center justify-end gap-2">
           <h2 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">

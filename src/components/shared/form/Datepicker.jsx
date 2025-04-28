@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // Import Dependencies
 import { CalendarIcon } from "@heroicons/react/24/solid";
 import clsx from "clsx";
