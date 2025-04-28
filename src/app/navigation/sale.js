@@ -9,7 +9,7 @@ const path = (root, item) => `${root}${item}`;
 export const sale = {
   id: "sale",
   type: NAV_TYPE_ROOT,
-  path: "/sales",
+  path: "/sale",
   title: "Sale",
   transKey: "nav.sale.sale",
   Icon: SaleIcon,

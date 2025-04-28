@@ -5,7 +5,7 @@ import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 
 // Local Imports
-import { schema } from "./schema";
+import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
 import { Button, Card, Input, Select, Textarea } from "components/ui";
 import { Delta } from "components/shared/form/TextEditor";
@@ -75,7 +75,7 @@ const AddPurchase = () => {
     control,
     reset,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(useValidationSchema()),
     defaultValues: initialState,
   });
 
@@ -104,7 +104,7 @@ const AddPurchase = () => {
               type="submit"
               form="new-post-form"
             >
-              Save
+              {t("nav.purchase.save")}
             </Button>
           </div>
         </div>
@@ -116,9 +116,6 @@ const AddPurchase = () => {
           <div className="w-full">
             <div className="col-span-12 lg:col-span-8">
               <Card className="p-4 sm:px-5">
-                <h3 className="dark:text-dark-100 text-base font-medium text-gray-800">
-                  General
-                </h3>
                 <div className="mt-5 space-y-5">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                     <div className="w-full">
@@ -127,10 +124,12 @@ const AddPurchase = () => {
                           <DatePicker
                             onChange={onChange}
                             value={value}
-                            label="Purchase Date"
+                            label={t("nav.purchase.purchase_date")}
                             error={errors?.purchase_date?.message}
                             options={{ disableMobile: true }}
-                            placeholder="Choose date..."
+                            placeholder={t(
+                              "nav.purchase.purchase_date_placeholder",
+                            )}
                             {...rest}
                           />
                         )}
@@ -141,8 +140,8 @@ const AddPurchase = () => {
 
                     <div className="w-full">
                       <Input
-                        label="Reference No"
-                        placeholder="Enter the reference no"
+                        label={t("nav.purchase.reference_no")}
+                        placeholder={t("nav.purchase.reference_no_placeholder")}
                         {...register("reference_no")}
                         error={errors?.reference_no?.message}
                       />
@@ -150,11 +149,11 @@ const AddPurchase = () => {
 
                     <div className="w-full">
                       <Select
-                        label="Supplier"
+                        label={t("nav.purchase.store")}
                         defaultValue=""
                         data={["", "Apple", "Orange", "Potato", "Tomato"]}
-                        {...register("supplier_id")}
-                        error={errors?.supplier_id?.message}
+                        {...register("store")}
+                        error={errors?.store?.message}
                       />
                     </div>
 
@@ -162,10 +161,11 @@ const AddPurchase = () => {
                       <div className="flex w-full items-end">
                         <div className="w-full">
                           <Select
-                            label="Supplier"
+                            label={t("nav.purchase.supplier")}
+                            defaultValue="Apple"
                             data={["Apple", "Orange", "Potato", "Tomato"]}
-                            {...register("store")}
-                            error={errors?.store?.message}
+                            {...register("supplier_id")}
+                            error={errors?.supplier_id?.message}
                           />
                         </div>
                         <Button color="primary" isGlow>
@@ -176,9 +176,10 @@ const AddPurchase = () => {
 
                     <div className="w-full">
                       <Input
-                        label="Days Of Credit"
+                        label={t("nav.purchase.days_of_credit")}
                         type="number"
-                        placeholder="Days Of Credit"
+                        defaultValue={0}
+                        placeholder={t("nav.purchase.days_of_credit")}
                         {...register("day_of_credit")}
                         error={errors?.day_of_credit?.message}
                       />
@@ -191,7 +192,7 @@ const AddPurchase = () => {
                         classNames={{
                           box: "mt-1.5",
                         }}
-                        label="Attachment"
+                        label={t("nav.purchase.attachment")}
                         error={errors?.attachment?.message}
                         {...field}
                       />
@@ -209,7 +210,7 @@ const AddPurchase = () => {
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                     <div className="w-full">
                       <Input
-                        label="Discount"
+                        label={t("nav.purchase.discount")}
                         type="number"
                         defaultValue={0}
                         {...register("discount")}
@@ -219,7 +220,7 @@ const AddPurchase = () => {
 
                     <div className="w-full">
                       <Input
-                        label="Shipping"
+                        label={t("nav.purchase.shipping")}
                         type="number"
                         defaultValue={0}
                         {...register("shipping")}
@@ -229,7 +230,7 @@ const AddPurchase = () => {
 
                     <div className="w-full">
                       <Input
-                        label="Return"
+                        label={t("nav.purchase.return")}
                         type="number"
                         defaultValue={0}
                         {...register("returns")}
@@ -242,8 +243,8 @@ const AddPurchase = () => {
                 <div className="mt-5 space-y-5">
                   <div className="w-full">
                     <Textarea
-                      label="Note"
-                      placeholder="Enter text"
+                      label={t("nav.purchase.note")}
+                      placeholder={t("nav.purchase.note_placeholder")}
                       rows="5"
                       {...register("note")}
                       error={errors?.note?.message}
@@ -263,7 +264,7 @@ const AddPurchase = () => {
                       }
                       onChange={(val) => field.onChange(val.id)}
                       name={field.name}
-                      label="Category"
+                      label={t("nav.purchase.save")}
                       placeholder="Select Category"
                       displayField="label"
                       error={errors?.category_id?.message}

@@ -29,6 +29,7 @@ import {
   Select,
 } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -109,6 +110,8 @@ const EditableDatePicker = ({
   column: { id },
   table,
 }) => {
+  const { t } = useTranslation();
+
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -124,72 +127,78 @@ const EditableDatePicker = ({
     <DatePicker
       value={value}
       onChange={(e) => setValue(e.target.value)}
+      placeholder={t("nav.purchase.purchase_date_placeholder")}
       onBlur={onBlur}
     />
   );
 };
 
-const defaultColumns = [
-  {
-    accessorKey: "product_name",
-    id: "product_name",
-    header: "Product Name",
-    cell: EditableSelect,
-  },
-  {
-    accessorKey: "expiry_date",
-    id: "expiry_date",
-    header: "Expiry Date",
-    cell: EditableDatePicker,
-  },
-  {
-    accessorKey: "product_cost",
-    id: "product_cost",
-    header: "Product Cost",
-    cell: EditableInput,
-  },
-  {
-    accessorKey: "quantity",
-    id: "quantity",
-    header: "Quantity",
-    cell: EditableInput,
-  },
-  {
-    accessorKey: "sub_total",
-    id: "sub_total",
-    header: "Sub Total",
-    cell: () => {
-      return (
-        <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-          <span>1</span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "action",
-    id: "action",
-    header: "",
-    cell: ({ row, table }) => {
-      return (
-        <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-          <Button
-            variant="flat"
-            onClick={() => {
-              table.options.meta?.removeRow(row.index);
-            }}
-          >
-            <FaTimes className="size-4.5" />
-          </Button>
-        </div>
-      );
-    },
-  },
-];
-
 export function OrderItemsTable() {
+  const { t } = useTranslation();
+
+  const defaultColumns = useMemo(
+    () => [
+      {
+        accessorKey: "product_name",
+        id: "product_name",
+        header: t("nav.purchase.product_name"),
+        cell: EditableSelect,
+      },
+      {
+        accessorKey: "expiry_date",
+        id: "expiry_date",
+        header: t("nav.purchase.expiry_date"),
+        cell: EditableDatePicker,
+      },
+      {
+        accessorKey: "product_cost",
+        id: "product_cost",
+        header: t("nav.purchase.product_cost"),
+        cell: EditableInput,
+      },
+      {
+        accessorKey: "quantity",
+        id: "quantity",
+        header: t("nav.purchase.quantity"),
+        cell: EditableInput,
+      },
+      {
+        accessorKey: "sub_total",
+        id: "sub_total",
+        header: t("nav.purchase.sub_total"),
+        cell: () => {
+          return (
+            <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+              <span>1</span>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "action",
+        id: "action",
+        header: "",
+        cell: ({ row, table }) => {
+          return (
+            <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+              <Button
+                variant="flat"
+                onClick={() => {
+                  table.options.meta?.removeRow(row.index);
+                }}
+              >
+                <FaTimes className="size-4.5" />
+              </Button>
+            </div>
+          );
+        },
+      },
+    ],
+    [t],
+  );
+
   const [data, setData] = useState([...users]);
-  const columns = useMemo(() => [...defaultColumns], []);
+  const columns = useMemo(() => [...defaultColumns], [t]);
 
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
