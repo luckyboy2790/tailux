@@ -73,6 +73,23 @@ const protectedRoutes = {
             },
           ],
         },
+        {
+          path: "pending-data",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/pending-data/purchase" />,
+            },
+            {
+              path: "purchase",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/purchase/pendingPurchaseList")
+                ).default,
+              }),
+            },
+          ],
+        },
       ],
     },
     // The app layout supports only the main layout. Avoid using it for other layouts.
