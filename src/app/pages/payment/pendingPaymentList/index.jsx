@@ -7,7 +7,7 @@ import PurchaseTable from "./purchaseTable";
 const PurchaseList = () => {
   const { t } = useTranslation();
   const breadcrumbs = [
-    { title: t("nav.payment.payment"), path: "/purchase" },
+    { title: t("nav.payment.payment"), path: "/payment" },
     { title: t("nav.payment.pending") },
   ];
 
