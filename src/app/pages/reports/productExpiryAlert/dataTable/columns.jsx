@@ -10,10 +10,10 @@ import {
 import {
   //   AddressCell,
   CustomerCell,
-  // DateCell,
+  DateCell,
   //   OrderIdCell,
   // OrderStatusCell,
-  ProfitCell,
+  // ProfitCell,
   // TotalCell,
 } from "./rows";
 
@@ -35,29 +35,37 @@ export const columns = [
     cell: () => <div></div>,
   }),
   columnHelper.accessor((row) => row.customer.name, {
-    id: "code",
-    label: "Code",
-    header: "Code",
+    id: "product_code",
+    label: "Product Code",
+    header: "Product Code",
+    cell: () => (
+      <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
+        <span className="text-sm-plus font-medium">1</span>
+      </div>
+    ),
+  }),
+  columnHelper.accessor((row) => row.customer.name, {
+    id: "product_name",
+    label: "Product Name",
+    header: "Product Name",
     cell: CustomerCell,
   }),
   columnHelper.accessor((row) => row.customer.name, {
-    id: "name",
-    label: "Name",
-    header: "Name",
+    id: "reference_no",
+    label: "Reference No",
+    header: "Reference No",
     cell: CustomerCell,
   }),
-  columnHelper.accessor((row) => row.profit, {
-    id: "quantity",
-    label: "Quantity",
-    header: "Quantity",
-    cell: ProfitCell,
-    filterFn: "inNumberRange",
+  columnHelper.accessor((row) => Number(row.created_at), {
+    id: "expiry_date",
+    label: "Expiry Date",
+    header: "Expiry Date",
+    cell: DateCell,
   }),
-  columnHelper.accessor((row) => row.profit, {
-    id: "alert_quantity",
-    label: "Alert Quantity",
-    header: "Alert Quantity",
-    cell: ProfitCell,
-    filterFn: "inNumberRange",
+  columnHelper.accessor((row) => Number(row.created_at), {
+    id: "purchase_date",
+    label: "Purchase Date",
+    header: "Purchase Date",
+    cell: DateCell,
   }),
 ];

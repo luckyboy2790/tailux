@@ -193,6 +193,14 @@ const protectedRoutes = {
                 ).default,
               }),
             },
+            {
+              path: "product_expiry_alert",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/reports/productExpiryAlert")
+                ).default,
+              }),
+            },
           ],
         },
       ],
