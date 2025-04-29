@@ -57,6 +57,7 @@
       "sale_list": "Lista de Ventas"
     },
     "payment": {
+      "payment": "Pago",
       "pending": "Pagos pendientes",
       "concurrent_payments": "Pagos concurrentes"
     },
