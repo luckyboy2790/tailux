@@ -14,7 +14,7 @@ import { useState } from "react";
 
 // Local Imports
 import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
-import { TableSortIcon } from "components/shared/table/TableSortIcon";
+// import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
@@ -183,9 +183,6 @@ export default function PurchaseTable() {
                                         header.getContext(),
                                       )}
                                 </span>
-                                <TableSortIcon
-                                  sorted={header.column.getIsSorted()}
-                                />
                               </div>
                             ) : header.isPlaceholder ? null : (
                               flexRender(

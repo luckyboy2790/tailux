@@ -31,6 +31,12 @@ export const columns = [
   columnHelper.accessor((row) => row.customer.name, {
     id: "code",
     label: "Code",
+    header: "",
+    cell: () => <div></div>,
+  }),
+  columnHelper.accessor((row) => row.customer.name, {
+    id: "code",
+    label: "Code",
     header: "Code",
     cell: CustomerCell,
   }),
