@@ -50,7 +50,9 @@
       "save": "Save",
       "purchase_date_placeholder": "Choose date...",
       "reference_no_placeholder": "Enter the Reference No",
-      "note_placeholder": "Input text"
+      "note_placeholder": "Input text",
+      "purchase_order": "Purchase Orders",
+      "list": "List"
     },
     "sale": {
       "sale": "Sale",
