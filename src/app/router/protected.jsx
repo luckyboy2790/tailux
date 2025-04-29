@@ -157,6 +157,22 @@ const protectedRoutes = {
             },
           ],
         },
+        {
+          path: "report",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/report/overview_chart" />,
+            },
+            {
+              path: "overview_chart",
+              lazy: async () => ({
+                Component: (await import("app/pages/reports/overviewChart"))
+                  .default,
+              }),
+            },
+          ],
+        },
       ],
     },
     // The app layout supports only the main layout. Avoid using it for other layouts.
