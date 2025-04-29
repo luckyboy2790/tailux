@@ -185,6 +185,14 @@ const protectedRoutes = {
                   .default,
               }),
             },
+            {
+              path: "product_quantity_alert",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/reports/productQuantityAlert")
+                ).default,
+              }),
+            },
           ],
         },
       ],
