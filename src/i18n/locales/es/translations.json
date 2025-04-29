@@ -62,7 +62,8 @@
       "concurrent_payments": "Pagos concurrentes"
     },
     "product": {
-      "product": "Producto"
+      "product": "Producto",
+      "product_list": "Lista de Productos"
     },
     "order": {
       "received": "Pedidos recibidos"

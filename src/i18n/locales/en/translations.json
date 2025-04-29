@@ -62,7 +62,8 @@
       "concurrent_payments": "Concurrent Payments"
     },
     "product": {
-      "product": "Product"
+      "product": "Product",
+      "product_list": "Product List"
     },
     "order": {
       "received": "Received Orders"

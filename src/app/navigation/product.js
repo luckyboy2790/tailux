@@ -16,7 +16,7 @@ export const product = {
   childs: [
     {
       id: "product.list",
-      path: path(ROOT_PRODUCTS, ""),
+      path: path(ROOT_PRODUCTS, "/list"),
       type: NAV_TYPE_ITEM,
       title: "Product",
       transKey: "nav.product.product",
