@@ -140,6 +140,23 @@ const protectedRoutes = {
             },
           ],
         },
+        {
+          path: "received-order",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/received_order/list" />,
+            },
+            {
+              path: "list",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/purchase/receivedOrdersList")
+                ).default,
+              }),
+            },
+          ],
+        },
       ],
     },
     // The app layout supports only the main layout. Avoid using it for other layouts.

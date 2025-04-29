@@ -52,7 +52,8 @@
       "reference_no_placeholder": "Introduzca el número de referencia",
       "note_placeholder": "Ingresar texto",
       "purchase_order": "Órdenes de compra",
-      "list": "Lista"
+      "list": "Lista",
+      "received_order": "Pedidos recibidos"
     },
     "sale": {
       "sale": "Venta",

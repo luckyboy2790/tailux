@@ -52,7 +52,8 @@
       "reference_no_placeholder": "Enter the Reference No",
       "note_placeholder": "Input text",
       "purchase_order": "Purchase Orders",
-      "list": "List"
+      "list": "List",
+      "received_order": "Received Orders"
     },
     "sale": {
       "sale": "Sale",
