@@ -201,6 +201,14 @@ const protectedRoutes = {
                 ).default,
               }),
             },
+            {
+              path: "expired_purchases_report",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/reports/expiredPurchaseReport")
+                ).default,
+              }),
+            },
           ],
         },
       ],
