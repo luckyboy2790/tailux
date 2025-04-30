@@ -4,7 +4,7 @@ import StoreIcon from "assets/dualicons/store.svg?react";
 import SiteSutatusIcon from "assets/dualicons/siteStatus.svg?react";
 import { NAV_TYPE_ROOT, NAV_TYPE_ITEM } from "constants/app.constant";
 
-const ROOT_PEOPLE = "/people";
+const ROOT_PEOPLE = "/setting";
 
 const path = (root, item) => `${root}${item}`;
 

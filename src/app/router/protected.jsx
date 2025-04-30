@@ -294,6 +294,21 @@ const protectedRoutes = {
             },
           ],
         },
+        {
+          path: "setting",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/setting/company" />,
+            },
+            {
+              path: "company",
+              lazy: async () => ({
+                Component: (await import("app/pages/setting/company")).default,
+              }),
+            },
+          ],
+        },
       ],
     },
     // The app layout supports only the main layout. Avoid using it for other layouts.
