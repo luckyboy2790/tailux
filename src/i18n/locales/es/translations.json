@@ -62,7 +62,9 @@
     "payment": {
       "payment": "Pago",
       "pending": "Pagos pendientes",
-      "concurrent_payments": "Pagos concurrentes"
+      "concurrent_payments": "Pagos concurrentes",
+      "form": "Formulario",
+      "select_supplier": "Seleccione un proveedor"
     },
     "product": {
       "product": "Producto",

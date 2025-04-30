@@ -1,7 +1,7 @@
 import PaymentIcon from "assets/dualicons/payments.svg?react";
 import { NAV_TYPE_ROOT, NAV_TYPE_ITEM } from "constants/app.constant";
 
-const ROOT_PAYMENTS = "/payment";
+const ROOT_PAYMENTS = "/concurrent_payments";
 
 const path = (root, item) => `${root}${item}`;
 
@@ -15,7 +15,7 @@ export const concurrent_payments = {
   childs: [
     {
       id: "payments.concurrent_payments",
-      path: path(ROOT_PAYMENTS, ""),
+      path: path(ROOT_PAYMENTS, "/form"),
       type: NAV_TYPE_ITEM,
       title: "Payment",
       transKey: "nav.payment.concurrent_payments",
