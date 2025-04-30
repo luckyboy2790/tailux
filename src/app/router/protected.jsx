@@ -327,7 +327,7 @@ const protectedRoutes = {
           children: [
             {
               index: true,
-              element: <Navigate to="/payment/pending" />,
+              element: <Navigate to="/concurrent_payments/form" />,
             },
             {
               path: "form",
@@ -336,6 +336,23 @@ const protectedRoutes = {
                   await import(
                     "app/pages/concurrentPayment/concurrentPaymentForm"
                   )
+                ).default,
+              }),
+            },
+          ],
+        },
+        {
+          path: "advanced_delete",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/advanced_delete/form" />,
+            },
+            {
+              path: "form",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/advancedDelete/advancedDeleteForm")
                 ).default,
               }),
             },

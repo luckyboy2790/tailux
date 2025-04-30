@@ -103,8 +103,13 @@
       "site_status": "Estado del sitio"
     },
     "advanced_delete": {
-      "advanced_delete": "Eliminación avanzada"
+      "advanced_delete": "Eliminación avanzada",
+      "submit": "Entregar"
     },
-    "company": "Empresa"
+    "company": "Empresa",
+    "date": "Fecha",
+    "supplier": "Proveedores",
+    "choose_date": "Elija fecha",
+    "select_supplier": "Seleccione un proveedor"
   }
 }
