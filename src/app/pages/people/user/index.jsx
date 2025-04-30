@@ -7,8 +7,8 @@ import PurchaseTable from "./dataTable";
 const PurchaseList = () => {
   const { t } = useTranslation();
   const breadcrumbs = [
-    { title: t("nav.report.report"), path: "/report" },
-    { title: t("nav.report.user") },
+    { title: t("nav.people.report"), path: "/report" },
+    { title: t("nav.people.user") },
   ];
 
   return (
@@ -19,7 +19,7 @@ const PurchaseList = () => {
             <div className="flex items-center gap-2">
               <PurchaseIcon className="size-6 shrink-0 stroke-[1.5]" />
               <h2 className="dark:text-dark-50 truncate text-xl font-medium tracking-wide text-gray-800">
-                {t("nav.report.user")}
+                {t("nav.people.user")}
               </h2>
             </div>
             <Breadcrumbs items={breadcrumbs} />
