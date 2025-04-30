@@ -244,6 +244,13 @@ const protectedRoutes = {
                   .default,
               }),
             },
+            {
+              path: "customers_report",
+              lazy: async () => ({
+                Component: (await import("app/pages/reports/customersReport"))
+                  .default,
+              }),
+            },
           ],
         },
       ],
