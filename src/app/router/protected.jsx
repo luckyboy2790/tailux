@@ -332,8 +332,11 @@ const protectedRoutes = {
             {
               path: "form",
               lazy: async () => ({
-                Component: (await import("app/pages/concurrentPayment"))
-                  .default,
+                Component: (
+                  await import(
+                    "app/pages/concurrentPayment/concurrentPaymentForm"
+                  )
+                ).default,
               }),
             },
           ],
