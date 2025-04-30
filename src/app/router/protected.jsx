@@ -237,6 +237,13 @@ const protectedRoutes = {
                   .default,
               }),
             },
+            {
+              path: "income_report",
+              lazy: async () => ({
+                Component: (await import("app/pages/reports/incomeReport"))
+                  .default,
+              }),
+            },
           ],
         },
       ],
