@@ -7,15 +7,15 @@ import {
   SelectCell,
   SelectHeader,
 } from "components/shared/table/SelectCheckbox";
-import {
-  //   AddressCell,
-  // CustomerCell,
-  // DateCell,
-  //   OrderIdCell,
-  OrderStatusCell,
-  // ProfitCell,
-  // TotalCell,
-} from "./rows";
+// import {
+//   AddressCell,
+// CustomerCell,
+// DateCell,
+//   OrderIdCell,
+// OrderStatusCell,
+// ProfitCell,
+// TotalCell,
+// } from "./rows";
 
 // ----------------------------------------------------------------------
 
@@ -100,11 +100,17 @@ export const columns = [
       );
     },
   }),
-  columnHelper.accessor((row) => row.order_status, {
-    id: "status",
-    label: "Status",
-    header: "Status",
-    cell: OrderStatusCell,
+  columnHelper.accessor((row) => Number(row.created_at), {
+    id: "ip_address",
+    label: "IP Address",
+    header: "IP Address",
+    cell: () => {
+      return (
+        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
+          <span className="text-sm-plus font-medium"></span>
+        </div>
+      );
+    },
   }),
   columnHelper.display({
     id: "actions",
