@@ -313,6 +313,13 @@ const protectedRoutes = {
                 Component: (await import("app/pages/setting/store")).default,
               }),
             },
+            {
+              path: "site_status",
+              lazy: async () => ({
+                Component: (await import("app/pages/setting/siteStatus"))
+                  .default,
+              }),
+            },
           ],
         },
       ],

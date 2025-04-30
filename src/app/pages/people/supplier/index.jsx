@@ -1,8 +1,8 @@
 import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
-import PurchaseIcon from "assets/dualicons/purchase.svg?react";
 import { useTranslation } from "react-i18next";
 import PurchaseTable from "./dataTable";
+import SupplierIcon from "assets/dualicons/supplier.svg?react";
 
 const PurchaseList = () => {
   const { t } = useTranslation();
@@ -17,7 +17,7 @@ const PurchaseList = () => {
         <div className="flex min-w-0 flex-col gap-8">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <PurchaseIcon className="size-6 shrink-0 stroke-[1.5]" />
+              <SupplierIcon className="size-6 shrink-0 stroke-[1.5]" />
               <h2 className="dark:text-dark-50 truncate text-xl font-medium tracking-wide text-gray-800">
                 {t("nav.people.supplier")}
               </h2>
