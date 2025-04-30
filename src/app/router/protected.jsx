@@ -251,6 +251,13 @@ const protectedRoutes = {
                   .default,
               }),
             },
+            {
+              path: "suppliers_report",
+              lazy: async () => ({
+                Component: (await import("app/pages/reports/supplierChart"))
+                  .default,
+              }),
+            },
           ],
         },
       ],
