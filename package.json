@@ -27,6 +27,7 @@
     "axios": "^1.8.4",
     "cleave.js": "^1.6.0",
     "color": "^5.0.0",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "eslint-config-prettier": "^10.1.1",
     "eslint-define-config": "^2.1.0",

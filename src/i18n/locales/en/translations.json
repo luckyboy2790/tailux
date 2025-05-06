@@ -3,7 +3,15 @@
     "dashboards": {
       "dashboards": "Dashboard",
       "home": "Home",
-      "date": "Date"
+      "date": "Date",
+      "today_purchase": "Today Purchases",
+      "week_purchase": "Week Purchases",
+      "month_purchase": "Month Purchases",
+      "company_balance": "Company Balance",
+      "today_sale": "Today Sales",
+      "week_sales": "Week Sales",
+      "expiries_in_5days_purchases": "Expiries In 5 Days",
+      "expired_purchase": "Expired Purchases"
     },
     "settings": {
       "settings": "Settings",

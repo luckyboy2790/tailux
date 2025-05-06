@@ -3,7 +3,15 @@
     "dashboards": {
       "dashboards": "Tablero",
       "home": "Inicio",
-      "date": "Fecha"
+      "date": "Fecha",
+      "today_purchase": "Compras de Hoy",
+      "week_purchase": "Compras de la Semana",
+      "month_purchase": "Compras del Mes",
+      "company_balance": "Saldo de la empresa",
+      "today_sale": "Ventas de Hoy",
+      "week_sales": "Ventas de la Semana",
+      "expiries_in_5days_purchases": "Vencimiento en 5 días",
+      "expired_purchase": "Facturas Vencidas"
     },
     "settings": {
       "settings": "Configuración",

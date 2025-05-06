@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 // Local Imports
 import { useThemeContext } from "app/contexts/theme/context";
 import { DatePicker } from "components/shared/form/Datepicker";
+import { format, parseISO } from "date-fns";
 
 const options = {
   chart: {
@@ -50,29 +51,74 @@ const options = {
   },
 };
 
-const OverviewChart = () => {
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const getCurrentMonthRange = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  return {
+    firstDay: formatDate(new Date(year, month, 1)),
+    lastDay: formatDate(new Date(year, month + 1, 0)),
+  };
+};
+
+const OverviewChart = ({
+  data = {},
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}) => {
   const { primaryColorScheme } = useThemeContext();
+
+  const { firstDay, lastDay } = getCurrentMonthRange();
 
   const { t } = useTranslation();
 
   const series = [
     {
-      name: "PRODUCT C",
-      data: [15, 52, 56, 52, 12, 32, 41, 63],
+      name: "Purchase",
+      data: data?.purchase_array || [],
+      color: "#3B82F6",
     },
     {
-      name: "PRODUCT B",
-      data: [45, 75, 50, 70, 85, 90, 70, 62],
+      name: "Sale",
+      data: data?.sale_array || [],
+      color: "#FFBA1A",
     },
     {
-      name: "PRODUCT A",
-      data: [30, 16, 27, 30, 55, 60, 48, 43],
+      name: "Payment",
+      data: data?.payment_array || [],
+      color: "#10B981",
     },
   ];
 
   const chartOptions = {
     ...options,
+    xaxis: { type: "datetime", categories: data?.key_array || [] },
     colors: [primaryColorScheme[500], "#ffba1a"],
+  };
+
+  const handleDateChange = (dates) => {
+    if (!dates || dates.length !== 2) return;
+
+    try {
+      // Ensure we have valid Date objects
+      const start = dates[0] instanceof Date ? dates[0] : new Date(dates[0]);
+      const end = dates[1] instanceof Date ? dates[1] : new Date(dates[1]);
+
+      setStartDate(format(start, "yyyy-MM-dd"));
+      setEndDate(format(end, "yyyy-MM-dd"));
+    } catch (error) {
+      console.error("Error formatting dates:", error);
+    }
   };
 
   return (
@@ -81,7 +127,18 @@ const OverviewChart = () => {
         <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
           {t("nav.dashboards.date")} :
         </h3>
-        <DatePicker />
+        <DatePicker
+          options={{
+            mode: "range",
+            dateFormat: "Y-m-d",
+            defaultDate: [startDate || firstDay, endDate || lastDay],
+          }}
+          value={[
+            startDate ? parseISO(startDate) : firstDay,
+            endDate ? parseISO(endDate) : lastDay,
+          ]}
+          onChange={handleDateChange}
+        />
       </div>
       <Chart
         series={series}

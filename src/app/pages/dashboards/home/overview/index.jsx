@@ -4,15 +4,39 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import { Avatar, Card } from "components/ui";
 // import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
-const Overivew = () => {
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+const Overivew = ({ data, extraData, companyId, setCompanyId }) => {
   const { t } = useTranslation();
+  const [companies, setCompanies] = useState([]);
 
-  // const [isShowed, setIsShowed] = useState(false);
+  const [isShowed, setIsShowed] = useState(false);
 
-  // const handleShow = () => {
-  //   setIsShowed((prev) => !prev);
-  // };
+  const handleShow = () => {
+    setIsShowed((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${API_URL}/api/dashboard/get-companies`);
+
+      const data = await response.json();
+
+      const selectData = data.map((item, key) => ({
+        key: key,
+        value: item?.id,
+        label: item?.name,
+        disabled: false,
+      }));
+
+      setCompanies(selectData);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4">
       <div className="flex w-full items-center justify-end gap-4">
@@ -21,13 +45,13 @@ const Overivew = () => {
             <SwapOn>
               <EyeIcon
                 className="size-7 cursor-pointer stroke-[1.5] text-[#155dfc]"
-                // onClick={handleShow}
+                onClick={handleShow}
               />
             </SwapOn>
             <SwapOff>
               <EyeSlashIcon
                 className="size-7 cursor-pointer stroke-[1.5] text-[#155dfc]"
-                // onClick={handleShow}
+                onClick={handleShow}
               />
             </SwapOff>
           </Swap>
@@ -37,8 +61,11 @@ const Overivew = () => {
             {t("nav.setting.company")} :
           </h2>
           <Select
-            defaultValue="Potato"
-            data={["Apple", "Orange", "Potato", "Tomato"]}
+            value={companyId || ""}
+            onChange={(e) => {
+              setCompanyId(e.target.value);
+            }}
+            data={companies}
             className="w-32"
           />
         </div>
@@ -46,9 +73,9 @@ const Overivew = () => {
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
         <Card className="flex justify-between p-5">
           <div>
-            <p>Sales</p>
+            <p>{t("nav.dashboards.today_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              7.5k
+              {data?.today_purchases.total || 0}
             </p>
           </div>
           <Avatar
@@ -62,11 +89,12 @@ const Overivew = () => {
             <PresentationChartBarIcon className="size-6" />
           </Avatar>
         </Card>
+
         <Card className="flex justify-between p-5">
           <div>
-            <p>Sales</p>
+            <p>{t("nav.dashboards.week_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
+              {data?.week_sales.total || 0}
             </p>
           </div>
           <Avatar
@@ -80,11 +108,54 @@ const Overivew = () => {
             <PresentationChartBarIcon className="size-6" />
           </Avatar>
         </Card>
+
+        {isShowed && (
+          <Card className="flex justify-between p-5">
+            <div>
+              <p>{t("nav.dashboards.month_purchase")}</p>
+              <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
+                {data?.month_purchases.total || 0}
+              </p>
+            </div>
+            <Avatar
+              size={12}
+              classNames={{
+                display: "mask is-squircle rounded-none",
+              }}
+              initialVariant="soft"
+              initialColor="info"
+            >
+              <PresentationChartBarIcon className="size-6" />
+            </Avatar>
+          </Card>
+        )}
+
+        {isShowed && (
+          <Card className="flex justify-between p-5">
+            <div>
+              <p>{t("nav.dashboards.company_balance")}</p>
+              <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
+                {extraData?.company_balance || 0}
+              </p>
+            </div>
+            <Avatar
+              size={12}
+              classNames={{
+                display: "mask is-squircle rounded-none",
+              }}
+              initialVariant="soft"
+              initialColor="info"
+            >
+              <PresentationChartBarIcon className="size-6" />
+            </Avatar>
+          </Card>
+        )}
+
         <Card className="flex justify-between p-5">
           <div>
-            <p>Sales</p>
+            <p>{t("nav.dashboards.today_sale")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
+              {data?.today_sales.total || 0}
             </p>
           </div>
           <Avatar
@@ -98,11 +169,12 @@ const Overivew = () => {
             <PresentationChartBarIcon className="size-6" />
           </Avatar>
         </Card>
+
         <Card className="flex justify-between p-5">
           <div>
-            <p>Sales</p>
+            <p>{t("nav.dashboards.week_sales")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
+              {data?.week_purchases.total || 0}
             </p>
           </div>
           <Avatar
@@ -116,11 +188,12 @@ const Overivew = () => {
             <PresentationChartBarIcon className="size-6" />
           </Avatar>
         </Card>
+
         <Card className="flex justify-between p-5">
           <div>
-            <p>Sales</p>
+            <p>{t("nav.dashboards.expiries_in_5days_purchases")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
+              {data?.expired_in_5days_purchases || 0}
             </p>
           </div>
           <Avatar
@@ -134,47 +207,12 @@ const Overivew = () => {
             <PresentationChartBarIcon className="size-6" />
           </Avatar>
         </Card>
+
         <Card className="flex justify-between p-5">
           <div>
-            <p>Sales</p>
+            <p>{t("nav.dashboards.expired_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
-            </p>
-          </div>
-          <Avatar
-            size={12}
-            classNames={{
-              display: "mask is-squircle rounded-none",
-            }}
-            initialVariant="soft"
-            initialColor="info"
-          >
-            <PresentationChartBarIcon className="size-6" />
-          </Avatar>
-        </Card>
-        <Card className="flex justify-between p-5">
-          <div>
-            <p>Sales</p>
-            <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
-            </p>
-          </div>
-          <Avatar
-            size={12}
-            classNames={{
-              display: "mask is-squircle rounded-none",
-            }}
-            initialVariant="soft"
-            initialColor="info"
-          >
-            <PresentationChartBarIcon className="size-6" />
-          </Avatar>
-        </Card>
-        <Card className="flex justify-between p-5">
-          <div>
-            <p>Sales</p>
-            <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              6.5k
+              {extraData?.expired_purchases || 0}
             </p>
           </div>
           <Avatar
