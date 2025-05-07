@@ -7,7 +7,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import {
-  ArrowUpRightIcon,
+  // ArrowUpRightIcon,
   EllipsisHorizontalIcon,
   EyeIcon,
   PencilIcon,
@@ -20,8 +20,8 @@ import PropTypes from "prop-types";
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
-import { OrdersDrawer } from "./OrdersDrawer";
-import { useDisclosure } from "hooks";
+// import { OrdersDrawer } from "./OrdersDrawer";
+// import { useDisclosure } from "hooks";
 
 // ----------------------------------------------------------------------
 
@@ -41,8 +41,8 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
-  const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
-    useDisclosure(false);
+  // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
+  //   useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -68,14 +68,14 @@ export function RowActions({ row, table }) {
 
   return (
     <>
-      <div className="flex justify-center space-x-1.5 ">
-        <Button
+      <div className="flex justify-center space-x-1.5">
+        {/* <Button
           isIcon
           className="size-8 rounded-full"
           onClick={() => openDrawer()}
         >
           <ArrowUpRightIcon className="size-4" />
-        </Button>
+        </Button> */}
 
         <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
@@ -92,15 +92,15 @@ export function RowActions({ row, table }) {
           >
             <MenuItems
               anchor={{ to: "bottom end", gap: 12 }}
-              className="absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0"
+              className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
               <MenuItem>
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors ",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
                     <EyeIcon className="size-4.5 stroke-1" />
@@ -112,9 +112,9 @@ export function RowActions({ row, table }) {
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors ",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
                     <PencilIcon className="size-4.5 stroke-1" />
@@ -127,7 +127,7 @@ export function RowActions({ row, table }) {
                   <button
                     onClick={openModal}
                     className={clsx(
-                      "this:error flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-hidden transition-colors dark:text-this-light ",
+                      "this:error text-this dark:text-this-light flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
@@ -150,7 +150,7 @@ export function RowActions({ row, table }) {
         state={state}
       />
 
-      <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
+      {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}
     </>
   );
 }

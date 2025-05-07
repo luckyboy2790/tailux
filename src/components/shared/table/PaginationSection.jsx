@@ -13,19 +13,26 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 
 // ----------------------------------------------------------------------
 
-export function PaginationSection({ table }) {
-  const paginationState = table.getState().pagination;
+export function PaginationSection({
+  table,
+  total,
+  pageIndex,
+  setPageIndex,
+  pageSize,
+  setPageSize,
+}) {
   const { isXl, is2xl } = useBreakpointsContext();
 
   return (
     <div className="flex flex-col justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0">
-      <div className="flex items-center space-x-2 text-xs-plus ">
+      <div className="text-xs-plus flex items-center space-x-2">
         <span>Show</span>
         <Select
           data={[10, 20, 30, 40, 50, 100]}
-          value={paginationState.pageSize}
+          value={pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
+            setPageSize(Number(e.target.value));
           }}
           classNames={{
             root: "w-fit",
@@ -36,9 +43,12 @@ export function PaginationSection({ table }) {
       </div>
       <div>
         <Pagination
-          total={table.getPageCount()}
-          value={paginationState.pageIndex + 1}
-          onChange={(page) => table.setPageIndex(page - 1)}
+          total={Math.ceil(total / pageSize)}
+          value={pageIndex + 1}
+          onChange={(page) => {
+            table.setPageIndex(page - 1);
+            setPageIndex(page - 1);
+          }}
           siblings={isXl ? 2 : is2xl ? 3 : 1}
           boundaries={isXl ? 2 : 1}
         >
@@ -47,10 +57,10 @@ export function PaginationSection({ table }) {
           <PaginationNext />
         </Pagination>
       </div>
-      <div className="truncate text-xs-plus">
-        {paginationState.pageIndex * paginationState.pageSize + 1} -{" "}
-        {table.getRowModel().rows.length} of{" "}
-        {table.getCoreRowModel().rows.length} entries
+      <div className="text-xs-plus truncate">
+        {pageIndex * pageSize + 1} -{" "}
+        {pageSize > total ? total : (pageIndex + 1) * pageSize} of {total}{" "}
+        entries
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ import {
   DateCell,
   //   OrderIdCell,
   OrderStatusCell,
-  ProfitCell,
+  // ProfitCell,
   TotalCell,
 } from "./rows";
 
@@ -28,47 +28,65 @@ export const columns = [
     header: SelectHeader,
     cell: SelectCell,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
-    id: "created_at",
+  columnHelper.accessor((row) => row?.timestamp, {
+    id: "timestamp",
     label: "Order Date",
     header: "Date",
     cell: DateCell,
     filterFn: "inNumberRange",
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.reference_no, {
     id: "reference_no",
     label: "Reference No",
     header: "Reference No",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.reference_no}
+        </p>
+      );
+    },
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.supplier.name, {
     id: "supplier",
     label: "Supplier",
     header: "Supplier",
     cell: CustomerCell,
   }),
-  columnHelper.accessor((row) => row.total, {
+  columnHelper.accessor((row) => row?.grand_total, {
     id: "total",
     label: "Total",
-    header: "Total",
+    header: "Grand Total",
     cell: TotalCell,
     filterFn: "inNumberRange",
   }),
-  columnHelper.accessor((row) => row.profit, {
+  columnHelper.accessor((row) => row?.paid_amount, {
     id: "paid",
     label: "Paid",
     header: "Paid",
-    cell: ProfitCell,
-    filterFn: "inNumberRange",
-  }),
-  columnHelper.accessor((row) => row.total, {
-    id: "balance",
-    label: "Balance",
-    header: "Balance",
     cell: TotalCell,
     filterFn: "inNumberRange",
   }),
-  columnHelper.accessor((row) => row.order_status, {
+  columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
+    id: "balance",
+    label: "Balance",
+    header: "Balance",
+    cell: (props) => (
+      <p
+        className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
+      >
+        {(
+          (props.row.original?.grand_total || 0) -
+          (props.row.original?.paid_amount || 0)
+        ).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </p>
+    ),
+    filterFn: "inNumberRange",
+  }),
+  columnHelper.accessor((row) => row, {
     id: "order_status",
     label: "Order Status",
     header: "Order Status",

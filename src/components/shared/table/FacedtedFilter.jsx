@@ -46,7 +46,7 @@ export function FacedtedFilter({
 
           {selectedItems?.length > 0 && (
             <>
-              <div className="h-full w-px bg-gray-300 dark:bg-dark-450" />
+              <div className="dark:bg-dark-450 h-full w-px bg-gray-300" />
               <Badge className="lg:hidden">{selectedItems.length}</Badge>
 
               {selectedItems.length > 2 ? (
@@ -122,7 +122,7 @@ function ComboboxFilter({
       className="h-[366px] sm:h-auto sm:max-h-80 sm:w-56"
     >
       <div className="relative flex flex-col">
-        <div className="relative bg-gray-100 py-1 dark:bg-dark-900">
+        <div className="dark:bg-dark-900 relative bg-gray-100 py-1">
           <ComboboxInput
             as={Input}
             className="border-none"
@@ -140,7 +140,7 @@ function ComboboxFilter({
           className="h-auto w-full overflow-y-auto py-1 outline-hidden"
         >
           {filteredItems.length === 0 && query !== "" ? (
-            <div className="relative cursor-default select-none px-2.5 py-2 text-gray-800 dark:text-dark-100">
+            <div className="dark:text-dark-100 relative cursor-default px-2.5 py-2 text-gray-800 select-none">
               Nothing found for {query}
             </div>
           ) : (
@@ -149,8 +149,8 @@ function ComboboxFilter({
                 key={refIndex}
                 className={({ focus }) =>
                   clsx(
-                    "relative cursor-pointer select-none px-2.5 py-2 text-gray-800 outline-hidden transition-colors dark:text-dark-100",
-                    focus && "bg-gray-100 dark:bg-dark-600",
+                    "dark:text-dark-100 relative cursor-pointer px-2.5 py-2 text-gray-800 outline-hidden transition-colors select-none",
+                    focus && "dark:bg-dark-600 bg-gray-100",
                   )
                 }
                 value={item}
@@ -161,7 +161,7 @@ function ComboboxFilter({
                       {showCheckbox && <Checkbox checked={selected} readOnly />}
                       {item.icon && <item.icon className="size-4.5 stroke-1" />}
                       {renderPrefix && renderPrefix(item, selected)}
-                      <span className="block truncate text-xs-plus">
+                      <span className="text-xs-plus block truncate">
                         {item[labelField]}
                       </span>
                     </div>

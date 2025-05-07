@@ -14,7 +14,7 @@ const PurchaseList = () => {
   return (
     <Page title="Homepage">
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
-        <div className="flex min-w-0 flex-col gap-8">
+        <div className="flex min-h-full min-w-0 flex-col gap-8">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <PurchaseIcon className="size-6 shrink-0 stroke-[1.5]" />

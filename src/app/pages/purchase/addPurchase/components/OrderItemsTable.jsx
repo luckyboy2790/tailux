@@ -1,4 +1,3 @@
-// Import Dependencies
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { FaTimes } from "react-icons/fa";
 import { rankItem } from "@tanstack/match-sorter-utils";
@@ -198,7 +197,7 @@ export function OrderItemsTable() {
   );
 
   const [data, setData] = useState([...users]);
-  const columns = useMemo(() => [...defaultColumns], [t]);
+  const columns = useMemo(() => [...defaultColumns], [defaultColumns]);
 
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
