@@ -62,13 +62,7 @@ export function TotalCell({ getValue }) {
 
   return (
     <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
-      $
-      {!isNaN(value)
-        ? Number(value).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })
-        : "0.00"}
+      ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
     </p>
   );
 }
@@ -79,20 +73,12 @@ export function ProfitCell({ getValue, row }) {
   return (
     <div className="flex items-center space-x-2">
       <p className="dark:text-dark-100 text-gray-800">
-        $
-        {!isNaN(value)
-          ? Number(value).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })
-          : "0.00"}
+        ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {(
-          (Number(row.original?.paid_amount) /
-            Number(row.original?.grand_total)) *
-          100
-        ).toFixed(2)}
+        {(Number(row.original?.paid_amount) /
+          Number(row.original?.grand_total)) *
+          100}
         %
       </Badge>
     </div>
