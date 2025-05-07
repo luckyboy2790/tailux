@@ -51,7 +51,7 @@ export default function PurchaseTable() {
 
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const [sorting, setSorting] = useState([]);
+  const [sorting, setSorting] = useState([{ id: "timestamp", desc: true }]);
 
   const [companyId, setCompanyId] = useState("");
   const [supplierId, setSupplierId] = useState("");
@@ -137,12 +137,19 @@ export default function PurchaseTable() {
       try {
         setIsLoading(true);
 
+        const dateSort = sorting.find((sort) => sort.id === "timestamp");
+        const sortDirection = dateSort
+          ? dateSort.desc
+            ? "desc"
+            : "asc"
+          : "desc";
+
         const queryString = new URLSearchParams({
           company_id: companyId,
           keyword: globalFilter,
           page: (pageIndex + 1).toString(),
           per_page: pageSize.toString(),
-          sort_by_date: "desc",
+          sort_by_date: sortDirection,
           startDate,
           endDate,
           supplier_id: supplierId,
@@ -172,6 +179,7 @@ export default function PurchaseTable() {
     endDate,
     companyId,
     supplierId,
+    sorting,
   ]);
 
   return (

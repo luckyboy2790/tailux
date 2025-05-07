@@ -13,7 +13,7 @@ import {
   DateCell,
   //   OrderIdCell,
   OrderStatusCell,
-  // ProfitCell,
+  ProfitCell,
   TotalCell,
 } from "./rows";
 
@@ -27,6 +27,7 @@ export const columns = [
     label: "Row Selection",
     header: SelectHeader,
     cell: SelectCell,
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.timestamp, {
     id: "timestamp",
@@ -34,6 +35,7 @@ export const columns = [
     header: "Date",
     cell: DateCell,
     filterFn: "inNumberRange",
+    enableSorting: true,
   }),
   columnHelper.accessor((row) => row?.reference_no, {
     id: "reference_no",
@@ -46,12 +48,14 @@ export const columns = [
         </p>
       );
     },
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.supplier.name, {
     id: "supplier",
     label: "Supplier",
     header: "Supplier",
     cell: CustomerCell,
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.grand_total, {
     id: "total",
@@ -59,13 +63,15 @@ export const columns = [
     header: "Grand Total",
     cell: TotalCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.paid_amount, {
     id: "paid",
     label: "Paid",
     header: "Paid",
-    cell: TotalCell,
+    cell: ProfitCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
     id: "balance",
@@ -85,6 +91,7 @@ export const columns = [
       </p>
     ),
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row, {
     id: "order_status",
@@ -92,6 +99,7 @@ export const columns = [
     header: "Order Status",
     cell: OrderStatusCell,
     filterFn: "arrIncludesSome",
+    enableSorting: false,
   }),
   //   columnHelper.accessor(
   //     (row) => `${row.shipping_address?.street}, ${row.shipping_address?.line}`,

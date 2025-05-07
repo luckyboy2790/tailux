@@ -1,15 +1,15 @@
 // Import Dependencies
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
-import clsx from "clsx";
+// import clsx from "clsx";
 import {
   Listbox,
   ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-  Transition,
+  // ListboxOption,
+  // ListboxOptions,
+  // Transition,
 } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
+// import { CheckIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 
 // Local Imports
@@ -74,13 +74,26 @@ export function TotalCell({ getValue }) {
 }
 
 export function ProfitCell({ getValue, row }) {
+  const value = Number(getValue());
+
   return (
     <div className="flex items-center space-x-2">
       <p className="dark:text-dark-100 text-gray-800">
-        ${getValue().toFixed(1)}
+        $
+        {!isNaN(value)
+          ? Number(value).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
+          : "0.00"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {((row.original.profit / row.original.total) * 100).toFixed(0)}%
+        {(
+          (Number(row.original?.paid_amount) /
+            Number(row.original?.grand_total)) *
+          100
+        ).toFixed(2)}
+        %
       </Badge>
     </div>
   );
@@ -120,7 +133,7 @@ export function OrderStatusCell({ getValue, row, column, table }) {
 
         <span>{option.label}</span>
       </ListboxButton>
-      <Transition
+      {/* <Transition
         as={ListboxOptions}
         enter="transition ease-out"
         enterFrom="opacity-0 translate-y-2"
@@ -153,7 +166,7 @@ export function OrderStatusCell({ getValue, row, column, table }) {
             )}
           </ListboxOption>
         ))}
-      </Transition>
+      </Transition> */}
     </Listbox>
   );
 }
