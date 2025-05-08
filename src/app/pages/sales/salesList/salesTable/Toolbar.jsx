@@ -2,8 +2,6 @@
 import {
   ChevronUpDownIcon,
   MagnifyingGlassIcon,
-  PrinterIcon,
-  MapPinIcon,
 } from "@heroicons/react/24/outline";
 import { TbUpload } from "react-icons/tb";
 import clsx from "clsx";
@@ -15,21 +13,25 @@ import {
   Transition,
 } from "@headlessui/react";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
-import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from "prop-types";
 
 // Local Imports
 import { DateFilter } from "components/shared/table/DateFilter";
-import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
-import { RangeFilter } from "components/shared/table/RangeFilter";
-import { Button, Input } from "components/ui";
+import { Button, Input, Select } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { orderStatusOptions } from "./data";
+import { useEffect, useState } from "react";
 
-// ----------------------------------------------------------------------
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-export function Toolbar({ table }) {
+export function Toolbar({
+  table,
+  onDateRangeChange,
+  companyId,
+  setCompanyId,
+  customerId,
+  setCustomerId,
+}) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
@@ -73,46 +75,6 @@ export function Toolbar({ table }) {
                   </button>
                 )}
               </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Share</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Print</span>
-                  </button>
-                )}
-              </MenuItem>
-              <hr className="border-gray-150 dark:border-dark-500 mx-3 my-1.5 h-px" />
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Import Orders</span>
-                  </button>
-                )}
-              </MenuItem>
               <hr className="border-gray-150 dark:border-dark-500 mx-3 my-1.5 h-px" />
               <MenuItem>
                 {({ focus }) => (
@@ -140,31 +102,10 @@ export function Toolbar({ table }) {
                   </button>
                 )}
               </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Save Table as View</span>
-                  </button>
-                )}
-              </MenuItem>
             </Transition>
           </Menu>
         ) : (
           <div className="flex space-x-2">
-            <Button
-              variant="outlined"
-              className="h-8 space-x-2 rounded-md px-3 text-xs"
-            >
-              <PrinterIcon className="size-4" />
-              <span>Print</span>
-            </Button>
-
             <Menu
               as="div"
               className="relative inline-block text-left whitespace-nowrap"
@@ -251,47 +192,6 @@ export function Toolbar({ table }) {
                     </button>
                   )}
                 </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Share Orders</span>
-                    </button>
-                  )}
-                </MenuItem>
-                <hr className="border-gray-150 dark:border-dark-500 mx-3 my-1.5 h-px" />
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Import Orders</span>
-                    </button>
-                  )}
-                </MenuItem>
-                <hr className="border-gray-150 dark:border-dark-500 mx-3 my-1.5 h-px" />
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Save Table as View</span>
-                    </button>
-                  )}
-                </MenuItem>
               </Transition>
             </Menu>
           </div>
@@ -315,7 +215,14 @@ export function Toolbar({ table }) {
               isFullScreenEnabled ? "px-4 sm:px-5" : "px-(--margin-x)",
             )}
           >
-            <Filters table={table} />
+            <Filters
+              table={table}
+              onDateRangeChange={onDateRangeChange}
+              companyId={companyId}
+              setCompanyId={setCompanyId}
+              customerId={customerId}
+              setCustomerId={setCustomerId}
+            />
           </div>
         </>
       ) : (
@@ -332,7 +239,14 @@ export function Toolbar({ table }) {
         >
           <div className="flex shrink-0 space-x-2">
             <SearchInput table={table} />
-            <Filters table={table} />
+            <Filters
+              table={table}
+              onDateRangeChange={onDateRangeChange}
+              companyId={companyId}
+              setCompanyId={setCompanyId}
+              customerId={customerId}
+              setCustomerId={setCustomerId}
+            />
           </div>
 
           <TableConfig table={table} />
@@ -357,46 +271,111 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table }) {
+function Filters({
+  table,
+  onDateRangeChange,
+  companyId,
+  setCompanyId,
+  customerId,
+  setCustomerId,
+}) {
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  const [company, setCompany] = useState([]);
+
+  const [customer, setCustomer] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const companyResponse = await fetch(
+        `${API_URL}/api/company/get_all_company`,
+      );
+
+      const companyResult = await companyResponse.json();
+
+      const companyData = [
+        {
+          key: -1,
+          value: "",
+          label: "All Companies",
+          disabled: false,
+        },
+        ...(Array.isArray(companyResult?.data) ? companyResult.data : []).map(
+          (item, key) => ({
+            key,
+            value: item?.id,
+            label: item?.name,
+            disabled: false,
+          }),
+        ),
+      ];
+
+      setCompany(companyData);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const customerResponse = await fetch(
+        `${API_URL}/api/customer/get_all_customers`,
+      );
+
+      const customerResult = await customerResponse.json();
+
+      const customerData = [
+        {
+          key: -1,
+          value: "",
+          label: "All Customers",
+          disabled: false,
+        },
+        ...(Array.isArray(customerResult?.data) ? customerResult.data : []).map(
+          (item, key) => ({
+            key,
+            value: item?.id,
+            label: item?.company,
+            disabled: false,
+          }),
+        ),
+      ];
+
+      setCustomer(customerData);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
-      {table.getColumn("order_status") && (
-        <FacedtedFilter
-          options={orderStatusOptions}
-          column={table.getColumn("order_status")}
-          title="Status"
-          Icon={MapPinIcon}
-        />
-      )}
-
-      {table.getColumn("created_at") && (
+      {table.getColumn("timestamp") && (
         <DateFilter
-          column={table.getColumn("created_at")}
-          title="Order Date Range"
+          onChange={onDateRangeChange}
+          title="Purchase Date Range"
           config={{
-            maxDate: new Date().fp_incr(1),
             mode: "range",
           }}
         />
       )}
 
-      {table.getColumn("total") && (
-        <RangeFilter
-          column={table.getColumn("total")}
-          title="Total Amount"
-          Icon={TbCurrencyDollar}
-          MinPrefixIcon={TbCurrencyDollar}
-          MaxPrefixIcon={TbCurrencyDollar}
-          buttonText={({ min, max }) => (
-            <>
-              {min && <>From ${min}</>}
-              {min && max && " - "}
-              {max && <>To ${max}</>}
-            </>
-          )}
-        />
-      )}
+      <Select
+        value={companyId || ""}
+        data={company}
+        onChange={(e) => {
+          setCompanyId(e.target.value);
+        }}
+        className="h-8 min-w-30 py-1 text-xs"
+      />
+
+      <Select
+        value={customerId || ""}
+        data={customer}
+        onChange={(e) => {
+          setCustomerId(e.target.value);
+        }}
+        className="h-8 min-w-30 py-1 text-xs"
+      />
 
       {isFiltered && (
         <Button
@@ -411,13 +390,15 @@ function Filters({ table }) {
 }
 
 Toolbar.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object.isRequired,
+  onDateRangeChange: PropTypes.func.isRequired,
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object.isRequired,
 };
 
 Filters.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object.isRequired,
+  onDateRangeChange: PropTypes.func.isRequired,
 };

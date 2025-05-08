@@ -81,6 +81,7 @@ export const columns = [
       <p
         className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
       >
+        $
         {(
           (props.row.original?.grand_total || 0) -
           (props.row.original?.paid_amount || 0)
