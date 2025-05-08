@@ -1,20 +1,20 @@
 // Import Dependencies
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
-import clsx from "clsx";
+// import clsx from "clsx";
 import {
   Listbox,
   ListboxButton,
-  ListboxOption,
-  ListboxOptions,
-  Transition,
+  // ListboxOption,
+  // ListboxOptions,
+  // Transition,
 } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
+// import { CheckIcon } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 
 // Local Imports
 import { Highlight } from "components/shared/Highlight";
-import { Avatar, Badge, Tag } from "components/ui";
+import { Badge, Tag } from "components/ui";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
 import { orderStatusOptions } from "./data";
@@ -23,7 +23,7 @@ import { orderStatusOptions } from "./data";
 
 export function OrderIdCell({ getValue }) {
   return (
-    <span className="font-medium text-primary-600 dark:text-primary-400">
+    <span className="text-primary-600 dark:text-primary-400 font-medium">
       {getValue()}
     </span>
   );
@@ -37,28 +37,35 @@ export function DateCell({ getValue }) {
   return (
     <>
       <p className="font-medium">{date}</p>
-      <p className="mt-0.5 text-xs text-gray-400 dark:text-dark-300">{time}</p>
+      <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400">{time}</p>
     </>
   );
 }
 
-export function CustomerCell({ row, getValue, column, table }) {
+export function CustomerCell({ getValue, column, table }) {
   const globalQuery = ensureString(table.getState().globalFilter);
   const columnQuery = ensureString(column.getFilterValue());
 
   const name = getValue();
 
   return (
-    <div className="flex items-center space-x-4 ">
-      <Avatar
-        size={9}
-        name={name}
-        src={row.original.customer.avatar_img}
-        classNames={{
-          display: "mask is-squircle rounded-none text-sm",
-        }}
-      />
-      <span className="font-medium text-gray-800 dark:text-dark-100">
+    <div className="flex items-center space-x-4">
+      <span className="dark:text-dark-100 font-medium text-gray-800">
+        <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
+      </span>
+    </div>
+  );
+}
+
+export function UserCell({ row, column, table }) {
+  const globalQuery = ensureString(table.getState().globalFilter);
+  const columnQuery = ensureString(column.getFilterValue());
+
+  const name = `${row.original.user_first_name} ${row.original.user_last_name}`;
+
+  return (
+    <div className="flex items-center space-x-4">
+      <span className="dark:text-dark-100 font-medium text-gray-800">
         <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
       </span>
     </div>
@@ -66,21 +73,28 @@ export function CustomerCell({ row, getValue, column, table }) {
 }
 
 export function TotalCell({ getValue }) {
+  const value = Number(getValue());
+
   return (
-    <p className="text-sm-plus font-medium text-gray-800 dark:text-dark-100">
-      ${getValue().toFixed(1)}
+    <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+      ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
     </p>
   );
 }
 
 export function ProfitCell({ getValue, row }) {
+  const value = Number(getValue());
+
   return (
-    <div className="flex items-center space-x-2 ">
-      <p className="text-gray-800 dark:text-dark-100">
-        ${getValue().toFixed(1)}
+    <div className="flex items-center space-x-2">
+      <p className="dark:text-dark-100 text-gray-800">
+        ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {((row.original.profit / row.original.total) * 100).toFixed(0)}%
+        {(Number(row.original?.paid_amount) /
+          Number(row.original?.grand_total)) *
+          100}
+        %
       </Badge>
     </div>
   );
@@ -88,7 +102,20 @@ export function ProfitCell({ getValue, row }) {
 
 export function OrderStatusCell({ getValue, row, column, table }) {
   const val = getValue();
-  const option = orderStatusOptions.find((item) => item.value === val);
+
+  let purchaseStatus;
+
+  if (val?.paid_amount < val?.grand_total) {
+    purchaseStatus = "pending";
+  } else if (val?.paid_amount === 0) {
+    purchaseStatus = "partial";
+  } else {
+    purchaseStatus = "paid";
+  }
+
+  const option = orderStatusOptions.find(
+    (item) => item.value === purchaseStatus,
+  );
 
   const handleChangeStatus = (status) => {
     table.options.meta?.updateData(row.index, column.id, status);
@@ -101,13 +128,13 @@ export function OrderStatusCell({ getValue, row, column, table }) {
         as={Tag}
         component="button"
         color={option.color}
-        className="gap-1.5 cursor-pointer"
+        className="cursor-pointer gap-1.5"
       >
         {option.icon && <option.icon className="h-4 w-4" />}
 
         <span>{option.label}</span>
       </ListboxButton>
-      <Transition
+      {/* <Transition
         as={ListboxOptions}
         enter="transition ease-out"
         enterFrom="opacity-0 translate-y-2"
@@ -116,7 +143,7 @@ export function OrderStatusCell({ getValue, row, column, table }) {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-2"
         anchor={{ to: "bottom start", gap: "8px" }}
-        className="max-h-60 z-100 w-40 overflow-auto rounded-lg border border-gray-300 bg-white py-1 text-xs-plus capitalize shadow-soft outline-hidden focus-visible:outline-hidden dark:border-dark-500 dark:bg-dark-750 dark:shadow-none"
+        className="text-xs-plus shadow-soft dark:border-dark-500 dark:bg-dark-750 z-100 max-h-60 w-40 overflow-auto rounded-lg border border-gray-300 bg-white py-1 capitalize outline-hidden focus-visible:outline-hidden dark:shadow-none"
       >
         {orderStatusOptions.map((item) => (
           <ListboxOption
@@ -124,8 +151,8 @@ export function OrderStatusCell({ getValue, row, column, table }) {
             value={item.value}
             className={({ focus }) =>
               clsx(
-                "relative flex cursor-pointer select-none items-center justify-between space-x-2 px-3 py-2 text-gray-800 outline-hidden transition-colors dark:text-dark-100 ",
-                focus && "bg-gray-100 dark:bg-dark-600",
+                "dark:text-dark-100 relative flex cursor-pointer items-center justify-between space-x-2 px-3 py-2 text-gray-800 outline-hidden transition-colors select-none",
+                focus && "dark:bg-dark-600 bg-gray-100",
               )
             }
           >
@@ -140,7 +167,7 @@ export function OrderStatusCell({ getValue, row, column, table }) {
             )}
           </ListboxOption>
         ))}
-      </Transition>
+      </Transition> */}
     </Listbox>
   );
 }
@@ -151,7 +178,7 @@ export function AddressCell({ getValue, column, table }) {
   const val = getValue();
 
   return (
-    <p className="w-48 truncate text-xs-plus xl:w-56 2xl:w-64">
+    <p className="text-xs-plus w-48 truncate xl:w-56 2xl:w-64">
       <Highlight query={[globalQuery, columnQuery]}>{val}</Highlight>
     </p>
   );
@@ -192,4 +219,10 @@ CustomerCell.propTypes = {
   column: PropTypes.object,
   table: PropTypes.object,
   getValue: PropTypes.func,
+};
+
+UserCell.propTypes = {
+  row: PropTypes.object,
+  column: PropTypes.object,
+  table: PropTypes.object,
 };
