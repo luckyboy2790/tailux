@@ -15,6 +15,7 @@ import {
   // OrderStatusCell,
   // ProfitCell,
   TotalCell,
+  TypeCell,
 } from "./rows";
 
 // ----------------------------------------------------------------------
@@ -27,46 +28,50 @@ export const columns = [
     label: "Row Selection",
     header: SelectHeader,
     cell: SelectCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
-    id: "created_at",
-    label: "Payment Date",
+  columnHelper.accessor((row) => row?.timestamp, {
+    id: "timestamp",
+    label: "Order Date",
     header: "Date",
     cell: DateCell,
     filterFn: "inNumberRange",
+    enableSorting: true,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.reference_no, {
     id: "reference_no",
     label: "Reference No",
     header: "Reference No",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.reference_no}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.paymentable, {
     id: "type",
     label: "Type",
     header: "Type",
-    cell: CustomerCell,
+    cell: TypeCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
-    id: "supplier",
+  columnHelper.accessor((row) => row?.supplier, {
+    id: "supplier_customer",
     label: "Supplier / Customer",
     header: "Supplier / Customer",
     cell: CustomerCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.total, {
-    id: "total",
-    label: "Total",
-    header: "Total",
+  columnHelper.accessor((row) => row?.amount, {
+    id: "amount",
+    label: "Amount",
+    header: "Amount",
     cell: TotalCell,
     filterFn: "inNumberRange",
-  }),
-  columnHelper.accessor((row) => row.customer.name, {
-    id: "note",
-    label: "Note",
-    header: "Note",
-    cell: () => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800"></p>
-    ),
+    enableSorting: false,
   }),
   //   columnHelper.accessor(
   //     (row) => `${row.shipping_address?.street}, ${row.shipping_address?.line}`,
