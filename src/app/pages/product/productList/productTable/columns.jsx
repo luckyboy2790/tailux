@@ -11,6 +11,7 @@ import {
   //   AddressCell,
   // CustomerCell,
   // DateCell,
+  ImageCell,
   //   OrderIdCell,
   // OrderStatusCell,
   // ProfitCell,
@@ -27,73 +28,77 @@ export const columns = [
     label: "Row Selection",
     header: SelectHeader,
     cell: SelectCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.images, {
     id: "attachment",
-    label: "Attachment",
+    label: "",
     header: "",
-    cell: () => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800"></p>
-    ),
+    cell: ImageCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.code, {
     id: "code",
     label: "Code",
     header: "Code",
-    cell: () => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
-        101010
-      </p>
-    ),
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.code}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
-    id: "name",
-    label: "Name",
-    header: "Name",
-    cell: () => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
-        Test Product
-      </p>
-    ),
-  }),
-  columnHelper.accessor((row) => row.total, {
+  columnHelper.accessor((row) => row?.cost, {
     id: "cost",
     label: "Cost",
     header: "Cost",
     cell: TotalCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.total, {
+  columnHelper.accessor((row) => row?.price, {
     id: "price",
     label: "Price",
     header: "Price",
     cell: TotalCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.unit, {
     id: "product_unit",
     label: "Product Unit",
     header: "Product Unit",
-    cell: () => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
-        Test Unit 01
-      </p>
-    ),
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.unit}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.total, {
+  columnHelper.accessor((row) => row?.quantity, {
     id: "quantity",
     label: "Quantity",
     header: "Quantity",
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          - ${Number(props.row.original?.quantity).toLocaleString()}
+        </p>
+      );
+    },
+    enableSorting: false,
+  }),
+  columnHelper.accessor((row) => row?.alert_quantity, {
+    id: "alert_quantity",
+    label: "Alert Quantity",
+    header: "Alert Quantity",
     cell: TotalCell,
     filterFn: "inNumberRange",
-  }),
-  columnHelper.accessor((row) => row.customer.name, {
-    id: "note",
-    label: "Note",
-    header: "Note",
-    cell: () => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800"></p>
-    ),
+    enableSorting: false,
   }),
   //   columnHelper.accessor(
   //     (row) => `${row.shipping_address?.street}, ${row.shipping_address?.line}`,
