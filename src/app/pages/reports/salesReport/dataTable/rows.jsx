@@ -94,7 +94,7 @@ export function OrderStatusCell({ getValue }) {
   if (!val?.status) {
     purchaseStatus = "";
   } else if (Number(val?.status) === 1) {
-    purchaseStatus = "recieved";
+    purchaseStatus = "received";
   } else if (Number(val?.status) === 0) {
     purchaseStatus = "pending";
   }
