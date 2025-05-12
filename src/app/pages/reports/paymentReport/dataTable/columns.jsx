@@ -24,7 +24,7 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.paymentable?.reference_no, {
     id: "paymentable_reference",
-    header: "Purchase",
+    header: "Purchase Reference",
     cell: (props) => (
       <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
         {props.row.original?.paymentable?.reference_no}

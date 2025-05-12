@@ -153,6 +153,7 @@ export default function PurchaseTable() {
           startDate,
           endDate,
           supplier_id: supplierId,
+          type: "purchase",
         }).toString();
 
         const response = await fetch(
