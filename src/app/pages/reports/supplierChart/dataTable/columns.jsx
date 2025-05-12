@@ -4,128 +4,131 @@ import { createColumnHelper } from "@tanstack/react-table";
 // Local Imports
 import { RowActions } from "./RowActions";
 import {
-  SelectCell,
-  SelectHeader,
-} from "components/shared/table/SelectCheckbox";
-// import {
-//   //   AddressCell,
-//   CustomerCell,
-//   DateCell,
-//   //   OrderIdCell,
-//   OrderStatusCell,
-//   ProfitCell,
-//   TotalCell,
-// } from "./rows";
+  //   AddressCell,
+  // CustomerCell,
+  // DateCell,
+  //   OrderIdCell,
+  // OrderStatusCell,
+  ProfitCell,
+  TotalCell,
+} from "./rows";
 
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.display({
-    id: "select",
-    label: "Row Selection",
-    header: SelectHeader,
-    cell: SelectCell,
-  }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.company, {
     id: "company",
     label: "Company",
     header: "Company",
-    cell: () => {
+    cell: (props) => {
       return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">aym</span>
-        </div>
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.company}
+        </p>
       );
     },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.name, {
     id: "name",
     label: "Name",
     header: "Name",
-    cell: () => {
+    cell: (props) => {
       return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">aym</span>
-        </div>
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.name}
+        </p>
       );
     },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.phone_number, {
     id: "phone_number",
-    label: "Phone Number",
-    header: "Phone Number",
-    cell: () => {
+    label: "Phone number",
+    header: "Phone number",
+    cell: (props) => {
       return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">no</span>
-        </div>
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.phone_number}
+        </p>
       );
     },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.email, {
     id: "email",
     label: "Email",
     header: "Email",
-    cell: () => {
+    cell: (props) => {
       return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">
-            jairo.visionam@gmail.com
-          </span>
-        </div>
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.email}
+        </p>
       );
     },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.total_sales, {
     id: "total_sales",
     label: "Total Sales",
     header: "Total Sales",
-    cell: () => {
-      return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">0</span>
-        </div>
-      );
-    },
+    cell: TotalCell,
+    filterFn: "inNumberRange",
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.total_amount, {
     id: "total_amount",
     label: "Total Amount",
     header: "Total Amount",
-    cell: () => {
+    cell: TotalCell,
+    filterFn: "inNumberRange",
+    enableSorting: false,
+  }),
+  columnHelper.accessor((row) => row?.paid_amount, {
+    id: "paid_amount",
+    label: "Paid Amount",
+    header: "Paid Amount",
+    cell: ProfitCell,
+    filterFn: "inNumberRange",
+    enableSorting: false,
+  }),
+  columnHelper.accessor((row) => row?.purchased_amount, {
+    id: "quantity",
+    label: "Quantity",
+    header: "Quantity",
+    cell: (props) => {
+      const formatCurrency = (value) => {
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          signDisplay: "always",
+        })
+          .format(value)
+          .replace("+", "");
+      };
+
       return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">0</span>
-        </div>
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {formatCurrency(
+            Number(props.row.original?.total_amount) -
+              Number(props.row.original?.paid_amount),
+          )}
+        </p>
       );
     },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
-    id: "paid",
-    label: "Paid",
-    header: "Paid",
-    cell: () => {
-      return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">0</span>
-        </div>
-      );
-    },
-  }),
-  columnHelper.accessor((row) => Number(row.created_at), {
-    id: "balance",
-    label: "Balance",
-    header: "Balance",
-    cell: () => {
-      return (
-        <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-          <span className="text-sm-plus font-medium">0</span>
-        </div>
-      );
-    },
-  }),
+  //   columnHelper.accessor(
+  //     (row) => `${row.shipping_address?.street}, ${row.shipping_address?.line}`,
+  //     {
+  //       id: "address",
+  //       label: "Address",
+  //       header: "Address",
+  //       cell: AddressCell,
+  //     },
+  //   ),
   columnHelper.display({
     id: "actions",
     label: "Row Actions",
