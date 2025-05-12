@@ -2,19 +2,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
 
 // Local Imports
-// import { RowActions } from "./RowActions";
-import {
-  SelectCell,
-  SelectHeader,
-} from "components/shared/table/SelectCheckbox";
 import {
   //   AddressCell,
   CustomerCell,
   DateCell,
-  //   OrderIdCell,
   OrderStatusCell,
+  //   OrderIdCell,
   ProfitCell,
-  // TotalCell,
+  TotalCell,
 } from "./rows";
 
 // ----------------------------------------------------------------------
@@ -22,92 +17,86 @@ import {
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.display({
-    id: "select",
-    label: "Row Selection",
-    header: SelectHeader,
-    cell: SelectCell,
-  }),
-  columnHelper.accessor((row) => Number(row.created_at), {
-    id: "date",
-    label: "Date",
+  columnHelper.accessor((row) => row?.timestamp, {
+    id: "timestamp",
+    label: "Order Date",
     header: "Date",
     cell: DateCell,
+    filterFn: "inNumberRange",
+    enableSorting: true,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.reference_no, {
     id: "reference_no",
     label: "Reference No",
     header: "Reference No",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.reference_no}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.company.name, {
     id: "company",
     label: "Company",
     header: "Company",
-    cell: () => (
-      <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-        <span className="text-sm-plus font-medium">1</span>
-      </div>
-    ),
+    cell: CustomerCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.store.name, {
     id: "store",
     label: "Store",
     header: "Store",
-    cell: () => (
-      <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-        <span className="text-sm-plus font-medium">1</span>
-      </div>
-    ),
+    cell: CustomerCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.user?.username, {
     id: "user",
     label: "User",
     header: "User",
     cell: CustomerCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.customer.company, {
     id: "customer",
     label: "Customer",
     header: "Customer",
     cell: CustomerCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
-    id: "product",
-    label: "Product(Qty)",
-    header: "Product(Qty)",
-    cell: () => (
-      <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-        <span className="text-sm-plus font-medium">1</span>
-      </div>
-    ),
-  }),
-  columnHelper.accessor((row) => row.profit, {
-    id: "grand_total",
-    label: "Grand Total",
+  columnHelper.accessor((row) => row?.grand_total, {
+    id: "total",
+    label: "Total",
     header: "Grand Total",
-    cell: ProfitCell,
+    cell: TotalCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.profit, {
+  columnHelper.accessor((row) => row?.paid_amount, {
     id: "paid",
     label: "Paid",
     header: "Paid",
     cell: ProfitCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.profit, {
-    id: "balance",
-    label: "Balance",
-    header: "Balance",
-    cell: ProfitCell,
-    filterFn: "inNumberRange",
-  }),
-  columnHelper.accessor((row) => row.order_status, {
-    id: "sale_status",
-    label: "Sale Status",
-    header: "Sale Status",
+  columnHelper.accessor((row) => row, {
+    id: "order_status",
+    label: "Order Status",
+    header: "Order Status",
     cell: OrderStatusCell,
     filterFn: "arrIncludesSome",
+    enableSorting: false,
   }),
+  //   columnHelper.accessor(
+  //     (row) => `${row.shipping_address?.street}, ${row.shipping_address?.line}`,
+  //     {
+  //       id: "address",
+  //       label: "Address",
+  //       header: "Address",
+  //       cell: AddressCell,
+  //     },
+  //   ),
 ];
