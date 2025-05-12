@@ -10,7 +10,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Local Imports
 import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
@@ -21,11 +21,10 @@ import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 // import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
-import { ordersList } from "./data";
-import { PaginationSection } from "components/shared/table/PaginationSection";
-import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +33,7 @@ const isSafari = getUserAgentBrowser() === "Safari";
 export default function PurchaseTable() {
   const { cardSkin } = useThemeContext();
 
-  const [orders, setOrders] = useState([...ordersList]);
+  const [orders, setOrders] = useState([]);
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -122,6 +121,27 @@ export default function PurchaseTable() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${API_URL}/api/report/product_quantity_alert`,
+      );
+
+      const result = await response.json();
+
+      setOrders(
+        result.data.filter((item) => {
+          return (
+            item.alert_quantity !== null &&
+            Number(item.alert_quantity) >= Number(item.quantity)
+          );
+        }),
+      );
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Page title="Orders Datatable v1">
@@ -248,22 +268,6 @@ export default function PurchaseTable() {
                   </TBody>
                 </Table>
               </div>
-              <SelectedRowsActions table={table} />
-              {table.getCoreRowModel().rows.length && (
-                <div
-                  className={clsx(
-                    "px-4 pb-4 sm:px-5 sm:pt-4",
-                    tableSettings.enableFullScreen &&
-                      "dark:bg-dark-800 bg-gray-50",
-                    !(
-                      table.getIsSomeRowsSelected() ||
-                      table.getIsAllRowsSelected()
-                    ) && "pt-4",
-                  )}
-                >
-                  <PaginationSection table={table} />
-                </div>
-              )}
             </Card>
           </div>
         </div>

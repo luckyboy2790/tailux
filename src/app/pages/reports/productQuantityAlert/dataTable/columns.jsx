@@ -3,17 +3,19 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 // Local Imports
 // import { RowActions } from "./RowActions";
-import {
-  SelectCell,
-  SelectHeader,
-} from "components/shared/table/SelectCheckbox";
+// import {
+//   SelectCell,
+//   SelectHeader,
+// } from "components/shared/table/SelectCheckbox";
 import {
   //   AddressCell,
-  CustomerCell,
+  // CustomerCell,
+  ImageCell,
   // DateCell,
   //   OrderIdCell,
   // OrderStatusCell,
-  ProfitCell,
+  // ProfitCell,
+  TotalCell,
   // TotalCell,
 } from "./rows";
 
@@ -22,42 +24,52 @@ import {
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.display({
-    id: "select",
-    label: "Row Selection",
-    header: SelectHeader,
-    cell: SelectCell,
-  }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.images, {
     id: "attachment",
-    label: "Attachment",
+    label: "",
     header: "",
-    cell: () => <div></div>,
+    cell: ImageCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.code, {
     id: "code",
     label: "Code",
     header: "Code",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.code}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row.name, {
     id: "name",
     label: "Name",
     header: "Name",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.name}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.profit, {
+  columnHelper.accessor((row) => row?.quantity, {
     id: "quantity",
     label: "Quantity",
     header: "Quantity",
-    cell: ProfitCell,
-    filterFn: "inNumberRange",
+    cell: TotalCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.profit, {
+  columnHelper.accessor((row) => row?.alert_quantity, {
     id: "alert_quantity",
     label: "Alert Quantity",
     header: "Alert Quantity",
-    cell: ProfitCell,
+    cell: TotalCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
 ];

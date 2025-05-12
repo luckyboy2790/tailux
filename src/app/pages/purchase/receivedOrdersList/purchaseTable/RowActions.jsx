@@ -9,9 +9,9 @@ import {
 import {
   ArrowUpRightIcon,
   EllipsisHorizontalIcon,
-  EyeIcon,
-  PencilIcon,
-  TrashIcon,
+  // EyeIcon,
+  // PencilIcon,
+  // TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment, useCallback, useState } from "react";
@@ -68,7 +68,7 @@ export function RowActions({ row, table }) {
 
   return (
     <>
-      <div className="flex justify-center space-x-1.5 ">
+      <div className="flex justify-center space-x-1.5">
         <Button
           isIcon
           className="size-8 rounded-full"
@@ -92,18 +92,17 @@ export function RowActions({ row, table }) {
           >
             <MenuItems
               anchor={{ to: "bottom end", gap: 12 }}
-              className="absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0"
+              className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
               <MenuItem>
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors ",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
-                    <EyeIcon className="size-4.5 stroke-1" />
                     <span>View</span>
                   </button>
                 )}
@@ -112,12 +111,89 @@ export function RowActions({ row, table }) {
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors ",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
-                    <PencilIcon className="size-4.5 stroke-1" />
+                    <span>Payment List</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                  >
+                    <span>Return List</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                  >
+                    <span>Add Payment</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                  >
+                    <span>Add Return</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                  >
+                    <span>Report</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                  >
+                    <span>Email</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                  >
                     <span>Edit</span>
                   </button>
                 )}
@@ -127,11 +203,10 @@ export function RowActions({ row, table }) {
                   <button
                     onClick={openModal}
                     className={clsx(
-                      "this:error flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-hidden transition-colors dark:text-this-light ",
+                      "this:error text-this dark:text-this-light flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <TrashIcon className="size-4.5 stroke-1" />
                     <span>Delete</span>
                   </button>
                 )}

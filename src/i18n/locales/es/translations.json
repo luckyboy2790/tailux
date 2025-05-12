@@ -118,6 +118,7 @@
     "date": "Fecha",
     "supplier": "Proveedores",
     "choose_date": "Elija fecha",
-    "select_supplier": "Seleccione un proveedor"
+    "select_supplier": "Seleccione un proveedor",
+    "select_date_range": "Por favor seleccione fechas"
   }
 }

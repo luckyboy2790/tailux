@@ -118,6 +118,7 @@
     "date": "Date",
     "supplier": "Supplier",
     "choose_date": "Choose Date",
-    "select_supplier": "Please select a supplier"
+    "select_supplier": "Please select a supplier",
+    "select_date_range": "Please select dates"
   }
 }

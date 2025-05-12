@@ -3,18 +3,19 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 // Local Imports
 // import { RowActions } from "./RowActions";
+// import {
+//   SelectCell,
+//   SelectHeader,
+// } from "components/shared/table/SelectCheckbox";
 import {
-  SelectCell,
-  SelectHeader,
-} from "components/shared/table/SelectCheckbox";
-import {
-  //   AddressCell,
-  CustomerCell,
   DateCell,
+  //   AddressCell,
+  // CustomerCell,
+  // DateCell,
+  ImageCell,
   //   OrderIdCell,
   // OrderStatusCell,
   // ProfitCell,
-  // TotalCell,
 } from "./rows";
 
 // ----------------------------------------------------------------------
@@ -22,50 +23,64 @@ import {
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.display({
-    id: "select",
-    label: "Row Selection",
-    header: SelectHeader,
-    cell: SelectCell,
-  }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.images, {
     id: "attachment",
-    label: "Attachment",
+    label: "",
     header: "",
-    cell: () => <div></div>,
+    cell: ImageCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
-    id: "product_code",
-    label: "Product Code",
-    header: "Product Code",
-    cell: () => (
-      <div className="dark:text-dark-100 flex items-center gap-2 text-gray-800">
-        <span className="text-sm-plus font-medium">1</span>
-      </div>
-    ),
+  columnHelper.accessor((row) => row?.product.code, {
+    id: "code",
+    label: "Code",
+    header: "Code",
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.product.code}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.product.name, {
     id: "product_name",
     label: "Product Name",
     header: "Product Name",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.product.name}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => row.customer.name, {
+  columnHelper.accessor((row) => row?.orderable.reference_no, {
     id: "reference_no",
     label: "Reference No",
     header: "Reference No",
-    cell: CustomerCell,
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.orderable.reference_no}
+        </p>
+      );
+    },
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.orderable.expiry_date, {
     id: "expiry_date",
     label: "Expiry Date",
     header: "Expiry Date",
     cell: DateCell,
+    enableSorting: false,
   }),
-  columnHelper.accessor((row) => Number(row.created_at), {
+  columnHelper.accessor((row) => row?.orderable.timestamp, {
     id: "purchase_date",
     label: "Purchase Date",
     header: "Purchase Date",
     cell: DateCell,
+    enableSorting: false,
   }),
 ];
