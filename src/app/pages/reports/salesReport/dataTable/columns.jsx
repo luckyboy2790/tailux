@@ -66,6 +66,21 @@ export const columns = [
     cell: CustomerCell,
     enableSorting: false,
   }),
+  columnHelper.accessor((row) => row?.reference_no, {
+    id: "products",
+    label: "Products",
+    header: "Products",
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.orders
+            ?.map((order) => `${order.product.name}(${order.quantity})`)
+            .join(", ")}
+        </p>
+      );
+    },
+    enableSorting: false,
+  }),
   columnHelper.accessor((row) => row?.grand_total, {
     id: "total",
     label: "Total",
