@@ -6,9 +6,12 @@ import { Box, Button } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { FaPlus } from "react-icons/fa";
 import { useDisclosure } from "hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { ConfirmModal } from "components/shared/ConfirmModal";
+import { IoCloseSharp } from "react-icons/io5";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const promise = () =>
   new Promise((resolve) =>
@@ -28,6 +31,8 @@ const PurchaseList = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+  const [settings, setSettings] = useState([]);
 
   const state = error ? "error" : success ? "success" : "pending";
 
@@ -57,6 +62,20 @@ const PurchaseList = () => {
         setError(true);
       });
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${API_URL}/api/site_setting/get?key=site_disable_time`,
+      );
+
+      const result = await response.json();
+
+      setSettings(result.data);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Page title="Homepage">
@@ -89,7 +108,7 @@ const PurchaseList = () => {
             </Button>
           </Box>
 
-          <Box className="shadow-soft dark:bg-dark-700 flex flex-col gap-4 rounded-lg bg-white px-4 py-4 sm:gap-5 sm:px-5 dark:shadow-none">
+          <Box className="shadow-soft dark:bg-dark-700 flex flex-col gap-4 rounded-lg bg-white px-4 py-4 sm:gap-7 sm:px-5 dark:shadow-none">
             <h3 className="dark:text-dark-50 truncate text-lg font-medium tracking-wide text-gray-800">
               Disable time for secretary
             </h3>
@@ -125,6 +144,40 @@ const PurchaseList = () => {
                 <FaPlus />
                 Add
               </Button>
+            </div>
+
+            <div className="flex w-full flex-col gap-5">
+              {settings.map((item, index) => (
+                <Box
+                  key={index}
+                  className="border-gray-150 dark:border-dark-600 dark:bg-dark-450 bg-gray-150 flex items-center justify-between rounded-lg border px-4 py-4 sm:px-5"
+                >
+                  <div className="flex items-center justify-start gap-3">
+                    <div className="flex items-center justify-start gap-2">
+                      <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
+                        From
+                      </h3>
+                      <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
+                        {item.start}
+                      </h3>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-start gap-2">
+                        <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
+                          To
+                        </h3>
+                        <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
+                          {item.end}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <IoCloseSharp className="dark:text-dark-50 cursor-pointer truncate text-sm font-medium tracking-wide text-gray-800" />
+                  </div>
+                </Box>
+              ))}
             </div>
           </Box>
         </div>
