@@ -1,4 +1,3 @@
-// Import Dependencies
 import {
   flexRender,
   getCoreRowModel,
@@ -10,10 +9,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// Local Imports
-import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
+import { Table, Card, THead, TBody, Th, Tr, Td, Spinner } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
@@ -21,25 +19,32 @@ import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
-import { ordersList } from "./data";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
+import { statusFilter } from "utils/react-table/statusFilter";
+import FileNotFound from "assets/emptyIcon";
 
-// ----------------------------------------------------------------------
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const isSafari = getUserAgentBrowser() === "Safari";
 
 export default function PurchaseTable() {
   const { cardSkin } = useThemeContext();
 
-  const [orders, setOrders] = useState([...ordersList]);
+  const [orders, setOrders] = useState([]);
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
     enableRowDense: false,
   });
+
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [globalFilter, setGlobalFilter] = useState("");
 
@@ -69,7 +74,6 @@ export default function PurchaseTable() {
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {
-        // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
         setOrders((old) =>
           old.map((row, index) => {
@@ -84,14 +88,12 @@ export default function PurchaseTable() {
         );
       },
       deleteRow: (row) => {
-        // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
         setOrders((old) =>
           old.filter((oldRow) => oldRow.order_id !== row.original.order_id),
         );
       },
       deleteRows: (rows) => {
-        // Skip page index reset until after next rerender
         skipAutoResetPageIndex();
         const rowIds = rows.map((row) => row.original.order_id);
         setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
@@ -100,6 +102,7 @@ export default function PurchaseTable() {
     },
     filterFns: {
       fuzzy: fuzzyFilter,
+      status: statusFilter,
     },
     enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
@@ -122,6 +125,35 @@ export default function PurchaseTable() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+
+        const queryString = new URLSearchParams({
+          keyword: globalFilter,
+          page: (pageIndex + 1).toString(),
+          per_page: pageSize.toString(),
+        }).toString();
+
+        const response = await fetch(
+          `${API_URL}/api/customer/search?${queryString}`,
+        );
+
+        const result = await response.json();
+
+        setOrders(result.data.data);
+        setTotalCount(result.data.total);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [globalFilter, pageIndex, pageSize]);
 
   return (
     <Page title="Orders Datatable v1">
@@ -200,60 +232,68 @@ export default function PurchaseTable() {
                     ))}
                   </THead>
                   <TBody>
-                    {table.getRowModel().rows.map((row) => {
-                      return (
-                        <Tr
-                          key={row.id}
-                          className={clsx(
-                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                            row.getIsSelected() &&
-                              !isSafari &&
-                              "row-selected after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500 after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent",
-                          )}
-                        >
-                          {/* first row is a normal row */}
-                          {row.getVisibleCells().map((cell) => {
-                            return (
-                              <Td
-                                key={cell.id}
-                                className={clsx(
-                                  "relative bg-white",
-                                  cardSkin === "shadow-sm"
-                                    ? "dark:bg-dark-700"
-                                    : "dark:bg-dark-900",
-                                  cell.column.getCanPin() && [
-                                    cell.column.getIsPinned() === "left" &&
-                                      "sticky z-2 ltr:left-0 rtl:right-0",
-                                    cell.column.getIsPinned() === "right" &&
-                                      "sticky z-2 ltr:right-0 rtl:left-0",
-                                  ],
-                                )}
-                              >
-                                {cell.column.getIsPinned() && (
-                                  <div
-                                    className={clsx(
-                                      "dark:border-dark-500 pointer-events-none absolute inset-0 border-gray-200",
-                                      cell.column.getIsPinned() === "left"
-                                        ? "ltr:border-r rtl:border-l"
-                                        : "ltr:border-l rtl:border-r",
-                                    )}
-                                  ></div>
-                                )}
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext(),
-                                )}
-                              </Td>
-                            );
-                          })}
-                        </Tr>
-                      );
-                    })}
+                    {isLoading ? (
+                      <Tr className="h-30">
+                        <Td colSpan={columns.length} className="text-center">
+                          <Spinner color="info" className="size-10" />
+                        </Td>
+                      </Tr>
+                    ) : (
+                      table.getRowModel().rows.map((row) => {
+                        return (
+                          <Tr
+                            key={row.id}
+                            className={clsx(
+                              "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                              row.getIsSelected() &&
+                                !isSafari &&
+                                "row-selected after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500 after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent",
+                            )}
+                          >
+                            {/* first row is a normal row */}
+                            {row.getVisibleCells().map((cell) => {
+                              return (
+                                <Td
+                                  key={cell.id}
+                                  className={clsx(
+                                    "relative bg-white",
+                                    cardSkin === "shadow-sm"
+                                      ? "dark:bg-dark-700"
+                                      : "dark:bg-dark-900",
+                                    cell.column.getCanPin() && [
+                                      cell.column.getIsPinned() === "left" &&
+                                        "sticky z-2 ltr:left-0 rtl:right-0",
+                                      cell.column.getIsPinned() === "right" &&
+                                        "sticky z-2 ltr:right-0 rtl:left-0",
+                                    ],
+                                  )}
+                                >
+                                  {cell.column.getIsPinned() && (
+                                    <div
+                                      className={clsx(
+                                        "dark:border-dark-500 pointer-events-none absolute inset-0 border-gray-200",
+                                        cell.column.getIsPinned() === "left"
+                                          ? "ltr:border-r rtl:border-l"
+                                          : "ltr:border-l rtl:border-r",
+                                      )}
+                                    ></div>
+                                  )}
+                                  {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext(),
+                                  )}
+                                </Td>
+                              );
+                            })}
+                          </Tr>
+                        );
+                      })
+                    )}
                   </TBody>
                 </Table>
               </div>
               <SelectedRowsActions table={table} />
-              {table.getCoreRowModel().rows.length && (
+              {!isLoading && table.getCoreRowModel().rows.length > 0 && (
                 <div
                   className={clsx(
                     "px-4 pb-4 sm:px-5 sm:pt-4",
@@ -265,7 +305,24 @@ export default function PurchaseTable() {
                     ) && "pt-4",
                   )}
                 >
-                  <PaginationSection table={table} />
+                  <PaginationSection
+                    table={table}
+                    total={totalCount}
+                    pageIndex={pageIndex}
+                    setPageIndex={setPageIndex}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                  />
+                </div>
+              )}
+
+              {!isLoading && table.getCoreRowModel().rows.length <= 0 && (
+                <div className="flex h-60 w-full flex-col items-center justify-center text-gray-500">
+                  <FileNotFound />
+                  <p className="text-lg font-medium">No results found</p>
+                  <p className="text-sm text-gray-400">
+                    Try changing filters or search terms
+                  </p>
                 </div>
               )}
             </Card>
