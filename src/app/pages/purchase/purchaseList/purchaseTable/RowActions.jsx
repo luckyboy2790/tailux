@@ -22,6 +22,7 @@ import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
 import { OrdersDrawer } from "./OrdersDrawer";
 import { useDisclosure } from "hooks";
+import { PaymentModal } from "components/shared/PaymentModal";
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +44,7 @@ export function RowActions({ row, table }) {
 
   const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
     useDisclosure(false);
+  const [isOpen, { open, close }] = useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -103,19 +105,6 @@ export function RowActions({ row, table }) {
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
-                    <span>View</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
                     <span>Payment List</span>
                   </button>
                 )}
@@ -141,6 +130,7 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={open}
                   >
                     <span>Add Payment</span>
                   </button>
@@ -226,6 +216,13 @@ export function RowActions({ row, table }) {
       />
 
       <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
+
+      <PaymentModal
+        type={"add"}
+        row={{ ...row, refetch: table.options.meta?.refetch }}
+        isOpen={isOpen}
+        close={close}
+      />
     </>
   );
 }
