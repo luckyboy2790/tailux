@@ -57,7 +57,7 @@ export const columns = [
     cell: CustomerCell,
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.grand_total, {
+  columnHelper.accessor((row) => row?.total_amount, {
     id: "total",
     label: "Total",
     header: "Grand Total",
@@ -73,22 +73,24 @@ export const columns = [
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
+  columnHelper.accessor((row) => row?.total_amount - row?.paid_amount, {
     id: "balance",
     label: "Balance",
     header: "Balance",
     cell: (props) => (
       <p
-        className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
+        className={`text-sm-plus ${props.row.original?.total_amount < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
       >
-        $
-        {(
-          (props.row.original?.grand_total || 0) -
-          (props.row.original?.paid_amount || 0)
-        ).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
+        {(() => {
+          const balance =
+            (props.row.original?.total_amount || 0) -
+            (props.row.original?.paid_amount || 0);
+          const formatted = Math.abs(balance).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+          return `${balance < 0 ? "-" : ""}$${formatted}`;
+        })()}
       </p>
     ),
     filterFn: "inNumberRange",

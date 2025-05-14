@@ -23,6 +23,7 @@ import { Button } from "components/ui";
 import { OrdersDrawer } from "./OrdersDrawer";
 import { useDisclosure } from "hooks";
 import { PaymentModal } from "components/shared/PaymentModal";
+import { PreturnModal } from "components/shared/PreturnModal";
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,8 @@ export function RowActions({ row, table }) {
   const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
     useDisclosure(false);
   const [isOpen, { open, close }] = useDisclosure(false);
+  const [isPreturnOpen, { open: openPreturn, close: closePreturn }] =
+    useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -144,6 +147,7 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={openPreturn}
                   >
                     <span>Add Return</span>
                   </button>
@@ -222,6 +226,13 @@ export function RowActions({ row, table }) {
         row={{ ...row, refetch: table.options.meta?.refetch }}
         isOpen={isOpen}
         close={close}
+      />
+
+      <PreturnModal
+        type={"add"}
+        row={{ ...row, refetch: table.options.meta?.refetch }}
+        isOpen={isPreturnOpen}
+        close={closePreturn}
       />
     </>
   );
