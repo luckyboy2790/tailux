@@ -7,7 +7,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import {
-  ArrowUpRightIcon,
+  // ArrowUpRightIcon,
   EllipsisHorizontalIcon,
   // EyeIcon,
   // PencilIcon,
@@ -20,11 +20,8 @@ import PropTypes from "prop-types";
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
-import { OrdersDrawer } from "./OrdersDrawer";
-import { useDisclosure } from "hooks";
-import { PaymentModal } from "components/shared/PaymentModal";
-import { PreturnModal } from "components/shared/PreturnModal";
-import { useNavigate } from "react-router";
+// import { OrdersDrawer } from "./OrdersDrawer";
+// import { useDisclosure } from "hooks";
 
 // ----------------------------------------------------------------------
 
@@ -44,13 +41,8 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
-  const navigate = useNavigate();
-
-  const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
-    useDisclosure(false);
-  const [isOpen, { open, close }] = useDisclosure(false);
-  const [isPreturnOpen, { open: openPreturn, close: closePreturn }] =
-    useDisclosure(false);
+  // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
+  //   useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -77,13 +69,13 @@ export function RowActions({ row, table }) {
   return (
     <>
       <div className="flex justify-center space-x-1.5">
-        <Button
+        {/* <Button
           isIcon
           className="size-8 rounded-full"
           onClick={() => openDrawer()}
         >
           <ArrowUpRightIcon className="size-4" />
-        </Button>
+        </Button> */}
 
         <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
@@ -110,9 +102,19 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
-                    onClick={() => {
-                      navigate(`/payments/purchase/${row.original?.id}`);
-                    }}
+                  >
+                    <span>View</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
                   >
                     <span>Payment List</span>
                   </button>
@@ -126,9 +128,6 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
-                    onClick={() => {
-                      navigate(`/preturn/list/${row.original?.id}`);
-                    }}
                   >
                     <span>Return List</span>
                   </button>
@@ -142,7 +141,6 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
-                    onClick={open}
                   >
                     <span>Add Payment</span>
                   </button>
@@ -156,7 +154,6 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
-                    onClick={openPreturn}
                   >
                     <span>Add Return</span>
                   </button>
@@ -228,21 +225,7 @@ export function RowActions({ row, table }) {
         state={state}
       />
 
-      <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
-
-      <PaymentModal
-        type={"add"}
-        row={{ ...row, refetch: table.options.meta?.refetch }}
-        isOpen={isOpen}
-        close={close}
-      />
-
-      <PreturnModal
-        type={"add"}
-        row={{ ...row, refetch: table.options.meta?.refetch }}
-        isOpen={isPreturnOpen}
-        close={closePreturn}
-      />
+      {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}
     </>
   );
 }

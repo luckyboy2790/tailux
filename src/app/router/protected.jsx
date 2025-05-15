@@ -120,6 +120,18 @@ const protectedRoutes = {
           ],
         },
         {
+          path: "preturn",
+          children: [
+            {
+              path: "list/:purchase_id",
+              lazy: async () => ({
+                Component: (await import("app/pages/preturn/preturnList"))
+                  .default,
+              }),
+            },
+          ],
+        },
+        {
           path: "product",
           children: [
             {

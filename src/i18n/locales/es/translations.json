@@ -63,6 +63,10 @@
       "list": "Lista",
       "received_order": "Pedidos recibidos"
     },
+    "return": {
+      "return": "Devoluciones",
+      "list": "Lista"
+    },
     "sale": {
       "sale": "Venta",
       "sale_list": "Lista de Ventas"

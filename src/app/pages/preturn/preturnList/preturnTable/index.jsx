@@ -29,7 +29,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const isSafari = getUserAgentBrowser() === "Safari";
 
-export default function PurchaseTable() {
+export default function PreturnTable() {
   const { cardSkin } = useThemeContext();
 
   const [orders, setOrders] = useState([]);
@@ -129,12 +129,11 @@ export default function PurchaseTable() {
         setIsLoading(true);
 
         const queryString = new URLSearchParams({
-          paymentable_id: params.purchase_id,
-          type: "purchase",
+          purchase_id: params.purchase_id,
         }).toString();
 
         const response = await fetch(
-          `${API_URL}/api/payment/search?${queryString}`,
+          `${API_URL}/api/preturn/search?${queryString}`,
         );
 
         const result = await response.json();

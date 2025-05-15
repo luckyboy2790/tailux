@@ -63,6 +63,10 @@
       "list": "List",
       "received_order": "Received Orders"
     },
+    "return": {
+      "return": "Return",
+      "list": "List"
+    },
     "sale": {
       "sale": "Sale",
       "sale_list": "Sales List"
