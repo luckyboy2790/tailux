@@ -72,7 +72,8 @@
       "pending": "Pending Payments",
       "concurrent_payments": "Concurrent Payments",
       "form": "Form",
-      "select_supplier": "Select a supplier"
+      "select_supplier": "Select a supplier",
+      "list": "List"
     },
     "product": {
       "product": "Product",
