@@ -385,7 +385,7 @@ function Filters({
         placeholder="Select Supplier"
         displayField="label"
         searchFields={["label"]}
-        className="h-8 min-w-30 text-xs"
+        className="h-8 min-w-70 text-xs"
       />
 
       {isFiltered && (
