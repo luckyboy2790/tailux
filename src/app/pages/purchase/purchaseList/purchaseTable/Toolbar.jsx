@@ -22,6 +22,7 @@ import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -193,8 +194,11 @@ export function Toolbar({
                         focus &&
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
+                      onClick={() => {
+                        navigate("/purchase/add");
+                      }}
                     >
-                      <span>New Order</span>
+                      <span>New Purchase</span>
                     </button>
                   )}
                 </MenuItem>
@@ -374,13 +378,14 @@ function Filters({
         className="h-8 min-w-30 py-1 text-xs"
       />
 
-      <Select
-        value={supplierId || ""}
+      <Combobox
         data={supplier}
-        onChange={(e) => {
-          setSupplierId(e.target.value);
-        }}
-        className="h-8 min-w-30 py-1 text-xs"
+        value={supplier.find((s) => s.value === supplierId) || null}
+        onChange={(selected) => setSupplierId(selected?.value || "")}
+        placeholder="Select Supplier"
+        displayField="label"
+        searchFields={["label"]}
+        className="h-8 min-w-30 text-xs"
       />
 
       {isFiltered && (

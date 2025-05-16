@@ -10,7 +10,7 @@ import {
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import { forwardRef, Fragment, useRef } from "react";
+import { forwardRef, Fragment, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 
 // Local Imports
@@ -35,12 +35,14 @@ const CustomCombobox = forwardRef(
       rootProps,
       className,
       classNames,
+      value,
+      onChange,
       ...rest
     },
     ref,
   ) => {
     const {
-      result: filteredData,
+      result: filteredDataRaw,
       query,
       setQuery,
     } = useFuse(data, {
@@ -48,8 +50,13 @@ const CustomCombobox = forwardRef(
       threshold: 0.2,
       matchAllOnEmptyQuery: true,
     });
-    const boxSizeRef = useRef();
 
+    const filteredData = useMemo(
+      () => filteredDataRaw.slice(0, 100),
+      [filteredDataRaw],
+    );
+
+    const boxSizeRef = useRef();
     const { width: inputWidth } = useBoxSize({ ref: boxSizeRef });
     const { left: inputLeft, ref: boxPositionRef } = useBoxPosition();
 
@@ -60,6 +67,10 @@ const CustomCombobox = forwardRef(
           className={clsx(classNames?.root, className)}
           multiple={multiple}
           ref={ref}
+          value={value}
+          onChange={(value) => {
+            onChange(value);
+          }}
           {...rest}
         >
           {({ open, value: selectedValue }) => {
@@ -78,7 +89,7 @@ const CustomCombobox = forwardRef(
                           "relative w-full cursor-default overflow-hidden rounded-lg border text-start outline-hidden transition-colors focus:outline-hidden",
                           error
                             ? "border-error dark:border-error-lighter"
-                            : "border-gray-300 focus-within:border-primary-600! hover:border-gray-400 dark:border-dark-450 dark:focus-within:border-primary-500! dark:hover:border-dark-400",
+                            : "focus-within:border-primary-600! dark:border-dark-450 dark:focus-within:border-primary-500! dark:hover:border-dark-400 border-gray-300 hover:border-gray-400",
                         )}
                       >
                         <div className="flex flex-wrap justify-start gap-2 px-3 py-2 ltr:pr-9 rtl:pl-9">
@@ -94,19 +105,17 @@ const CustomCombobox = forwardRef(
                             classNames={{
                               root: "flex-1",
                               input:
-                                "placeholder:font-light placeholder:text-gray-600 dark:placeholder:text-dark-200",
+                                "dark:placeholder:text-dark-200 placeholder:font-light placeholder:text-gray-600",
                             }}
                             unstyled
-                            displayValue={(val) => val?.item?.[displayField]}
+                            displayValue={() => ""}
                             autoComplete="new"
                             placeholder={
                               selectedValue.length === 0 && query === ""
                                 ? placeholder
                                 : undefined
                             }
-                            onChange={(event) => {
-                              setQuery(event.target.value);
-                            }}
+                            onChange={(event) => setQuery(event.target.value)}
                             value={query}
                             {...inputProps}
                           />
@@ -115,7 +124,7 @@ const CustomCombobox = forwardRef(
                         <div className="absolute inset-y-0 flex items-center ltr:right-0 ltr:pr-2 rtl:left-0 rtl:pl-2">
                           <ChevronDownIcon
                             className={clsx(
-                              "size-5 text-gray-400 transition-transform dark:text-dark-300",
+                              "dark:text-dark-300 size-5 text-gray-400 transition-transform",
                               open && "rotate-180",
                             )}
                             aria-hidden="true"
@@ -133,7 +142,9 @@ const CustomCombobox = forwardRef(
                         autoComplete="new"
                         error={error}
                         displayValue={(val) => val?.[displayField]}
-                        onChange={(event) => setQuery(event.target.value)}
+                        onChange={(event) => {
+                          setQuery(event.target.value);
+                        }}
                         placeholder={placeholder}
                         suffix={
                           <ChevronDownIcon
@@ -144,6 +155,7 @@ const CustomCombobox = forwardRef(
                             aria-hidden="true"
                           />
                         }
+                        value={query?.[displayField]}
                         {...inputProps}
                       />
                     </ComboboxButton>
@@ -166,12 +178,12 @@ const CustomCombobox = forwardRef(
                         "--left-anchor": `${inputLeft}px`,
                       }}
                       className={clsx(
-                        "absolute left-(--left-anchor)! z-10 max-h-60 overflow-y-auto overflow-x-hidden rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:border-dark-500 dark:bg-dark-750 dark:shadow-none",
+                        "dark:border-dark-500 dark:bg-dark-750 absolute left-(--left-anchor)! z-10 max-h-60 overflow-x-hidden overflow-y-auto rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:shadow-none",
                         multiple && "mt-2",
                       )}
                     >
                       {filteredData.length === 0 && query !== "" ? (
-                        <div className="relative cursor-default select-none px-4 py-2 text-gray-800 dark:text-dark-100">
+                        <div className="dark:text-dark-100 relative cursor-default px-4 py-2 text-gray-800 select-none">
                           Nothing found for {query}
                         </div>
                       ) : (
@@ -180,13 +192,13 @@ const CustomCombobox = forwardRef(
                             key={refIndex}
                             className={({ selected, active }) =>
                               clsx(
-                                "relative cursor-pointer select-none px-4 py-2 outline-hidden transition-colors",
+                                "relative cursor-pointer px-4 py-2 outline-hidden transition-colors select-none",
                                 active &&
                                   !selected &&
-                                  "bg-gray-100 dark:bg-dark-600",
+                                  "dark:bg-dark-600 bg-gray-100",
                                 selected
-                                  ? "bg-primary-600 text-white dark:bg-primary-500"
-                                  : "text-gray-800 dark:text-dark-100",
+                                  ? "bg-primary-600 dark:bg-primary-500 text-white"
+                                  : "dark:text-dark-100 text-gray-800",
                               )
                             }
                             value={item}
@@ -236,6 +248,8 @@ CustomCombobox.propTypes = {
   rootProps: PropTypes.object,
   classNames: PropTypes.object,
   className: PropTypes.string,
+  value: PropTypes.any,
+  onChange: PropTypes.func,
 };
 
 export { CustomCombobox as Combobox };

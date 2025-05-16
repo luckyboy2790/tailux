@@ -76,9 +76,11 @@ export function ProfitCell({ getValue, row }) {
         ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {(Number(row.original?.paid_amount) /
-          Number(row.original?.grand_total)) *
-          100}
+        {Math.round(
+          (Number(row.original?.paid_amount) /
+            Number(row.original?.grand_total)) *
+            100,
+        )}
         %
       </Badge>
     </div>
