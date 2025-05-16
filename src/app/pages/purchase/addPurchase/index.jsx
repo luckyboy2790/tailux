@@ -8,7 +8,14 @@ import dayjs from "dayjs";
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
-import { Button, Card, Input, Select, Textarea } from "components/ui";
+import {
+  Button,
+  Card,
+  GhostSpinner,
+  Input,
+  Select,
+  Textarea,
+} from "components/ui";
 import { Delta } from "components/shared/form/TextEditor";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
@@ -51,6 +58,8 @@ const AddPurchase = () => {
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
   const [supplier, setSupplier] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -102,6 +111,8 @@ const AddPurchase = () => {
   }, []);
 
   const onSubmit = async (formData) => {
+    setIsLoading(true);
+
     const payload = {
       id: "",
       date: formData.purchase_date,
@@ -139,6 +150,8 @@ const AddPurchase = () => {
     };
 
     try {
+      if (!isLoading) return;
+
       const form = new FormData();
       for (const key in payload) {
         if (key === "orders" || key === "orders_json") {
@@ -166,6 +179,8 @@ const AddPurchase = () => {
       navigate("/purchase/list");
     } catch (error) {
       console.error("Error submitting form:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -185,7 +200,13 @@ const AddPurchase = () => {
             type="submit"
             form="new-post-form"
           >
-            {t("nav.purchase.save")}
+            {isLoading ? (
+              <>
+                <GhostSpinner variant="soft" className="size-4 border-2" />
+              </>
+            ) : (
+              <>{t("nav.purchase.save")}</>
+            )}
           </Button>
         </div>
 

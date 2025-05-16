@@ -9,7 +9,14 @@ import dayjs from "dayjs";
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
-import { Button, Card, Input, Select, Textarea } from "components/ui";
+import {
+  Button,
+  Card,
+  GhostSpinner,
+  Input,
+  Select,
+  Textarea,
+} from "components/ui";
 import { Delta } from "components/shared/form/TextEditor";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
@@ -32,6 +39,9 @@ const EditPurchase = () => {
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
   const [supplier, setSupplier] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const methods = useForm({
@@ -83,7 +93,13 @@ const EditPurchase = () => {
       if (!res.ok) return;
 
       const data = result.data;
-      const mappedOrders = data.orders || initialData;
+      const mappedOrders =
+        data.orders.map((item) => ({
+          product_name: item.product_id,
+          expiry_date: item.expiry_date,
+          product_cost: item.cost,
+          quantity: item.quantity,
+        })) || initialData;
 
       reset({
         title: data.title || "",
@@ -113,6 +129,8 @@ const EditPurchase = () => {
   }, [id, reset]);
 
   const onSubmit = async (formData) => {
+    setIsLoading(true);
+
     const payload = {
       id,
       date: formData.purchase_date,
@@ -150,6 +168,8 @@ const EditPurchase = () => {
     };
 
     try {
+      if (!isLoading) return;
+
       const form = new FormData();
       for (const key in payload) {
         form.append(key, payload[key] ?? "");
@@ -171,6 +191,8 @@ const EditPurchase = () => {
       navigate("/purchase/list");
     } catch (error) {
       console.error("Error submitting form:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -190,7 +212,13 @@ const EditPurchase = () => {
             type="submit"
             form="new-post-form"
           >
-            {t("nav.purchase.save")}
+            {isLoading ? (
+              <>
+                <GhostSpinner variant="soft" className="size-4 border-2" />
+              </>
+            ) : (
+              <>{t("nav.purchase.save")}</>
+            )}
           </Button>
         </div>
 

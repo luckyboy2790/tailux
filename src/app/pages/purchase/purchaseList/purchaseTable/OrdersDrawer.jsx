@@ -172,17 +172,18 @@ export function OrdersDrawer({ isOpen, close, row }) {
           />
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
-            <div className="flex flex-col">
+            <div className="flex w-full flex-col">
               <div className="mb-1.5 font-semibold">Attachments:</div>
 
-              <div className="flex gap-4">
+              <div className="flex w-full gap-4 overflow-x-scroll">
                 {row.original?.images.map((item, key) => (
-                  <Image
-                    key={key}
-                    width={100}
-                    height={100}
-                    src={`${IMG_URL}${item.path}`}
-                  />
+                  <div className="w-25" key={key}>
+                    <Image
+                      width={100}
+                      height={100}
+                      src={`${IMG_URL}${item.path}`}
+                    />
+                  </div>
                 ))}
               </div>
             </div>

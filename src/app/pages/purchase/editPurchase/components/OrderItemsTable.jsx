@@ -64,6 +64,7 @@ const EditableSelect = ({
   table,
 }) => {
   const initialValue = getValue();
+
   const [value, setValue] = useState(initialValue || "Apple");
   const [products, setProducts] = useState([]);
 
