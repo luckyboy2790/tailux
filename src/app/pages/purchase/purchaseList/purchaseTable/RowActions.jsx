@@ -170,6 +170,9 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => {
+                      navigate(`/purchase/edit/${row.original?.id}`);
+                    }}
                   >
                     <span>Edit</span>
                   </button>

@@ -247,8 +247,6 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
     (sum, o) => sum + (Number(o.product_cost) || 0) * (Number(o.quantity) || 0),
     0,
   );
-  console.log(orders);
-
   const grandTotal = subtotal - discount - shipping - returns;
 
   return (

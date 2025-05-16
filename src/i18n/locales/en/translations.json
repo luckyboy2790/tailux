@@ -22,6 +22,7 @@
       "purchase": "Purchase",
       "purchase_list": "Purchase List",
       "add_purchase": "Add Purchase",
+      "update_purchase": "Update Purchase",
       "pending": "Pending Purchases",
       "order": "Purchase Orders",
       "purchase_date": "Purchase Date",
