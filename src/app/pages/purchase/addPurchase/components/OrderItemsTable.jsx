@@ -176,7 +176,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
         header: t("nav.purchase.sub_total"),
         cell: ({ row }) => {
           const cost = Number(row.getValue("product_cost")) || 0;
-          const qty = Number(row.getValue("quantity")) || 1;
+          const qty = Number(row.getValue("quantity")) || 0;
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
               <span>{cost * qty}</span>
@@ -247,7 +247,6 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
     (sum, o) => sum + (Number(o.product_cost) || 0) * (Number(o.quantity) || 0),
     0,
   );
-  console.log(orders);
 
   const grandTotal = subtotal - discount - shipping - returns;
 

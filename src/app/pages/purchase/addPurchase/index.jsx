@@ -150,7 +150,7 @@ const AddPurchase = () => {
     };
 
     try {
-      if (!isLoading) return;
+      if (isLoading) return;
 
       const form = new FormData();
       for (const key in payload) {

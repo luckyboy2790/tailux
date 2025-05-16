@@ -21,6 +21,7 @@ import { Button, Input, Select } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -34,6 +35,8 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+
+  const navigate = useNavigate();
 
   return (
     <div className="table-toolbar">
@@ -70,8 +73,11 @@ export function Toolbar({
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => {
+                      navigate("/purchase/add");
+                    }}
                   >
-                    <span>New Order</span>
+                    <span>New Purchase</span>
                   </button>
                 )}
               </MenuItem>
