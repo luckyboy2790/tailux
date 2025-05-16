@@ -1,8 +1,9 @@
-// Import Dependencies
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 // Local Imports
 import useValidationSchema from "./schema";
@@ -10,16 +11,11 @@ import { Page } from "components/shared/Page";
 import { Button, Card, Input, Select, Textarea } from "components/ui";
 import { Delta } from "components/shared/form/TextEditor";
 import { CoverImageUpload } from "./components/CoverImageUpload";
-// import { Tags } from "./components/Tags";
-// import { ContextualHelp } from "components/shared/ContextualHelp";
-// import { DatePicker } from "components/shared/form/Datepicker";
-// import { Listbox } from "components/shared/form/Listbox";
-// import { Combobox } from "components/shared/form/Combobox";
-import { useTranslation } from "react-i18next";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
+import { useNavigate } from "react-router";
 
-// ----------------------------------------------------------------------
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const initialState = {
   title: "",
@@ -30,61 +26,147 @@ const initialState = {
   author_id: "",
   tags: [],
   publish_date: "",
-  meta: {
-    title: "",
-    description: "",
-    keywords: [],
-  },
+  reference_no: "",
+  store: "",
+  supplier_id: "",
+  day_of_credit: 0,
+  attachment: [],
+  discount: 0,
+  shipping: 0,
+  returns: 0,
+  note: "",
 };
 
-// const categories = [
-//   {
-//     id: "1",
-//     label: "Accessories",
-//   },
-//   {
-//     id: "2",
-//     label: "Digital",
-//   },
-//   {
-//     id: "3",
-//     label: "Home",
-//   },
-//   {
-//     id: "4",
-//     label: "Technology",
-//   },
-// ];
-
-// const people = [
-//   { id: 1, name: "Wade Cooper" },
-//   { id: 2, name: "Arlene Mccoy" },
-//   { id: 3, name: "Devon Webb" },
-//   { id: 4, name: "Tom Cook" },
-//   { id: 5, name: "Tanya Fox" },
-//   { id: 6, name: "Hellen Schmidt" },
-// ];
+const initialData = [
+  {
+    product_name: "",
+    expiry_date: "",
+    product_cost: 0,
+    quantity: 0,
+  },
+];
 
 const AddPurchase = () => {
   const { t } = useTranslation();
+  const [orders, setOrders] = useState(initialData);
+  const [stores, setStores] = useState([]);
+  const [supplier, setSupplier] = useState([]);
+
+  const navigate = useNavigate();
+
+  const methods = useForm({
+    resolver: yupResolver(useValidationSchema()),
+    defaultValues: {
+      ...initialState,
+      orders: initialData,
+    },
+  });
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
     control,
-    reset,
-  } = useForm({
-    resolver: yupResolver(useValidationSchema()),
-    defaultValues: initialState,
-  });
+    formState: { errors },
+    watch,
+  } = methods;
 
-  const onSubmit = (data) => {
-    console.log(data);
-    toast("New Post Published. Now you can add new one", {
-      invert: true,
-    });
-    reset();
+  useEffect(() => {
+    const fetchData = async () => {
+      const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
+      const storeResult = await storeRes.json();
+      const storeData = [
+        { key: -1, value: "", label: "Select store" },
+        ...(storeResult?.data?.map((item, key) => ({
+          key,
+          value: item?.id,
+          label: item?.name,
+        })) ?? []),
+      ];
+      setStores(storeData);
+
+      const supplierRes = await fetch(
+        `${API_URL}/api/supplier/get_all_suppliers`,
+      );
+      const supplierResult = await supplierRes.json();
+      const supplierData = [
+        { key: -1, value: "", label: "Select supplier" },
+        ...(supplierResult?.data?.map((item, key) => ({
+          key,
+          value: item?.id,
+          label: item?.name,
+        })) ?? []),
+      ];
+      setSupplier(supplierData);
+    };
+    fetchData();
+  }, []);
+
+  const onSubmit = async (formData) => {
+    const payload = {
+      id: "",
+      date: formData.purchase_date,
+      reference_no: formData.reference_no,
+      store: Number(formData.store),
+      supplier: Number(formData.supplier_id),
+      credit_days: formData.day_of_credit.toString(),
+      orders: orders.map((o) => ({
+        product: o.product_name || "",
+        product_id: o.product_id || 1,
+        cost: o.product_cost,
+        quantity: o.quantity,
+        expiry_date: o.expiry_date || "",
+      })),
+      orders_json: JSON.stringify(
+        orders.map((o) => ({
+          product: o.product_name || "",
+          product_id: o.product_id || 1,
+          cost: o.product_cost,
+          quantity: o.quantity,
+          expiry_date: o.expiry_date || "",
+        })),
+      ),
+      discount: formData.discount,
+      discount_string: formData.discount.toString(),
+      shipping: formData.shipping,
+      shipping_string: formData.shipping.toString(),
+      returns: formData.returns,
+      grand_total: orders.reduce(
+        (sum, o) => sum + Number(o.product_cost || 0) * Number(o.quantity || 1),
+        0,
+      ),
+      note: formData.note || "",
+      status: 1,
+    };
+
+    try {
+      const form = new FormData();
+      for (const key in payload) {
+        if (key === "orders" || key === "orders_json") {
+          form.append(key, payload[key]);
+        } else {
+          form.append(key, payload[key] ?? "");
+        }
+      }
+
+      if (formData.attachment?.length) {
+        for (let i = 0; i < formData.attachment.length; i++) {
+          form.append("attachment", formData.attachment[i]);
+        }
+      }
+
+      const res = await fetch(`${API_URL}/api/purchase/create`, {
+        method: "POST",
+        body: form,
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message || "Something went wrong");
+
+      navigate("/purchase/list");
+    } catch (error) {
+      console.error("Error submitting form:", error.message);
+    }
   };
 
   return (
@@ -93,298 +175,130 @@ const AddPurchase = () => {
         <div className="flex flex-col items-center justify-between space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="size-6" />
-            <h2 className="dark:text-dark-50 line-clamp-1 text-xl font-medium text-gray-700">
+            <h2 className="dark:text-dark-50 text-xl font-medium text-gray-700">
               {t("nav.purchase.add_purchase")}
             </h2>
           </div>
-          <div className="flex gap-2">
-            <Button
-              className="min-w-[7rem]"
-              color="primary"
-              type="submit"
-              form="new-post-form"
-            >
-              {t("nav.purchase.save")}
-            </Button>
-          </div>
+          <Button
+            className="min-w-[7rem]"
+            color="primary"
+            type="submit"
+            form="new-post-form"
+          >
+            {t("nav.purchase.save")}
+          </Button>
         </div>
-        <form
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-          id="new-post-form"
-        >
-          <div className="w-full">
-            <div className="col-span-12 lg:col-span-8">
-              <Card className="p-4 sm:px-5">
-                <div className="mt-5 space-y-5">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                    <div className="w-full">
+
+        <FormProvider {...methods}>
+          <form
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+            id="new-post-form"
+          >
+            <div className="w-full">
+              <div className="col-span-12 lg:col-span-8">
+                <Card className="p-4 sm:px-5">
+                  <div className="mt-5 space-y-5">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                       <Controller
-                        render={({ field: { onChange, value, ...rest } }) => (
+                        name="purchase_date"
+                        control={control}
+                        render={({ field }) => (
                           <DatePicker
-                            onChange={onChange}
-                            value={value}
+                            {...field}
+                            onChange={(val) =>
+                              field.onChange(dayjs(val).format("YYYY-MM-DD"))
+                            }
+                            value={field.value || ""}
                             label={t("nav.purchase.purchase_date")}
                             error={errors?.purchase_date?.message}
-                            options={{ disableMobile: true }}
                             placeholder={t(
                               "nav.purchase.purchase_date_placeholder",
                             )}
-                            {...rest}
                           />
                         )}
-                        control={control}
-                        name="purchase_date"
                       />
-                    </div>
-
-                    <div className="w-full">
                       <Input
                         label={t("nav.purchase.reference_no")}
-                        placeholder={t("nav.purchase.reference_no_placeholder")}
                         {...register("reference_no")}
                         error={errors?.reference_no?.message}
                       />
-                    </div>
-
-                    <div className="w-full">
                       <Select
                         label={t("nav.purchase.store")}
-                        defaultValue=""
-                        data={["", "Apple", "Orange", "Potato", "Tomato"]}
+                        data={stores}
                         {...register("store")}
                         error={errors?.store?.message}
                       />
-                    </div>
-
-                    <div className="flex w-full items-start">
-                      <div className="flex w-full items-end">
-                        <div className="w-full">
-                          <Select
-                            label={t("nav.purchase.supplier")}
-                            defaultValue="Apple"
-                            data={["Apple", "Orange", "Potato", "Tomato"]}
-                            {...register("supplier_id")}
-                            error={errors?.supplier_id?.message}
-                          />
-                        </div>
-                        <Button color="primary" isGlow>
-                          +
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="w-full">
+                      <Select
+                        label={t("nav.purchase.supplier")}
+                        data={supplier}
+                        {...register("supplier_id")}
+                        error={errors?.supplier_id?.message}
+                      />
                       <Input
                         label={t("nav.purchase.days_of_credit")}
                         type="number"
-                        defaultValue={0}
-                        placeholder={t("nav.purchase.days_of_credit")}
                         {...register("day_of_credit")}
                         error={errors?.day_of_credit?.message}
+                      />
+                      <Controller
+                        name="attachment"
+                        control={control}
+                        render={({ field }) => (
+                          <CoverImageUpload
+                            label={t("nav.purchase.attachment")}
+                            error={errors?.attachment?.message}
+                            {...field}
+                          />
+                        )}
                       />
                     </div>
                   </div>
 
-                  <Controller
-                    render={({ field }) => (
-                      <CoverImageUpload
-                        classNames={{
-                          box: "mt-1.5",
-                        }}
-                        label={t("nav.purchase.attachment")}
-                        error={errors?.attachment?.message}
-                        {...field}
-                      />
-                    )}
-                    name="attachment"
-                    control={control}
-                  />
-                </div>
+                  <div className="mt-5 space-y-5">
+                    <OrderItemsTable
+                      orders={orders}
+                      setOrders={setOrders}
+                      watch={watch}
+                    />
+                  </div>
 
-                <div className="mt-5 space-y-5">
-                  <OrderItemsTable />
-                </div>
-
-                <div className="mt-5 space-y-5">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                    <div className="w-full">
+                  <div className="mt-5 space-y-5">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                       <Input
                         label={t("nav.purchase.discount")}
                         type="number"
-                        defaultValue={0}
                         {...register("discount")}
                         error={errors?.discount?.message}
                       />
-                    </div>
-
-                    <div className="w-full">
                       <Input
                         label={t("nav.purchase.shipping")}
                         type="number"
-                        defaultValue={0}
                         {...register("shipping")}
                         error={errors?.shipping?.message}
                       />
-                    </div>
-
-                    <div className="w-full">
                       <Input
                         label={t("nav.purchase.return")}
                         type="number"
-                        defaultValue={0}
                         {...register("returns")}
                         error={errors?.returns?.message}
                       />
                     </div>
                   </div>
-                </div>
 
-                <div className="mt-5 space-y-5">
-                  <div className="w-full">
+                  <div className="mt-5 space-y-5">
                     <Textarea
                       label={t("nav.purchase.note")}
-                      placeholder={t("nav.purchase.note_placeholder")}
                       rows="5"
                       {...register("note")}
                       error={errors?.note?.message}
                     />
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </div>
             </div>
-            {/* <div className="col-span-12 space-y-4 sm:space-y-5 lg:col-span-4 lg:space-y-6">
-              <Card className="space-y-5 p-4 sm:px-5">
-                <Controller
-                  render={({ field }) => (
-                    <Listbox
-                      data={categories}
-                      value={
-                        categories.find((cat) => cat.id === field.value) || null
-                      }
-                      onChange={(val) => field.onChange(val.id)}
-                      name={field.name}
-                      label={t("nav.purchase.save")}
-                      placeholder="Select Category"
-                      displayField="label"
-                      error={errors?.category_id?.message}
-                    />
-                  )}
-                  control={control}
-                  name="category_id"
-                />
-
-                <Controller
-                  render={({ field: { value, onChange, ...rest } }) => (
-                    <Combobox
-                      data={people}
-                      displayField="name"
-                      value={people.find((user) => user.id === value) || null}
-                      onChange={(val) => onChange(val?.id)}
-                      placeholder="Please Select Author"
-                      label="Select Author"
-                      searchFields={["name"]}
-                      error={errors?.author_id?.message}
-                      highlight
-                      {...rest}
-                    />
-                  )}
-                  control={control}
-                  name="author_id"
-                />
-
-                <Controller
-                  render={({ field: { value, onChange, ...rest } }) => (
-                    <Tags
-                      value={
-                        value?.map((val, i) => {
-                          return { id: i, value: val };
-                        }) || []
-                      }
-                      placeholder="Enter Tags"
-                      onChange={(val) => onChange(val.map((i) => i.value))}
-                      error={errors?.tags?.message}
-                      label="Tags"
-                      {...rest}
-                    />
-                  )}
-                  control={control}
-                  name="tags"
-                />
-
-                <Controller
-                  render={({ field: { onChange, value, ...rest } }) => (
-                    <DatePicker
-                      onChange={onChange}
-                      value={value || ""}
-                      label="Publish Date"
-                      error={errors?.publish_date?.message}
-                      options={{ disableMobile: true }}
-                      placeholder="Choose date..."
-                      {...rest}
-                    />
-                  )}
-                  control={control}
-                  name="publish_date"
-                />
-              </Card>
-
-              <Card className="p-4 sm:px-5">
-                <h6 className="dark:text-dark-100 flex space-x-1.5 text-base font-medium text-gray-800">
-                  <span>SEO Meta Data</span>
-                  <ContextualHelp
-                    title="SEO Meta Data"
-                    anchor={{ to: "bottom", gap: 8 }}
-                    content={
-                      <p>
-                        SEO data is relevant information that your company needs
-                        to be aware of so that your business can take full
-                        advantage of all the opportunities presented with this
-                        type of strategy.
-                      </p>
-                    }
-                  />
-                </h6>
-
-                <div className="mt-3 space-y-5">
-                  <Input
-                    {...register("meta.title")}
-                    label="Meta title"
-                    error={errors?.meta?.title?.message}
-                    placeholder="Enter Meta Title"
-                  />
-                  <Textarea
-                    rows={4}
-                    {...register("meta.description")}
-                    label="Meta Description"
-                    error={errors?.meta?.description?.message}
-                    placeholder="Enter Meta Description"
-                  />
-                  <Controller
-                    render={({ field }) => (
-                      <Tags
-                        placeholder="Enter Meta Keywords"
-                        label="Meta Keywords"
-                        name={field.name}
-                        value={
-                          field.value?.map((val, i) => {
-                            return { id: i, value: val };
-                          }) || []
-                        }
-                        onChange={(val) =>
-                          field.onChange(val.map((i) => i.value))
-                        }
-                        error={errors?.meta?.keywords?.message}
-                      />
-                    )}
-                    control={control}
-                    name="meta.keywords"
-                  />
-                </div>
-              </Card>
-            </div> */}
-          </div>
-        </form>
+          </form>
+        </FormProvider>
       </div>
     </Page>
   );

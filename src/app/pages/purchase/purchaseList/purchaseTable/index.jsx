@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Spinner } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -68,16 +68,11 @@ export default function PurchaseTable() {
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-
       const dateSort = sorting.find((sort) => sort.id === "timestamp");
-      const sortDirection = dateSort
-        ? dateSort.desc
-          ? "desc"
-          : "asc"
-        : "desc";
+      const sortDirection = dateSort?.desc ? "desc" : "asc";
 
       const queryString = new URLSearchParams({
         company_id: companyId,
@@ -93,30 +88,29 @@ export default function PurchaseTable() {
       const response = await fetch(
         `${API_URL}/api/purchase/search?${queryString}`,
       );
-
       const result = await response.json();
 
       setOrders(result.data.data);
       setTotalCount(result.data.total);
-
-      setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchOrders();
   }, [
+    companyId,
+    endDate,
     globalFilter,
     pageIndex,
     pageSize,
-    startDate,
-    endDate,
-    companyId,
-    supplierId,
     sorting,
+    startDate,
+    supplierId,
   ]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   const table = useReactTable({
     data: orders,

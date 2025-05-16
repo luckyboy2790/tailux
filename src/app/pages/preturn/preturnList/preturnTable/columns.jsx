@@ -57,8 +57,6 @@ export const columns = [
     cell: (props) => {
       const { note, attachment } = props.row.original || {};
 
-      console.log(IMG_URL);
-
       return (
         <div className="flex items-center gap-2 py-1">
           <span className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">

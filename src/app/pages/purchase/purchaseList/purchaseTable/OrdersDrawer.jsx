@@ -27,6 +27,8 @@ import { orderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { Image } from "antd";
 
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
+
 // ----------------------------------------------------------------------
 
 const cols = [
@@ -173,9 +175,14 @@ export function OrdersDrawer({ isOpen, close, row }) {
             <div className="flex flex-col">
               <div className="mb-1.5 font-semibold">Attachments:</div>
 
-              <div>
+              <div className="flex gap-4">
                 {row.original?.images.map((item, key) => (
-                  <Image key={key} width={100} height={100} src={item.path} />
+                  <Image
+                    key={key}
+                    width={100}
+                    height={100}
+                    src={`${IMG_URL}${item.path}`}
+                  />
                 ))}
               </div>
             </div>
