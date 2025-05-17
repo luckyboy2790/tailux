@@ -118,7 +118,7 @@ const protectedRoutes = {
           path: "payments",
           children: [
             {
-              path: "purchase/:purchase_id",
+              path: ":type/:purchase_id",
               lazy: async () => ({
                 Component: (await import("app/pages/payment/paymentList"))
                   .default,

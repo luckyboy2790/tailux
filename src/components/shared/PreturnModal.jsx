@@ -7,7 +7,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { PaperClipIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 // Local Imports
 import { Textarea, Button, Input, Upload } from "components/ui";
@@ -24,11 +24,33 @@ export function PreturnModal({ type, row, isOpen, close }) {
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState({
-    date: dayjs().format("YYYY-MM-DD"),
+    date: "",
     amount: 0,
     attachment: [],
     reference_no: "",
   });
+
+  useEffect(() => {
+    if (type === "edit") {
+      const rowData = row.original;
+
+      console.log(rowData);
+
+      setData({
+        date: dayjs(rowData?.timestamp).format("YYYY-MM-DD"),
+        amount: Number(rowData?.amount),
+        attachment: [],
+        reference_no: rowData.reference_no,
+      });
+    } else {
+      setData({
+        date: dayjs().format("YYYY-MM-DD"),
+        amount: 0,
+        attachment: [],
+        reference_no: "",
+      });
+    }
+  }, [type, row.original]);
 
   const uploadRef = useRef();
 
@@ -45,17 +67,29 @@ export function PreturnModal({ type, row, isOpen, close }) {
     formData.append("amount", data.amount);
     formData.append("reference_no", data.reference_no);
     formData.append("note", data.note || "");
-    formData.append("purchase_id", row.original?.id);
+
+    if (type === "add") {
+      formData.append("purchase_id", row.original?.id);
+    } else {
+      formData.append("purchase_id", row.original?.purchase_id);
+    }
+
+    if (type === "edit") {
+      formData.append("id", row.original?.id);
+    }
 
     data.attachment.forEach((file) => {
       formData.append("attachment", file);
     });
 
     try {
-      const response = await fetch(`${API_URL}/api/preturn/create`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${API_URL}/api/preturn/${type === "add" ? "create" : "update"}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       if (!response.ok) throw new Error("Failed to upload");
 

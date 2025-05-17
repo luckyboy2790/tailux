@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Spinner } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -57,6 +57,31 @@ export default function PaymentTable() {
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
+  const params = useParams();
+
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const queryString = new URLSearchParams({
+        paymentable_id: params.purchase_id,
+        type: params.type,
+      }).toString();
+
+      const response = await fetch(
+        `${API_URL}/api/payment/search?${queryString}`,
+      );
+
+      const result = await response.json();
+
+      setOrders(result.data);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [params.purchase_id, params.type]);
+
   const table = useReactTable({
     data: orders,
     columns: columns,
@@ -94,6 +119,7 @@ export default function PaymentTable() {
         setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
       },
       setTableSettings,
+      refetch: fetchData,
     },
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -117,38 +143,13 @@ export default function PaymentTable() {
     autoResetPageIndex,
   });
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
-
-  const params = useParams();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const queryString = new URLSearchParams({
-          paymentable_id: params.purchase_id,
-          type: "purchase",
-        }).toString();
-
-        const response = await fetch(
-          `${API_URL}/api/payment/search?${queryString}`,
-        );
-
-        const result = await response.json();
-
-        setOrders(result.data);
-
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [params.purchase_id]);
 
   return (
     <Page title="Orders Datatable v1">

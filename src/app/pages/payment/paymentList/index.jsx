@@ -27,8 +27,6 @@ const PurchaseList = () => {
 
       const result = await response.json();
 
-      console.log(result);
-
       setReferenceNo(result.data?.reference_no);
     };
 

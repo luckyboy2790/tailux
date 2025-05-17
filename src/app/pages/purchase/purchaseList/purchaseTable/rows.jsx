@@ -62,7 +62,7 @@ export function TotalCell({ getValue }) {
 
   return (
     <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
-      ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
+      {`${value < 0 ? "-" : ""}$${Math.abs(Number(value)).toLocaleString()}`}
     </p>
   );
 }

@@ -7,7 +7,7 @@ import {
   TransitionChild,
 } from "@headlessui/react";
 import { PaperClipIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 // Local Imports
 import { Textarea, Button, Input, Upload } from "components/ui";
@@ -24,17 +24,41 @@ export function PaymentModal({ type, row, isOpen, close }) {
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState({
-    date: dayjs().format("YYYY-MM-DD"),
-    amount:
-      Number(row.original?.grand_total) - Number(row.original?.paid_amount),
+    date: "",
+    amount: 0,
     attachment: [],
     reference_no: "",
   });
 
+  useEffect(() => {
+    if (type === "edit") {
+      const rowData = row.original;
+
+      console.log(rowData);
+
+      setData({
+        date: dayjs(rowData?.timestamp).format("YYYY-MM-DD"),
+        amount: Number(rowData?.amount),
+        attachment: [],
+        reference_no: rowData.reference_no,
+        note: rowData.note || "",
+      });
+    } else {
+      setData({
+        date: dayjs().format("YYYY-MM-DD"),
+        amount:
+          Number(row.original?.grand_total) - Number(row.original?.paid_amount),
+        attachment: [],
+        reference_no: "",
+        note: "",
+      });
+    }
+  }, [type, row.original]);
+
   const uploadRef = useRef();
 
   const filesList =
-    data.attachment.length > 0
+    data.attachment?.length > 0
       ? data.attachment.map((file) => file.name).join(", ")
       : "Choose Files";
 
@@ -46,19 +70,32 @@ export function PaymentModal({ type, row, isOpen, close }) {
     formData.append("amount", data.amount);
     formData.append("reference_no", data.reference_no);
     formData.append("note", data.note || "");
-    formData.append("paymentable_id", row.original?.id);
+
+    if (type === "add") {
+      formData.append("paymentable_id", row.original?.id);
+    } else {
+      formData.append("paymentable_id", row.original?.paymentable_id);
+    }
+
     formData.append("status", 1);
     formData.append("type", "purchase");
+
+    if (type === "edit") {
+      formData.append("id", row.original?.id);
+    }
 
     data.attachment.forEach((file) => {
       formData.append("attachment", file);
     });
 
     try {
-      const response = await fetch(`${API_URL}/api/payment/create`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${API_URL}/api/payment/${type === "add" ? "create" : "update"}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       if (!response.ok) throw new Error("Failed to upload");
 

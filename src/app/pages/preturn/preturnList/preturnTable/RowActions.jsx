@@ -14,14 +14,19 @@ import {
   // TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
+import { useDisclosure } from "hooks";
+import { toast } from "sonner";
+import { PreturnModal } from "components/shared/PreturnModal";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +49,8 @@ export function RowActions({ row, table }) {
   // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
   //   useDisclosure(false);
 
+  const [isOpen, { open, close }] = useDisclosure(false);
+
   const closeModal = () => {
     setDeleteModalOpen(false);
   };
@@ -54,15 +61,71 @@ export function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(() => {
+  const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    setTimeout(() => {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+    const response = await fetch(
+      `${API_URL}/api/preturn/delete/${row.original?.id}`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      toast.error("Delete Return Failed");
+
       setConfirmDeleteLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+
+      closeModal();
+
+      throw new Error("Something went wrong");
+    }
+
+    toast.success("Delete Return Successfully");
+
+    setDeleteSuccess(true);
+    setConfirmDeleteLoading(false);
+
+    closeModal();
+
+    if (typeof table.options.meta?.refetch === "function") {
+      await table.options.meta.refetch();
+    } else {
+      console.warn("Refetch function not available in table meta.");
+    }
+  };
+
+  const handleApprove = async (item) => {
+    try {
+      if (Number(item.status) === 1) {
+        toast.success("Already approved");
+      } else {
+        const response = await fetch(
+          `${API_URL}/api/preturn/approve/${row.original?.id}`,
+          {
+            method: "POST",
+          },
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          toast.error(result.error);
+
+          return;
+        }
+
+        toast.success("Approved Successfully");
+
+        if (typeof table.options.meta?.refetch === "function") {
+          await table.options.meta.refetch();
+        } else {
+          console.warn("Refetch function not available in table meta.");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 
@@ -102,8 +165,11 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => {
+                      handleApprove(row.original);
+                    }}
                   >
-                    <span>View</span>
+                    <span>Approve</span>
                   </button>
                 )}
               </MenuItem>
@@ -115,84 +181,7 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
-                  >
-                    <span>Payment List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Return List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Payment</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Return</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Report</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Email</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
+                    onClick={open}
                   >
                     <span>Edit</span>
                   </button>
@@ -223,6 +212,13 @@ export function RowActions({ row, table }) {
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+
+      <PreturnModal
+        type={"edit"}
+        row={{ ...row, refetch: table.options.meta?.refetch }}
+        isOpen={isOpen}
+        close={close}
       />
 
       {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}
