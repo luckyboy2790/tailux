@@ -18,7 +18,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
-export function PaymentModal({ type, row, isOpen, close }) {
+export function PaymentModal({ type, paymentType, row, isOpen, close }) {
   const saveRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
@@ -34,8 +34,6 @@ export function PaymentModal({ type, row, isOpen, close }) {
     if (type === "edit") {
       const rowData = row.original;
 
-      console.log(rowData);
-
       setData({
         date: dayjs(rowData?.timestamp).format("YYYY-MM-DD"),
         amount: Number(rowData?.amount),
@@ -47,13 +45,16 @@ export function PaymentModal({ type, row, isOpen, close }) {
       setData({
         date: dayjs().format("YYYY-MM-DD"),
         amount:
-          Number(row.original?.grand_total) - Number(row.original?.paid_amount),
+          paymentType === "purchase"
+            ? Number(row.original?.grand_total) -
+              Number(row.original?.paid_amount)
+            : 0,
         attachment: [],
         reference_no: "",
         note: "",
       });
     }
-  }, [type, row.original]);
+  }, [type, row.original, paymentType]);
 
   const uploadRef = useRef();
 
@@ -78,7 +79,7 @@ export function PaymentModal({ type, row, isOpen, close }) {
     }
 
     formData.append("status", 1);
-    formData.append("type", "purchase");
+    formData.append("type", paymentType || "");
 
     if (type === "edit") {
       formData.append("id", row.original?.id);

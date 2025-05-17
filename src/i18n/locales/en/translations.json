@@ -70,7 +70,11 @@
     },
     "sale": {
       "sale": "Sale",
-      "sale_list": "Sales List"
+      "sale_list": "Sales List",
+      "product_price": "Product Price",
+      "product_name": "Product Name(Code)",
+      "quantity": "Quantity",
+      "sub_total": "Subtotal"
     },
     "payment": {
       "payment": "Payment",

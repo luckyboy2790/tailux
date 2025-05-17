@@ -235,6 +235,7 @@ export function RowActions({ row, table }) {
 
       <PaymentModal
         type={"add"}
+        paymentType={"purchase"}
         row={{ ...row, refetch: table.options.meta?.refetch }}
         isOpen={isOpen}
         close={close}

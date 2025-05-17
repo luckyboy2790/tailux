@@ -76,9 +76,11 @@ export function ProfitCell({ getValue, row }) {
         ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {(Number(row.original?.paid_amount) /
-          Number(row.original?.grand_total || 0)) *
-          100}
+        {Math.round(
+          (Number(row.original?.paid_amount) /
+            Number(row.original?.grand_total || 0)) *
+            100,
+        )}
         %
       </Badge>
     </div>
@@ -92,8 +94,6 @@ export function OrderStatusCell({ getValue, row, column, table }) {
 
   if (val?.paid_amount < val?.grand_total) {
     purchaseStatus = "pending";
-  } else if (val?.paid_amount === 0) {
-    purchaseStatus = "partial";
   } else {
     purchaseStatus = "paid";
   }

@@ -9,12 +9,9 @@ import {
 import {
   ArrowUpRightIcon,
   EllipsisHorizontalIcon,
-  EyeIcon,
-  PencilIcon,
-  TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 
 // Local Imports
@@ -22,6 +19,11 @@ import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
 import { OrdersDrawer } from "./OrdersDrawer";
 import { useDisclosure } from "hooks";
+import { PaymentModal } from "components/shared/PaymentModal";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -41,8 +43,12 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
+  const navigate = useNavigate();
+
   const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
     useDisclosure(false);
+
+  const [isOpen, { open, close }] = useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -54,21 +60,45 @@ export function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(() => {
+  const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    setTimeout(() => {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+
+    const response = await fetch(
+      `${API_URL}/api/sales/delete/${row.original?.id}`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      toast.error("Delete Sale Failed");
+
       setConfirmDeleteLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+
+      closeModal();
+
+      throw new Error("Something went wrong");
+    }
+
+    toast.success("Delete Sale Successfully");
+
+    setDeleteSuccess(true);
+    setConfirmDeleteLoading(false);
+
+    closeModal();
+
+    if (typeof table.options.meta?.refetch === "function") {
+      await table.options.meta.refetch();
+    } else {
+      console.warn("Refetch function not available in table meta.");
+    }
+  };
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 
   return (
     <>
-      <div className="flex justify-center space-x-1.5 ">
+      <div className="flex justify-center space-x-1.5">
         <Button
           isIcon
           className="size-8 rounded-full"
@@ -92,19 +122,21 @@ export function RowActions({ row, table }) {
           >
             <MenuItems
               anchor={{ to: "bottom end", gap: 12 }}
-              className="absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0"
+              className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
               <MenuItem>
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors ",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => {
+                      navigate(`/payments/sale/${row.original?.id}`);
+                    }}
                   >
-                    <EyeIcon className="size-4.5 stroke-1" />
-                    <span>View</span>
+                    <span>Payment List</span>
                   </button>
                 )}
               </MenuItem>
@@ -112,12 +144,28 @@ export function RowActions({ row, table }) {
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors ",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={open}
                   >
-                    <PencilIcon className="size-4.5 stroke-1" />
+                    <span>Add Payment</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                    onClick={() => {
+                      navigate(`/sale/edit/${row.original?.id}`);
+                    }}
+                  >
                     <span>Edit</span>
                   </button>
                 )}
@@ -127,11 +175,10 @@ export function RowActions({ row, table }) {
                   <button
                     onClick={openModal}
                     className={clsx(
-                      "this:error flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-hidden transition-colors dark:text-this-light ",
+                      "this:error text-this dark:text-this-light flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <TrashIcon className="size-4.5 stroke-1" />
                     <span>Delete</span>
                   </button>
                 )}
@@ -148,6 +195,14 @@ export function RowActions({ row, table }) {
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+
+      <PaymentModal
+        type={"add"}
+        paymentType={"sale"}
+        row={{ ...row, refetch: table.options.meta?.refetch }}
+        isOpen={isOpen}
+        close={close}
       />
 
       <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
