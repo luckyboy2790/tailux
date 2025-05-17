@@ -23,6 +23,9 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import dayjs from "dayjs";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -38,6 +41,48 @@ export function Toolbar({
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   const navigate = useNavigate();
+
+  const exportTableToExcel = async () => {
+    const response = await fetch(`${API_URL}/api/purchase/get_all`);
+    const result = await response.json();
+
+    const purchases = result || [];
+
+    const data = purchases.map((p, index) => {
+      let status = "paid";
+      if (p.paid_amount === 0) {
+        status = "partial";
+      } else if (p.paid_amount < p.total_amount) {
+        status = "pending";
+      }
+
+      return {
+        No: index + 1,
+        Date: dayjs(p.timestamp).format("YYYY-MM-DD"),
+        Reference_No: p.reference_no,
+        Supplier: p.supplier_company || "",
+        Grand_Total: p.total_amount,
+        Paid_Amount: p.paid_amount,
+        Balance: p.total_amount - p.paid_amount,
+        Order_Status: status,
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Purchases");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(blob, "PurchaseReport.xlsx");
+  };
 
   return (
     <div className="table-toolbar">
@@ -91,21 +136,9 @@ export function Toolbar({
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => exportTableToExcel()}
                   >
-                    <span>Export as PDF</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Export as CSV</span>
+                    <span>Export as Excel</span>
                   </button>
                 )}
               </MenuItem>
@@ -144,21 +177,9 @@ export function Toolbar({
                         focus &&
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
+                      onClick={() => exportTableToExcel()}
                     >
-                      <span>Export as PDF</span>
-                    </button>
-                  )}
-                </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Export as CSV</span>
+                      <span>Export as Excel</span>
                     </button>
                   )}
                 </MenuItem>

@@ -15,6 +15,9 @@ import PropTypes from "prop-types";
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
 import { toast } from "sonner";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import dayjs from "dayjs";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -45,6 +48,46 @@ export function SelectedRowsActions({ table }) {
         console.warn("Refetch function not available in table meta.");
       }
     }
+  };
+
+  const exportTableToExcel = async (table) => {
+    const purchases = table || [];
+    console.log(purchases);
+
+    const data = purchases.map((p, index) => {
+      let status = "paid";
+      if (p.original?.paid_amount === 0) {
+        status = "partial";
+      } else if (p.original?.paid_amount < p.original?.total_amount) {
+        status = "pending";
+      }
+
+      return {
+        No: index + 1,
+        Date: dayjs(p.original?.timestamp).format("YYYY-MM-DD"),
+        Reference_No: p.original?.reference_no,
+        Supplier: p.original?.supplier_company || "",
+        Grand_Total: p.original?.total_amount,
+        Paid_Amount: p.original?.paid_amount,
+        Balance: p.original?.total_amount - p.original?.paid_amount,
+        Order_Status: status,
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Purchases");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(blob, "PurchaseReport.xlsx");
   };
 
   return (
@@ -114,23 +157,12 @@ export function SelectedRowsActions({ table }) {
                           focus &&
                             "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                         )}
+                        onClick={() => {
+                          exportTableToExcel(selectedRows);
+                        }}
                       >
                         <ArrowUpTrayIcon className="size-4.5" />
-                        <span>Export CVS</span>
-                      </button>
-                    )}
-                  </MenuItem>
-                  <MenuItem>
-                    {({ focus }) => (
-                      <button
-                        className={clsx(
-                          "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                          focus &&
-                            "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                        )}
-                      >
-                        <ArrowUpTrayIcon className="size-4.5" />
-                        <span>Export PDF</span>
+                        <span>Export Excel</span>
                       </button>
                     )}
                   </MenuItem>
