@@ -1,5 +1,5 @@
 // Import Dependencies
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 
 // Local Imports
@@ -74,6 +74,16 @@ export function AuthProvider({ children }) {
   const [cookies, setCookie, removeCookie] = useCookies(["authToken"]);
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const logout = useCallback(() => {
+    try {
+      dispatch({ type: "LOGOUT" });
+      removeCookie("authToken");
+      delete axios.defaults.headers.common.Authorization;
+    } catch (err) {
+      console.error(err);
+    }
+  }, [removeCookie]);
+
   useEffect(() => {
     const init = async () => {
       const token = cookies.authToken;
@@ -99,7 +109,7 @@ export function AuthProvider({ children }) {
     };
 
     init();
-  }, [cookies.authToken]);
+  }, [cookies.authToken, logout]);
 
   const login = async ({ username, password }) => {
     dispatch({ type: "LOGIN_REQUEST" });
@@ -112,13 +122,34 @@ export function AuthProvider({ children }) {
 
       const { authToken, user, expires_in } = data;
 
-      if (user?.enable_google2fa) {
+      const queryParams = new URLSearchParams(window.location.search);
+      const redirect = queryParams.get("redirect");
+
+      if (user?.enable_google2fa && user?.google2fa_secret) {
         localStorage.setItem("pending2FAUser", JSON.stringify(user));
         localStorage.setItem(
           "pendingUserToken",
           JSON.stringify({ authToken, expires_in }),
         );
-        window.location.href = "/verification";
+
+        const verificationURL = redirect
+          ? `/verification?redirect=${encodeURIComponent(redirect)}`
+          : "/verification";
+
+        window.location.href = verificationURL;
+        return;
+      } else if (!user?.google2fa_secret && !user?.enable_google2fa) {
+        localStorage.setItem("pending2FAUser", JSON.stringify(user));
+        localStorage.setItem(
+          "pendingUserToken",
+          JSON.stringify({ authToken, expires_in }),
+        );
+
+        const qrURL = redirect
+          ? `/qr?redirect=${encodeURIComponent(redirect)}`
+          : "/qr";
+
+        window.location.href = qrURL;
         return;
       } else {
         setCookie("authToken", authToken, {
@@ -149,8 +180,6 @@ export function AuthProvider({ children }) {
         google2fa_secret,
       });
 
-      console.log(response);
-
       if (response.status !== 200) {
         dispatch({
           type: "LOGIN_ERROR",
@@ -164,8 +193,6 @@ export function AuthProvider({ children }) {
         localStorage.getItem("pendingUserToken"),
       );
 
-      console.log(authToken, expires_in);
-
       setCookie("authToken", authToken, {
         path: "/",
         maxAge: expires_in,
@@ -177,8 +204,6 @@ export function AuthProvider({ children }) {
 
       localStorage.removeItem("pending2FAUser");
       localStorage.removeItem("pendingUserToken");
-
-      window.location.href = "/";
     } catch (err) {
       console.log(err);
 
@@ -187,12 +212,6 @@ export function AuthProvider({ children }) {
         payload: { errorMessage: err.error },
       });
     }
-  };
-
-  const logout = () => {
-    removeCookie("authToken");
-    delete axios.defaults.headers.common.Authorization;
-    dispatch({ type: "LOGOUT" });
   };
 
   if (!children) {

@@ -16,6 +16,12 @@ const ghostRoutes = {
         Component: (await import("app/pages/Auth/google2Fa")).default,
       }),
     },
+    {
+      path: "qr",
+      lazy: async () => ({
+        Component: (await import("app/pages/Auth/QRGenerate")).default,
+      }),
+    },
   ],
 };
 

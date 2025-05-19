@@ -45,6 +45,7 @@
     "jwt-decode": "^4.0.0",
     "lint-staged": "^15.5.0",
     "lodash.debounce": "^4.0.8",
+    "qrcode.react": "^4.2.0",
     "quill": "^2.0.3",
     "quill-magic-url": "^4.2.0",
     "react": "^19.0.0",

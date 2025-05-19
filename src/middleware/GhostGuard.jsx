@@ -7,7 +7,6 @@ import { HOME_PATH, REDIRECT_URL_KEY } from "constants/app.constant";
 
 // ----------------------------------------------------------------------
 
-
 export default function GhostGuard() {
   const outlet = useOutlet();
   const { isAuthenticated } = useAuthContext();
