@@ -1,13 +1,11 @@
 // Import Dependencies
 import { useEffect, useReducer } from "react";
-import isObject from "lodash/isObject";
 import PropTypes from "prop-types";
-import isString from "lodash/isString";
 
 // Local Imports
 import axios from "utils/axios";
-import { isTokenValid, setSession } from "utils/jwt";
 import { AuthContext } from "./context";
+import { useCookies } from "react-cookie";
 
 // ----------------------------------------------------------------------
 
@@ -73,87 +71,127 @@ const reducer = (state, action) => {
 };
 
 export function AuthProvider({ children }) {
+  const [cookies, setCookie, removeCookie] = useCookies(["authToken"]);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const init = async () => {
-      try {
-        const authToken = window.localStorage.getItem("authToken");
+      const token = cookies.authToken;
 
-        if (authToken && isTokenValid(authToken)) {
-          setSession(authToken);
-
-          const response = await axios.get("/user/profile");
-          const { user } = response.data;
+      if (token) {
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+        try {
+          const { data } = await axios.get("/api/auth/user/profile");
 
           dispatch({
             type: "INITIALIZE",
-            payload: {
-              isAuthenticated: true,
-              user,
-            },
+            payload: { isAuthenticated: true, user: data },
           });
-        } else {
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
+        } catch {
+          logout();
         }
-      } catch (err) {
-        console.error(err);
+      } else {
         dispatch({
           type: "INITIALIZE",
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
+          payload: { isAuthenticated: false, user: null },
         });
       }
     };
 
     init();
-  }, []);
+  }, [cookies.authToken]);
 
   const login = async ({ username, password }) => {
-    dispatch({
-      type: "LOGIN_REQUEST",
-    });
+    dispatch({ type: "LOGIN_REQUEST" });
 
     try {
-      const response = await axios.post("/login", {
+      const { data } = await axios.post("/api/auth/login", {
         username,
         password,
       });
 
-      const { authToken, user } = response.data;
+      const { authToken, user, expires_in } = data;
 
-      if (!isString(authToken) && !isObject(user)) {
-        throw new Error("Response is not vallid");
+      if (user?.enable_google2fa) {
+        localStorage.setItem("pending2FAUser", JSON.stringify(user));
+        localStorage.setItem(
+          "pendingUserToken",
+          JSON.stringify({ authToken, expires_in }),
+        );
+        window.location.href = "/verification";
+        return;
+      } else {
+        setCookie("authToken", authToken, {
+          path: "/",
+          maxAge: expires_in,
+        });
+
+        axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
+
+        dispatch({ type: "LOGIN_SUCCESS", payload: { user } });
       }
-
-      setSession(authToken);
-
-      dispatch({
-        type: "LOGIN_SUCCESS",
-        payload: {
-          user,
-        },
-      });
     } catch (err) {
+      console.log(err);
+
       dispatch({
         type: "LOGIN_ERROR",
-        payload: {
-          errorMessage: err,
-        },
+        payload: { errorMessage: err.error },
       });
     }
   };
 
-  const logout = async () => {
-    setSession(null);
+  const checkOTP = async ({ one_time_password, google2fa_secret, user }) => {
+    dispatch({ type: "LOGIN_REQUEST" });
+
+    try {
+      const response = await axios.post("/api/auth/2fa", {
+        one_time_password,
+        google2fa_secret,
+      });
+
+      console.log(response);
+
+      if (response.status !== 200) {
+        dispatch({
+          type: "LOGIN_ERROR",
+          payload: { errorMessage: "Invalid OTP" },
+        });
+
+        return;
+      }
+
+      const { authToken, expires_in } = JSON.parse(
+        localStorage.getItem("pendingUserToken"),
+      );
+
+      console.log(authToken, expires_in);
+
+      setCookie("authToken", authToken, {
+        path: "/",
+        maxAge: expires_in,
+      });
+
+      axios.defaults.headers.common.Authorization = `Bearer ${authToken}`;
+
+      dispatch({ type: "LOGIN_SUCCESS", payload: { user } });
+
+      localStorage.removeItem("pending2FAUser");
+      localStorage.removeItem("pendingUserToken");
+
+      window.location.href = "/";
+    } catch (err) {
+      console.log(err);
+
+      dispatch({
+        type: "LOGIN_ERROR",
+        payload: { errorMessage: err.error },
+      });
+    }
+  };
+
+  const logout = () => {
+    removeCookie("authToken");
+    delete axios.defaults.headers.common.Authorization;
     dispatch({ type: "LOGOUT" });
   };
 
@@ -166,6 +204,7 @@ export function AuthProvider({ children }) {
       value={{
         ...state,
         login,
+        checkOTP,
         logout,
       }}
     >

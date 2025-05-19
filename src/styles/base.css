@@ -12,11 +12,11 @@ html.dark {
 }
 
 body {
-  @apply h-full bg-gray-50 font-sans text-sm leading-5 text-gray-700 antialiased [text-rendering:optimizeLegibility] dark:bg-dark-900 dark:text-dark-200 dark:[color-scheme:dark];
+  @apply dark:bg-dark-900 dark:text-dark-200 h-full bg-gray-50 font-sans text-sm leading-5 text-gray-700 antialiased [text-rendering:optimizeLegibility] dark:[color-scheme:dark];
 }
 
 [data-card-skin="bordered"] body {
-  @apply bg-white dark:bg-dark-900;
+  @apply dark:bg-dark-900 bg-white;
 }
 
 .dark[data-card-skin="bordered"] body {
@@ -28,7 +28,7 @@ body.is-monochrome::before {
 }
 
 .transition-content {
-  @apply duration-[.25s] ease-in [transition-property:width,padding-left,padding-right,margin-left,margin-right];
+  @apply [transition-property:width,padding-left,padding-right,margin-left,margin-right] duration-[.25s] ease-in;
 }
 
 .is-sidebar-open .transition-content {
@@ -72,11 +72,11 @@ body.is-monochrome::before {
 
 /* Demo inline space */
 .inline-space > :not([hidden]) {
-  @apply mb-2.5 mr-2.5;
+  @apply mr-2.5 mb-2.5;
 }
 
 .inline-code code {
-  @apply rounded-sm bg-gray-100 px-1 py-0.5 text-xs-plus text-secondary dark:bg-dark-800 dark:text-secondary-lighter;
+  @apply text-xs-plus text-secondary dark:bg-dark-800 dark:text-secondary-lighter rounded-sm bg-gray-100 px-1 py-0.5;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -99,7 +99,7 @@ body.is-monochrome::before {
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-300/80 dark:bg-dark-400;
+    @apply dark:bg-dark-400 bg-gray-300/80;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -109,7 +109,7 @@ body.is-monochrome::before {
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-dark-300;
+    @apply dark:bg-dark-300 bg-gray-400;
   }
 }
 

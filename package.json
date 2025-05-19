@@ -50,6 +50,7 @@
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",
     "react-confetti": "^6.4.0",
+    "react-cookie": "^8.0.1",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-fast-marquee": "^1.6.5",
