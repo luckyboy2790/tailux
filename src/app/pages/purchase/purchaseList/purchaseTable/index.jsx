@@ -25,6 +25,7 @@ import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -55,6 +56,10 @@ export default function PurchaseTable() {
 
   const [companyId, setCompanyId] = useState("");
   const [supplierId, setSupplierId] = useState("");
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
     "column-visibility-orders-1",
@@ -87,6 +92,11 @@ export default function PurchaseTable() {
 
       const response = await fetch(
         `${API_URL}/api/purchase/search?${queryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       const result = await response.json();
 
@@ -98,6 +108,7 @@ export default function PurchaseTable() {
       setIsLoading(false);
     }
   }, [
+    token,
     companyId,
     endDate,
     globalFilter,
