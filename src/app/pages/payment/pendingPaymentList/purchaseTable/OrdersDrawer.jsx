@@ -92,7 +92,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           leave="ease-in transform-gpu transition-transform duration-200"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
-          className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
+          className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-2xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
