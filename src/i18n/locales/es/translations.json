@@ -45,12 +45,14 @@
       "reference_no_too_short": "Referencia No es demasiado corta",
       "select_store": "Seleccione una tienda",
       "select_supplier": "Seleccione un proveedor",
+      "select_user": "Seleccione un usuario",
       "attachment_required": "El archivo adjunto es obligatorio",
       "file_size": "El tamaño máximo del archivo debe ser de 4 MB",
       "credit_must_amount": "El crédito debe ser mayor que 0",
       "product_name_too_short": "El nombre del producto es demasiado corto",
       "product_name_required": "El nombre del producto es obligatorio",
       "expiry_date_required": "La fecha de caducidad es obligatoria",
+      "customer_required": "El cliente es obligatorio",
       "product_cost_required": "Ingrese el costo del producto",
       "product_quantity_required": "Ingrese la cantidad del producto",
       "discount_required": "Ingrese el descuento del producto",
@@ -71,10 +73,13 @@
     "sale": {
       "sale": "Venta",
       "sale_list": "Lista de Ventas",
+      "sale_add": "Nueva Venta",
       "product_price": "Precio de venta",
       "product_name": "Nombre de Producto (Código)",
+      "sale_date": "Fecha de Venta",
       "quantity": "Cantidad",
-      "sub_total": "Total parcial"
+      "sub_total": "Total parcial",
+      "sale_date_required": "La fecha de venta es obligatoria"
     },
     "payment": {
       "payment": "Pago",

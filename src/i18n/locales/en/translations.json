@@ -45,11 +45,13 @@
       "reference_no_too_short": "Reference No is too short",
       "select_store": "Please select a store",
       "select_supplier": "Please select a supplier",
+      "select_user": "Please select a user",
       "attachment_required": "Attachment is required",
       "file_size": "Max file size should be 4MB",
       "credit_must_amount": "Credit must be greater than 0",
       "product_name_too_short": "Product Name is too short",
       "product_name_required": "Product Name is required",
+      "customer_required": "Customer is required",
       "expiry_date_required": "Expiry Date is required",
       "product_cost_required": "Input Product Cost",
       "product_quantity_required": "Input Product Quantity",
@@ -71,10 +73,13 @@
     "sale": {
       "sale": "Sale",
       "sale_list": "Sales List",
+      "sale_add": "Add Sale",
       "product_price": "Product Price",
       "product_name": "Product Name(Code)",
+      "sale_date": "Sale Date",
       "quantity": "Quantity",
-      "sub_total": "Subtotal"
+      "sub_total": "Subtotal",
+      "sale_date_required": "Sale Date is required"
     },
     "payment": {
       "payment": "Payment",

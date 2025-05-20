@@ -84,6 +84,12 @@ const protectedRoutes = {
                 Component: (await import("app/pages/sales/editSale")).default,
               }),
             },
+            {
+              path: "add",
+              lazy: async () => ({
+                Component: (await import("app/pages/sales/addSale")).default,
+              }),
+            },
           ],
         },
         {

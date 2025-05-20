@@ -1,14 +1,11 @@
 // Import Dependencies
 import { useLocation } from "react-router";
 import { useRef, useState } from "react";
-import {
-  useDidUpdate,
-  useIsomorphicEffect,
-} from "hooks";
+import { useDidUpdate, useIsomorphicEffect } from "hooks";
 import SimpleBar from "simplebar-react";
 
 // Local Imports
-import { navigation } from "app/navigation";
+import { useNavigation } from "app/navigation";
 import { Group } from "./Group";
 import { Accordion } from "components/ui";
 import { isRouteActive } from "utils/isRouteActive";
@@ -18,6 +15,8 @@ import { isRouteActive } from "utils/isRouteActive";
 export function Menu() {
   const { pathname } = useLocation();
   const { ref } = useRef();
+
+  const navigation = useNavigation();
 
   const activeGroup = navigation.find((item) => {
     if (item.path) return isRouteActive(item.path, pathname);

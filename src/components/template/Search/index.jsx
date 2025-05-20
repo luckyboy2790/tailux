@@ -20,22 +20,20 @@ import { Button, Input } from "components/ui";
 import { useDisclosure, useFuse } from "hooks";
 import { useThemeContext } from "app/contexts/theme/context";
 import { createScopedKeydownHandler } from "utils/dom/createScopedKeydownHandler";
-import { navigation } from "app/navigation";
+import { useNavigation } from "app/navigation";
 import { settings } from "app/navigation/settings";
 import { NAV_TYPE_COLLAPSE } from "constants/app.constant";
 import { Highlight } from "components/shared/Highlight";
 
 // ----------------------------------------------------------------------
 
-const data = flattenNav([...navigation,settings]);
-
 export function Search({ renderButton }) {
   const [isOpen, { open, close }] = useDisclosure(false);
-  
+
   useHotkeys("/", () => open(), {
     ignoreModifiers: true,
     preventDefault: true,
-  })
+  });
 
   return (
     <>
@@ -65,7 +63,7 @@ export function Search({ renderButton }) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <DialogPanel className="relative flex h-full w-full max-w-lg origin-bottom flex-col bg-white transition-all duration-300 dark:bg-dark-700 sm:max-h-[600px] sm:rounded-lg">
+            <DialogPanel className="dark:bg-dark-700 relative flex h-full w-full max-w-lg origin-bottom flex-col bg-white transition-all duration-300 sm:max-h-[600px] sm:rounded-lg">
               <SearchDialog isOpen={isOpen} close={close} />
             </DialogPanel>
           </TransitionChild>
@@ -78,6 +76,10 @@ export function Search({ renderButton }) {
 }
 
 export function SearchDialog({ close }) {
+  const navigation = useNavigation();
+
+  const data = flattenNav([...navigation, settings]);
+
   const { isDark } = useThemeContext();
   const searchRef = useRef(null);
   const { result, query, setQuery } = useFuse(data, {
@@ -93,8 +95,8 @@ export function SearchDialog({ close }) {
 
   return (
     <div data-search-wrapper className="flex flex-col overflow-hidden">
-      <div className="rounded-t-lg bg-gray-200 py-2 dark:bg-dark-800 lg:py-3">
-        <div className="flex items-center justify-between pl-2 pr-4 rtl:pl-4 rtl:pr-2">
+      <div className="dark:bg-dark-800 rounded-t-lg bg-gray-200 py-2 lg:py-3">
+        <div className="flex items-center justify-between pr-4 pl-2 rtl:pr-2 rtl:pl-4">
           <Input
             ref={searchRef}
             placeholder="Search here..."
@@ -123,7 +125,7 @@ export function SearchDialog({ close }) {
 
       {result.length === 0 && query !== "" && (
         <div className="flex flex-col overflow-y-auto py-4">
-          <h3 className="px-4 text-gray-800 dark:text-dark-50 sm:px-5">
+          <h3 className="dark:text-dark-50 px-4 text-gray-800 sm:px-5">
             No Result Found
           </h3>
         </div>
@@ -131,7 +133,7 @@ export function SearchDialog({ close }) {
 
       {result.length > 0 && (
         <div className="flex flex-col overflow-y-auto py-4">
-          <h3 className="px-4 text-gray-800 dark:text-dark-50 sm:px-5">
+          <h3 className="dark:text-dark-50 px-4 text-gray-800 sm:px-5">
             Search Result
           </h3>
           <div className="space-y-3 px-4 pt-3">
@@ -147,7 +149,7 @@ export function SearchDialog({ close }) {
                 })}
                 data-search-item
                 to={item.path}
-                className="group flex items-center justify-between space-x-2 rounded-lg bg-gray-100 px-2.5 py-2 tracking-wide text-gray-800 outline-hidden transition-all focus:ring-3 focus:ring-primary-500/50 dark:bg-dark-600 dark:text-dark-100 "
+                className="group focus:ring-primary-500/50 dark:bg-dark-600 dark:text-dark-100 flex items-center justify-between space-x-2 rounded-lg bg-gray-100 px-2.5 py-2 tracking-wide text-gray-800 outline-hidden transition-all focus:ring-3"
                 onClick={close}
               >
                 <div className="min-w-0">
