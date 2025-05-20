@@ -267,7 +267,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     Returns
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {(row.original?.returns || 0).toLocaleString()}
+                    {(row.original?.returned_amount || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
