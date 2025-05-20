@@ -21,6 +21,7 @@ import { Delta } from "components/shared/form/TextEditor";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -86,6 +87,7 @@ const EditPurchase = () => {
       setSupplier(supplierData);
 
       if (!id) return;
+
       const res = await fetch(
         `${API_URL}/api/purchase/get_detail?purchaseId=${id}`,
       );
@@ -261,11 +263,30 @@ const EditPurchase = () => {
                       {...register("store")}
                       error={errors?.store?.message}
                     />
-                    <Select
-                      label={t("nav.purchase.supplier")}
-                      data={supplier}
-                      {...register("supplier_id")}
-                      error={errors?.supplier_id?.message}
+                    <Controller
+                      name="supplier_id"
+                      control={control}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <Combobox
+                          label={t("nav.purchase.supplier")}
+                          data={supplier}
+                          value={
+                            supplier.find(
+                              (s) => s.value?.toString() === value,
+                            ) || null
+                          }
+                          onChange={(selected) =>
+                            onChange(selected?.value || "")
+                          }
+                          placeholder="Select supplier"
+                          displayField="label"
+                          searchFields={["label"]}
+                          error={error?.message}
+                        />
+                      )}
                     />
                     <Input
                       label={t("nav.purchase.days_of_credit")}

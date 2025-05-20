@@ -21,11 +21,11 @@ import {
   Th,
   Tr,
   Td,
-  Select,
 } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -64,16 +64,21 @@ const EditableSelect = ({
   table,
 }) => {
   const initialValue = getValue();
-  const [value, setValue] = useState(initialValue || "Apple");
+  const [value, setValue] = useState(null);
   const [products, setProducts] = useState([]);
 
   const onBlur = () => {
-    table.options.meta?.updateData(index, id, value);
+    table.options.meta?.updateData(index, id, value?.value || "");
   };
 
   useEffect(() => {
-    setValue(initialValue || "");
-  }, [initialValue]);
+    setValue(
+      products.find((p) => p.value === initialValue) || {
+        value: initialValue || "",
+        label: initialValue || "",
+      },
+    );
+  }, [initialValue, products]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +86,7 @@ const EditableSelect = ({
       const result = await response.json();
 
       const productData = [
-        { key: -1, value: "", label: "Select supplier", disabled: false },
+        { key: -1, value: "", label: "Select product", disabled: false },
         ...(Array.isArray(result?.data) ? result.data : []).map(
           (item, key) => ({
             key,
@@ -99,12 +104,16 @@ const EditableSelect = ({
   }, []);
 
   return (
-    <Select
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={onBlur}
+    <Combobox
       data={products}
-      required={value === ""}
+      value={value}
+      onChange={(selected) => setValue(selected)}
+      onBlur={onBlur}
+      placeholder="Select product"
+      displayField="label"
+      searchFields={["label"]}
+      error={value?.value === ""}
+      className="min-w-[180px]"
     />
   );
 };
