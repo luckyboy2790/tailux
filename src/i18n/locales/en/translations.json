@@ -163,12 +163,57 @@
       "paid": "Paid",
       "balance": "Balance",
       "order_status": "Order Status",
-      "actions": "Actions"
+      "actions": "Actions",
+      "add_payment": "Add Payment",
+      "add_return": "Add Return",
+      "payment_list": "Payment List",
+      "return_list": "Return List",
+      "edit": "Edit",
+      "delete": "Delete"
     },
     "pagination": {
       "show": "Show",
       "entries": "entries",
       "of": "of"
+    },
+    "detail": {
+      "reference_no": "Reference NO",
+      "pending": "Pending",
+      "paid_status": "Paid",
+      "partial": "Partial",
+      "date": "Date",
+      "supplier": "Supplier",
+      "name": "Name",
+      "company": "Company",
+      "store": "Store",
+      "attachments": "Attachments",
+      "email": "Email",
+      "order_item": "Order Items",
+      "product_code": "Product Code",
+      "product_name": "Product Name",
+      "product_cost": "Product Cost",
+      "quantity": "Quantity",
+      "sub_total": "Total",
+      "total_cop": "Total (COP)",
+      "discount": "Discount (COP)",
+      "shipping": "Shipping (COP)",
+      "returns": "Returns",
+      "total_amount": "Total Amount (COP)",
+      "paid": "Paid (COP)",
+      "balance": "Balance (COP)",
+      "payment_list": "Payment List",
+      "amount": "Amount",
+      "note": "Note",
+      "created_by": "Created By",
+      "created_at": "Created At"
+    },
+    "choose_file": "Seleccionar archivo",
+    "select": {
+      "select_supplier": "Select Supplier",
+      "select_user": "Select User",
+      "select_store": "Select Store",
+      "select_customer": "Select Customer",
+      "select_product": "Select Product"
     }
   }
 }

@@ -26,6 +26,7 @@ import { PaymentModal } from "components/shared/PaymentModal";
 import { PreturnModal } from "components/shared/PreturnModal";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -46,6 +47,8 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -126,7 +129,7 @@ export function RowActions({ row, table }) {
           >
             <MenuItems
               anchor={{ to: "bottom end", gap: 12 }}
-              className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
+              className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[13rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
               <MenuItem>
                 {({ focus }) => (
@@ -140,7 +143,7 @@ export function RowActions({ row, table }) {
                       navigate(`/payments/purchase/${row.original?.id}`);
                     }}
                   >
-                    <span>Payment List</span>
+                    <span>{t("nav.table_fields.payment_list")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -156,7 +159,7 @@ export function RowActions({ row, table }) {
                       navigate(`/preturn/list/${row.original?.id}`);
                     }}
                   >
-                    <span>Return List</span>
+                    <span>{t("nav.table_fields.return_list")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -170,7 +173,7 @@ export function RowActions({ row, table }) {
                     )}
                     onClick={open}
                   >
-                    <span>Add Payment</span>
+                    <span>{t("nav.table_fields.add_payment")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -184,7 +187,7 @@ export function RowActions({ row, table }) {
                     )}
                     onClick={openPreturn}
                   >
-                    <span>Add Return</span>
+                    <span>{t("nav.table_fields.add_return")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -200,7 +203,7 @@ export function RowActions({ row, table }) {
                       navigate(`/purchase/edit/${row.original?.id}`);
                     }}
                   >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -213,7 +216,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>

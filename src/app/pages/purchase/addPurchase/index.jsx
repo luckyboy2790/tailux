@@ -85,7 +85,7 @@ const AddPurchase = () => {
       const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
       const storeResult = await storeRes.json();
       const storeData = [
-        { key: -1, value: "", label: "Select store" },
+        { key: -1, value: "", label: t("nav.select.select_store") },
         ...(storeResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -99,7 +99,7 @@ const AddPurchase = () => {
       );
       const supplierResult = await supplierRes.json();
       const supplierData = [
-        { key: -1, value: "", label: "Select supplier" },
+        { key: -1, value: "", label: t("nav.select.select_supplier") },
         ...(supplierResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -109,7 +109,7 @@ const AddPurchase = () => {
       setSupplier(supplierData);
     };
     fetchData();
-  }, []);
+  }, [t]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -240,17 +240,21 @@ const AddPurchase = () => {
                           />
                         )}
                       />
+
                       <Input
                         label={t("nav.purchase.reference_no")}
+                        placeholder={t("nav.purchase.reference_no")}
                         {...register("reference_no")}
                         error={errors?.reference_no?.message}
                       />
+
                       <Select
                         label={t("nav.purchase.store")}
                         data={stores}
                         {...register("store")}
                         error={errors?.store?.message}
                       />
+
                       <Controller
                         name="supplier_id"
                         control={control}
@@ -274,6 +278,7 @@ const AddPurchase = () => {
                           />
                         )}
                       />
+
                       <Input
                         label={t("nav.purchase.days_of_credit")}
                         type="number"

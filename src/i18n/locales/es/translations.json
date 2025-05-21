@@ -163,13 +163,57 @@
       "paid": "Pagado",
       "balance": "Saldo",
       "order_status": "Estado del pedido",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "add_payment": "Agregar pago",
+      "add_return": "Agregar devolución",
+      "payment_list": "Lista de pagos",
+      "return_list": "Lista de devoluciones",
+      "edit": "Editar",
+      "delete": "Eliminar"
     },
     "pagination": {
       "show": "Espectáculo",
       "entries": "entradas",
       "of": "de"
     },
-    "detail": {}
+    "detail": {
+      "reference_no": "Referencia No",
+      "pending": "Pendiente",
+      "paid_status": "Pagado",
+      "partial": "Parcial",
+      "date": "Fecha",
+      "supplier": "Proveedores",
+      "name": "Nombre",
+      "company": "Empresa",
+      "store": "Tienda",
+      "attachments": "Archivo Adjunto",
+      "email": "Email",
+      "order_item": "Encargar Artículos",
+      "product_code": "Código del Producto",
+      "product_name": "Nombre del Producto",
+      "product_cost": "Costo del Producto",
+      "quantity": "Cantidad",
+      "sub_total": "Total",
+      "total_cop": "Total (COP)",
+      "discount": "Descuento (COP)",
+      "shipping": "Envío (COP)",
+      "returns": "Devoluciones",
+      "total_amount": "Cantidad Total (COP)",
+      "paid": "Pagado (COP)",
+      "balance": "Balance (COP)",
+      "payment_list": "Lista de Pagos",
+      "amount": "Cantidad",
+      "note": "Notas",
+      "created_by": "Creado Por",
+      "created_at": "Creado En"
+    },
+    "choose_file": "Seleccionar archivo",
+    "select": {
+      "select_supplier": "Seleccionar Proveedor",
+      "select_user": "Seleccionar Usuario",
+      "select_store": "Seleccionar Tienda",
+      "select_customer": "Seleccionar Cliente",
+      "select_product": "Seleccionar Producto"
+    }
   }
 }

@@ -71,6 +71,8 @@ const EditableSelect = ({
     table.options.meta?.updateData(index, id, value?.value || "");
   };
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     setValue(
       products.find((p) => p.value === initialValue) || {
@@ -86,7 +88,12 @@ const EditableSelect = ({
       const result = await response.json();
 
       const productData = [
-        { key: -1, value: "", label: "Select product", disabled: false },
+        {
+          key: -1,
+          value: "",
+          label: t("nav.select.select_product"),
+          disabled: false,
+        },
         ...(Array.isArray(result?.data) ? result.data : []).map(
           (item, key) => ({
             key,
@@ -101,7 +108,7 @@ const EditableSelect = ({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   return (
     <Combobox
@@ -318,7 +325,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
             </TBody>
           </Table>
           <div className="mt-4 mr-4 mb-3 text-right font-medium text-black dark:text-white">
-            {`Purchase (${subtotal}) - Discount (${discount}) - Shipping (${shipping}) - Returns (${returns}) = `}
+            {`${t("nav.purchase.purchase")} (${subtotal}) - ${t("nav.purchase.discount")} (${discount}) - ${t("nav.purchase.shipping")} (${shipping}) - ${t("nav.purchase.return")} (${returns}) = `}
             <span className="text-primary font-bold">{grandTotal}</span>
           </div>
         </div>
