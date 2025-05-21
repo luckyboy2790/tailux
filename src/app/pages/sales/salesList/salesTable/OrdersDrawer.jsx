@@ -16,32 +16,37 @@ import {
   Badge,
   Button,
   // Tag,
-  // Table,
-  // THead,
-  // TBody,
-  // Th,
-  // Tr,
-  // Td,
+  Table,
+  THead,
+  TBody,
+  Th,
+  Tr,
+  Td,
 } from "components/ui";
 import { orderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
-// import { Image } from "antd";
+import { useTranslation } from "react-i18next";
+import { Image } from "antd";
+
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 // ----------------------------------------------------------------------
 
-// const cols = [
-//   "#",
-//   "Product Code",
-//   "Product Name",
-//   "Product Cost",
-//   "Quantity",
-//   "Total",
-// ];
+const cols = [
+  "#",
+  "Product Code",
+  "Product Name",
+  "Product Cost",
+  "Quantity",
+  "Total",
+];
 
-// const paymentCols = ["#", "Date", "Reference No", "Amount", "Note"];
+const paymentCols = ["#", "Date", "Reference No", "Amount", "Note"];
 
 export function OrdersDrawer({ isOpen, close, row }) {
   let orderStatus;
+
+  const { t } = useTranslation();
 
   const val = row.original;
 
@@ -61,14 +66,14 @@ export function OrdersDrawer({ isOpen, close, row }) {
   const timestapms = row.original.timestamp;
   const date = dayjs(timestapms).locale(locale).format("DD MMM YYYY");
 
-  // const sums = row.original?.orders.reduce(
-  //   (acc, order) => {
-  //     acc.subtotal += order.subtotal || 0;
-  //     acc.quantity += order.quantity || 0;
-  //     return acc;
-  //   },
-  //   { subtotal: 0, quantity: 0 },
-  // );
+  const sums = row.original?.orders.reduce(
+    (acc, order) => {
+      acc.subtotal += order.subtotal || 0;
+      acc.quantity += order.quantity || 0;
+      return acc;
+    },
+    { subtotal: 0, quantity: 0 },
+  );
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -164,7 +169,32 @@ export function OrdersDrawer({ isOpen, close, row }) {
             </div>
           </div>
 
-          {/* <hr
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
+
+          <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
+            <div className="flex w-full flex-col">
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.attachments")}:
+              </div>
+
+              <div className="flex w-full gap-4 overflow-x-auto">
+                {row.original?.images.map((item, key) => (
+                  <div className="w-25" key={key}>
+                    <Image
+                      width={100}
+                      height={100}
+                      src={`${IMG_URL}${item.path}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <hr
             className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
             role="none"
           />
@@ -173,7 +203,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
             Order Items
           </p>
 
-          <div className="mt-1 h-auto min-h-90 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
+          <div className="mt-1 h-auto min-h-60 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
             <Table
               hoverable
               className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2"
@@ -221,42 +251,6 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Discount (COP)
-                  </Td>
-                  <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.discount.toLocaleString()}
-                  </Td>
-                </Tr>
-
-                <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                  <Td colSpan={5} className="text-end">
-                    Shipping (COP)
-                  </Td>
-                  <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.shipping.toLocaleString()}
-                  </Td>
-                </Tr>
-
-                <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                  <Td colSpan={5} className="text-end">
-                    Returns
-                  </Td>
-                  <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.returns.toLocaleString()}
-                  </Td>
-                </Tr>
-
-                <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                  <Td colSpan={5} className="text-end">
-                    Total Amount (COP)
-                  </Td>
-                  <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.total_amount.toLocaleString()}
-                  </Td>
-                </Tr>
-
-                <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                  <Td colSpan={5} className="text-end">
                     Paid (COP)
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
@@ -270,18 +264,14 @@ export function OrdersDrawer({ isOpen, close, row }) {
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {(
-                      row.original?.total_amount - row.original?.paid_amount
+                      Number(row.original?.grand_total) -
+                      Number(row.original?.paid_amount)
                     ).toLocaleString()}
                   </Td>
                 </Tr>
               </TBody>
             </Table>
           </div>
-
-          <hr
-            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
-            role="none"
-          />
 
           <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
             Payment List
@@ -325,12 +315,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                 ))}
               </TBody>
             </Table>
-          </div> */}
-
-          <hr
-            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
-            role="none"
-          />
+          </div>
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">

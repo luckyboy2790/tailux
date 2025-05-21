@@ -22,7 +22,7 @@ const PurchaseList = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `${API_URL}/api/purchase/get_detail?purchaseId=${params.purchase_id}`,
+        `${API_URL}/api/${params.type === "purchase" ? "purchase" : "sales"}/get_detail?${params.type}Id=${params.purchase_id}`,
       );
 
       const result = await response.json();
@@ -31,7 +31,7 @@ const PurchaseList = () => {
     };
 
     fetchData();
-  }, [params.purchase_id]);
+  }, [params.purchase_id, params.type]);
 
   return (
     <Page title="Homepage">
