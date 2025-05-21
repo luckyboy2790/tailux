@@ -271,7 +271,7 @@ const AddPurchase = () => {
                             onChange={(selected) =>
                               onChange(selected?.value || "")
                             }
-                            placeholder="Select supplier"
+                            placeholder={t("nav.select.select_supplier")}
                             displayField="label"
                             searchFields={["label"]}
                             error={error?.message}
@@ -285,6 +285,7 @@ const AddPurchase = () => {
                         {...register("day_of_credit")}
                         error={errors?.day_of_credit?.message}
                       />
+
                       <Controller
                         name="attachment"
                         control={control}

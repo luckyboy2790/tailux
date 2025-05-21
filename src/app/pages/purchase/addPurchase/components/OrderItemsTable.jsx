@@ -116,7 +116,7 @@ const EditableSelect = ({
       value={value}
       onChange={(selected) => setValue(selected)}
       onBlur={onBlur}
-      placeholder="Select product"
+      placeholder={t("nav.select.select_product")}
       displayField="label"
       searchFields={["label"]}
       error={value?.value === ""}
