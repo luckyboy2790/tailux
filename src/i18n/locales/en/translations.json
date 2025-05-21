@@ -64,7 +64,8 @@
       "note_placeholder": "Input text",
       "purchase_order": "Purchase Orders",
       "list": "List",
-      "received_order": "Received Orders"
+      "received_order": "Received Orders",
+      "purchase_date_range": "Purchase Date Range"
     },
     "return": {
       "return": "Return",
@@ -134,6 +135,40 @@
     "supplier": "Supplier",
     "choose_date": "Choose Date",
     "select_supplier": "Please select a supplier",
-    "select_date_range": "Please select dates"
+    "select_date_range": "Please select dates",
+    "export": {
+      "export": "Export",
+      "export_excel": "Export Excel"
+    },
+    "view": {
+      "view": "View",
+      "table_view": "Table View",
+      "full_screen": "Full Screen",
+      "column_visibility": "Column Visibility",
+      "show_all_columns": "Show All Columns"
+    },
+    "all_companies": "All Companies",
+    "all_suppliers": "All Suppliers",
+    "all_stores": "All Stores",
+    "all_users": "All Users",
+    "all_customers": "All Customers",
+    "all_products": "All Products",
+    "search_placeholder": "Search ID, Customer...",
+    "table_fields": {
+      "row_selection": "Row Selection",
+      "date": "Date",
+      "reference_no": "Reference No",
+      "supplier": "Supplier",
+      "grand_total": "Grand Total",
+      "paid": "Paid",
+      "balance": "Balance",
+      "order_status": "Order Status",
+      "actions": "Actions"
+    },
+    "pagination": {
+      "show": "Show",
+      "entries": "entries",
+      "of": "of"
+    }
   }
 }

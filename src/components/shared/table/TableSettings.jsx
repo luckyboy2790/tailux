@@ -4,16 +4,19 @@ import { TbPinned, TbPinnedOff } from "react-icons/tb";
 
 // Local Imports
 import { Button, Checkbox, Switch } from "components/ui";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export function TableSettings({ table }) {
   const tableSettings = table.getState().tableSettings;
   const setTableSettings = table.options.meta.setTableSettings;
+  const { t } = useTranslation();
+
   return (
     <>
       {Object.keys(tableSettings).length > 0 && (
-        <div className="mb-4 mt-3 flex flex-col items-start space-y-2 px-3 text-gray-600 dark:text-dark-100">
+        <div className="dark:text-dark-100 mt-3 mb-4 flex flex-col items-start space-y-2 px-3 text-gray-600">
           {Object.prototype.hasOwnProperty.call(
             tableSettings,
             "enableFullScreen",
@@ -84,12 +87,12 @@ export function TableSettings({ table }) {
         </div>
       )}
 
-      <div className="flex items-center space-x-2 px-3 ">
-        <p className="text-tiny uppercase">column visibility</p>
-        <hr className="flex-1 border-gray-300 dark:border-dark-500" />
+      <div className="flex items-center space-x-2 px-3">
+        <p className="text-tiny uppercase">{t("nav.view.column_visibility")}</p>
+        <hr className="dark:border-dark-500 flex-1 border-gray-300" />
       </div>
 
-      <div className="mt-3 flex max-h-[50vh] flex-col space-y-2 overflow-y-auto overscroll-y-contain px-3 pb-3 text-gray-600 dark:text-dark-100">
+      <div className="dark:text-dark-100 mt-3 flex max-h-[50vh] flex-col space-y-2 overflow-y-auto overscroll-y-contain px-3 pb-3 text-gray-600">
         {table
           .getAllLeafColumns()
           .filter((column) => !column.columnDef?.isHiddenColumn)
@@ -151,10 +154,10 @@ export function TableSettings({ table }) {
 
       <Button
         variant="flat"
-        className="h-9 w-full shrink-0 rounded-t-none border-t border-gray-300 text-xs-plus leading-none dark:border-dark-500"
+        className="text-xs-plus dark:border-dark-500 h-9 w-full shrink-0 rounded-t-none border-t border-gray-300 leading-none"
         onClick={() => table.resetColumnVisibility()}
       >
-        Show All Columns
+        {t("nav.view.show_all_columns")}
       </Button>
     </>
   );

@@ -26,6 +26,7 @@ import { Combobox } from "components/shared/form/Combobox";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,6 +42,8 @@ export function Toolbar({
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const exportTableToExcel = async () => {
     const response = await fetch(`${API_URL}/api/purchase/get_all`);
@@ -123,7 +126,7 @@ export function Toolbar({
                       navigate("/purchase/add");
                     }}
                   >
-                    <span>New Purchase</span>
+                    <span>{t("nav.purchase.add_purchase")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -138,7 +141,7 @@ export function Toolbar({
                     )}
                     onClick={() => exportTableToExcel()}
                   >
-                    <span>Export as Excel</span>
+                    <span>{t("nav.export.export_excel")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -156,7 +159,7 @@ export function Toolbar({
                 className="h-8 space-x-2 rounded-md px-3 text-xs"
               >
                 <TbUpload className="size-4" />
-                <span>Export</span>
+                <span>{t("nav.export.export")}</span>
                 <ChevronUpDownIcon className="size-4" />
               </MenuButton>
               <Transition
@@ -179,7 +182,7 @@ export function Toolbar({
                       )}
                       onClick={() => exportTableToExcel()}
                     >
-                      <span>Export as Excel</span>
+                      <span>{t("nav.export.export_excel")}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -219,7 +222,7 @@ export function Toolbar({
                         navigate("/purchase/add");
                       }}
                     >
-                      <span>New Purchase</span>
+                      <span>{t("nav.purchase.add_purchase")}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -288,6 +291,8 @@ export function Toolbar({
 }
 
 function SearchInput({ table }) {
+  const { t } = useTranslation();
+
   return (
     <Input
       value={table.getState().globalFilter}
@@ -297,7 +302,7 @@ function SearchInput({ table }) {
         input: "ring-primary-500/50 h-8 text-xs focus:ring-3",
         root: "shrink-0",
       }}
-      placeholder="Search ID, Customer..."
+      placeholder={t("nav.search_placeholder")}
     />
   );
 }
@@ -311,6 +316,8 @@ function Filters({
   setSupplierId,
 }) {
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  const { t } = useTranslation();
 
   const [company, setCompany] = useState([]);
 
@@ -328,7 +335,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: "All Companies",
+          label: t("nav.all_companies"),
           disabled: false,
         },
         ...(Array.isArray(companyResult?.data) ? companyResult.data : []).map(
@@ -345,7 +352,7 @@ function Filters({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -359,7 +366,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: "All Suppliers",
+          label: t("nav.all_suppliers"),
           disabled: false,
         },
         ...(Array.isArray(supplierResult?.data) ? supplierResult.data : []).map(
@@ -376,14 +383,14 @@ function Filters({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   return (
     <>
       {table.getColumn("timestamp") && (
         <DateFilter
           onChange={onDateRangeChange}
-          title="Purchase Date Range"
+          title={t("nav.purchase.purchase_date_range")}
           config={{
             mode: "range",
           }}
@@ -396,6 +403,7 @@ function Filters({
         onChange={(e) => {
           setCompanyId(e.target.value);
         }}
+        placeholder={t("nav.all_companies")}
         className="h-8 min-w-30 py-1 text-xs"
       />
 
@@ -403,7 +411,7 @@ function Filters({
         data={supplier}
         value={supplier.find((s) => s.value === supplierId) || null}
         onChange={(selected) => setSupplierId(selected?.value || "")}
-        placeholder="Select Supplier"
+        placeholder={t("nav.all_suppliers")}
         displayField="label"
         searchFields={["label"]}
         className="h-8 min-w-70 text-xs"
@@ -414,7 +422,7 @@ function Filters({
           onClick={() => table.resetColumnFilters()}
           className="h-8 px-2.5 text-xs whitespace-nowrap"
         >
-          Reset Filters
+          {t("nav.reset_filters")}
         </Button>
       )}
     </>

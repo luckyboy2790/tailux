@@ -276,7 +276,11 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     Total Amount (COP)
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.total_amount.toLocaleString()}
+                    {(
+                      Number(row.original?.total_amount) -
+                      Number(row.original?.discount) +
+                      Number(row.original?.shipping)
+                    ).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -295,7 +299,10 @@ export function OrdersDrawer({ isOpen, close, row }) {
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {(
-                      row.original?.total_amount - row.original?.paid_amount
+                      Number(row.original?.total_amount) -
+                      Number(row.original?.discount) +
+                      Number(row.original?.shipping) -
+                      Number(row.original?.paid_amount)
                     ).toLocaleString()}
                   </Td>
                 </Tr>

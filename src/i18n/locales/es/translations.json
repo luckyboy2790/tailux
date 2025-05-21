@@ -64,7 +64,8 @@
       "note_placeholder": "Ingresar texto",
       "purchase_order": "Órdenes de compra",
       "list": "Lista",
-      "received_order": "Pedidos recibidos"
+      "received_order": "Pedidos recibidos",
+      "purchase_date_range": "Rango de fechas de compra"
     },
     "return": {
       "return": "Devoluciones",
@@ -134,6 +135,41 @@
     "supplier": "Proveedores",
     "choose_date": "Elija fecha",
     "select_supplier": "Seleccione un proveedor",
-    "select_date_range": "Por favor seleccione fechas"
+    "select_date_range": "Por favor seleccione fechas",
+    "export": {
+      "export": "Exportar",
+      "export_excel": "Exportar Excel"
+    },
+    "view": {
+      "view": "Ver",
+      "table_view": "Vista de tabla",
+      "full_screen": "Pantalla completa",
+      "column_visibility": "Visibilidad de columna",
+      "show_all_columns": "Mostrar todas las columnas"
+    },
+    "all_companies": "Todas las empresas",
+    "all_suppliers": "Todos los proveedores",
+    "all_stores": "Todas las tiendas",
+    "all_users": "Todos los usuarios",
+    "all_customers": "Todos los clientes",
+    "all_products": "Todos los productos",
+    "search_placeholder": "Buscar ID, Cliente...",
+    "table_fields": {
+      "row_selection": "Selección de fila",
+      "date": "Fecha",
+      "reference_no": "Referencia No",
+      "supplier": "Proveedor",
+      "grand_total": "Total general",
+      "paid": "Pagado",
+      "balance": "Saldo",
+      "order_status": "Estado del pedido",
+      "actions": "Acciones"
+    },
+    "pagination": {
+      "show": "Espectáculo",
+      "entries": "entradas",
+      "of": "de"
+    },
+    "detail": {}
   }
 }

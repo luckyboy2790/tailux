@@ -10,6 +10,7 @@ import {
   Select,
 } from "components/ui";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -21,12 +22,13 @@ export function PaginationSection({
   pageSize,
   setPageSize,
 }) {
+  const { t } = useTranslation();
   const { isXl, is2xl } = useBreakpointsContext();
 
   return (
     <div className="flex flex-col justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0">
       <div className="text-xs-plus flex items-center space-x-2">
-        <span>Show</span>
+        <span>{t("nav.pagination.show")}</span>
         <Select
           data={[10, 20, 30, 40, 50, 100]}
           value={pageSize}
@@ -39,7 +41,7 @@ export function PaginationSection({
             select: "h-7 rounded-full py-1 text-xs ltr:pr-7! rtl:pl-7!",
           }}
         />
-        <span>entries</span>
+        <span>{t("nav.pagination.entries")}</span>
       </div>
       <div>
         <Pagination
@@ -59,8 +61,8 @@ export function PaginationSection({
       </div>
       <div className="text-xs-plus truncate">
         {pageIndex * pageSize + 1} -{" "}
-        {pageSize > total ? total : (pageIndex + 1) * pageSize} of {total}{" "}
-        entries
+        {pageSize > total ? total : (pageIndex + 1) * pageSize}{" "}
+        {t("nav.pagination.of")} {total} {t("nav.pagination.entries")}
       </div>
     </div>
   );
