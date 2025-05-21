@@ -17,10 +17,10 @@ import {
   Select,
   Textarea,
 } from "components/ui";
-import { Delta } from "components/shared/form/TextEditor";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -38,7 +38,10 @@ const EditSale = () => {
   const { id } = useParams();
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
-  const [user, setUser] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [customer, setCustomer] = useState([]);
+
+  const [cookie] = useCookies();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,7 +61,11 @@ const EditSale = () => {
 
   useEffect(() => {
     const init = async () => {
-      const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
+      const storeRes = await fetch(`${API_URL}/api/store/get_stores`, {
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
+      });
       const storeResult = await storeRes.json();
       const storeData = [
         { key: -1, value: "", label: "Select store" },
@@ -70,7 +77,11 @@ const EditSale = () => {
       ];
       setStores(storeData);
 
-      const userRes = await fetch(`${API_URL}/api/users`);
+      const userRes = await fetch(`${API_URL}/api/users`, {
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
+      });
       const userResult = await userRes.json();
       const userData = [
         { key: -1, value: "", label: "Select user" },
@@ -80,10 +91,35 @@ const EditSale = () => {
           label: `${item.first_name} ${item.last_name}`,
         })) ?? []),
       ];
-      setUser(userData);
+      setUsers(userData);
+
+      const customerRes = await fetch(
+        `${API_URL}/api/customer/get_all_customers`,
+        {
+          headers: {
+            Authorization: cookie?.authToken
+              ? `Bearer ${cookie.authToken}`
+              : "",
+          },
+        },
+      );
+      const customerResult = await customerRes.json();
+      const customerData = [
+        { key: -1, value: "", label: "Select customer" },
+        ...(customerResult?.data?.map((item, key) => ({
+          key,
+          value: item?.id,
+          label: `${item?.company}`,
+        })) ?? []),
+      ];
+      setCustomer(customerData);
 
       if (!id) return;
-      const res = await fetch(`${API_URL}/api/sales/get_detail?saleId=${id}`);
+      const res = await fetch(`${API_URL}/api/sales/get_detail?saleId=${id}`, {
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
+      });
       const result = await res.json();
       if (!res.ok) return;
 
@@ -97,23 +133,12 @@ const EditSale = () => {
         })) || initialData;
 
       reset({
-        title: data.title || "",
-        caption: data.caption || "",
-        content: new Delta(data.content || {}),
-        cover: data.cover || null,
-        category_id: data.category_id || "",
-        author_id: data.author_id || "",
-        tags: data.tags || [],
-        publish_date: data.publish_date || "",
-        purchase_date: dayjs(data.timestamp).format("YYYY-MM-DD"),
+        sale_date: dayjs(data.timestamp).format("YYYY-MM-DD"),
         reference_no: data.reference_no || "",
         store: data.store_id?.toString() || "",
         user_id: data.user_id?.toString() || "",
-        day_of_credit: Number(data.credit_days) || 0,
+        customer_id: data.customer_id?.toString() || "",
         attachment: data.attachment || [],
-        discount: Number(data.discount) || 0,
-        shipping: Number(data.shipping) || 0,
-        returns: Number(data.returns) || 0,
         note: data.note || "",
       });
 
@@ -121,46 +146,43 @@ const EditSale = () => {
     };
 
     init();
-  }, [id, reset]);
+  }, [id, reset, cookie.authToken]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
 
+    console.log(id);
+
     const payload = {
       id,
-      date: formData.purchase_date,
+      date: formData.sale_date,
       reference_no: formData.reference_no,
       store: Number(formData.store),
-      supplier: Number(formData.supplier_id),
-      credit_days: formData.day_of_credit.toString(),
+      customer: Number(formData.customer_id),
       orders: orders.map((o) => ({
         product: o.product_name || "",
         product_id: o.product_id || 1,
-        cost: o.product_cost,
+        price: o.product_price,
         quantity: o.quantity,
-        expiry_date: o.expiry_date || "",
       })),
       orders_json: JSON.stringify(
         orders.map((o) => ({
           product: o.product_name || "",
           product_id: o.product_id || 1,
-          cost: o.product_cost,
+          price: o.product_price,
           quantity: o.quantity,
-          expiry_date: o.expiry_date || "",
         })),
       ),
-      discount: formData.discount,
-      discount_string: formData.discount.toString(),
-      shipping: formData.shipping,
-      shipping_string: formData.shipping.toString(),
-      returns: formData.returns,
       grand_total: orders.reduce(
-        (sum, o) => sum + Number(o.product_cost || 0) * Number(o.quantity || 1),
+        (sum, o) =>
+          sum + Number(o.product_price || 0) * Number(o.quantity || 1),
         0,
       ),
       note: formData.note || "",
       status: 1,
     };
+
+    console.log(payload);
 
     try {
       if (isLoading) return;
@@ -175,15 +197,18 @@ const EditSale = () => {
         }
       }
 
-      const res = await fetch(`${API_URL}/api/purchase/update`, {
+      const res = await fetch(`${API_URL}/api/sales/update`, {
         method: "POST",
         body: form,
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
       });
 
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Something went wrong");
 
-      navigate("/purchase/list");
+      navigate("/sale/list");
     } catch (error) {
       console.error("Error submitting form:", error.message);
     } finally {
@@ -228,7 +253,7 @@ const EditSale = () => {
                 <Card className="p-4 sm:px-5">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                     <Controller
-                      name="purchase_date"
+                      name="sale_date"
                       control={control}
                       render={({ field }) => (
                         <DatePicker
@@ -237,8 +262,8 @@ const EditSale = () => {
                             field.onChange(dayjs(val).format("YYYY-MM-DD"))
                           }
                           value={field.value || ""}
-                          label={t("nav.purchase.purchase_date")}
-                          error={errors?.purchase_date?.message}
+                          label={t("nav.sale.sale_date")}
+                          error={errors?.sale_date?.message}
                           placeholder={t(
                             "nav.purchase.purchase_date_placeholder",
                           )}
@@ -246,28 +271,41 @@ const EditSale = () => {
                       )}
                     />
                     <Input
-                      label={t("nav.purchase.reference_no")}
+                      label={t("nav.sale.reference_no")}
+                      placeholder={t("nav.sale.reference_no")}
                       {...register("reference_no")}
                       error={errors?.reference_no?.message}
                     />
+
                     <Select
-                      label={t("nav.purchase.store")}
+                      label={t("nav.sale.user")}
+                      data={users}
+                      {...register("user_id")}
+                      error={errors?.user_id?.message}
+                      disabled
+                    />
+
+                    <Select
+                      label={t("nav.sale.store")}
                       data={stores}
                       {...register("store")}
                       error={errors?.store?.message}
+                      disabled
                     />
+
                     <Select
-                      label={t("nav.purchase.supplier")}
-                      data={user}
-                      {...register("user_id")}
-                      error={errors?.user_id?.message}
+                      label={t("nav.people.customer")}
+                      data={customer}
+                      {...register("customer_id")}
+                      error={errors?.customer_id?.message}
                     />
+
                     <Controller
                       name="attachment"
                       control={control}
                       render={({ field }) => (
                         <CoverImageUpload
-                          label={t("nav.purchase.attachment")}
+                          label={t("nav.sale.attachment")}
                           error={errors?.attachment?.message}
                           {...field}
                         />
@@ -281,7 +319,7 @@ const EditSale = () => {
 
                   <div className="mt-5 space-y-5">
                     <Textarea
-                      label={t("nav.purchase.note")}
+                      label={t("nav.sale.note")}
                       rows="5"
                       {...register("note")}
                       error={errors?.note?.message}

@@ -21,6 +21,7 @@ import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useAuthContext } from "app/contexts/auth/context";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -42,6 +43,8 @@ const AddSale = () => {
   const [users, setUsers] = useState([]);
   const [customer, setCustomer] = useState([]);
 
+  const [cookie] = useCookies();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -60,7 +63,11 @@ const AddSale = () => {
 
   useEffect(() => {
     const init = async () => {
-      const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
+      const storeRes = await fetch(`${API_URL}/api/store/get_stores`, {
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
+      });
       const storeResult = await storeRes.json();
       const storeData = [
         { key: -1, value: "", label: "Select store" },
@@ -72,7 +79,11 @@ const AddSale = () => {
       ];
       setStores(storeData);
 
-      const userRes = await fetch(`${API_URL}/api/users`);
+      const userRes = await fetch(`${API_URL}/api/users`, {
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
+      });
       const userResult = await userRes.json();
       const userData = [
         { key: -1, value: "", label: "Select users" },
@@ -86,6 +97,13 @@ const AddSale = () => {
 
       const customerRes = await fetch(
         `${API_URL}/api/customer/get_all_customers`,
+        {
+          headers: {
+            Authorization: cookie?.authToken
+              ? `Bearer ${cookie.authToken}`
+              : "",
+          },
+        },
       );
       const customerResult = await customerRes.json();
       const customerData = [
@@ -105,7 +123,7 @@ const AddSale = () => {
     };
 
     init();
-  }, [id, reset, user]);
+  }, [id, reset, user, cookie.authToken]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -157,6 +175,9 @@ const AddSale = () => {
       const res = await fetch(`${API_URL}/api/sales/create`, {
         method: "POST",
         body: form,
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
       });
 
       const result = await res.json();
