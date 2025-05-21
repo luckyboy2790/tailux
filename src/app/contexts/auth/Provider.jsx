@@ -71,13 +71,13 @@ const reducer = (state, action) => {
 };
 
 export function AuthProvider({ children }) {
-  const [cookies, setCookie, removeCookie] = useCookies(["authToken"]);
+  const [cookies, setCookie, removeCookie] = useCookies();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const logout = useCallback(() => {
     try {
       dispatch({ type: "LOGOUT" });
-      removeCookie("authToken");
+      removeCookie("authToken", { path: "/" });
       delete axios.defaults.headers.common.Authorization;
     } catch (err) {
       console.error(err);
