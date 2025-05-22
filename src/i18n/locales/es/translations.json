@@ -194,7 +194,10 @@
       "payment_list": "Lista de pagos",
       "return_list": "Lista de devoluciones",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "amount": "Cantidad",
+      "approve": "Aprobar",
+      "note": "Nota"
     },
     "pagination": {
       "show": "Espectáculo",

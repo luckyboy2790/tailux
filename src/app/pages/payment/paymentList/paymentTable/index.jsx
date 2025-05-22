@@ -17,13 +17,14 @@ import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
-import { columns } from "./columns";
+import { getColumns } from "./columns";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
 import { useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,6 +32,10 @@ const isSafari = getUserAgentBrowser() === "Safari";
 
 export default function PaymentTable() {
   const { cardSkin } = useThemeContext();
+
+  const { t } = useTranslation();
+
+  const columns = getColumns(t);
 
   const [orders, setOrders] = useState([]);
 

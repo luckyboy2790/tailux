@@ -194,7 +194,10 @@
       "payment_list": "Payment List",
       "return_list": "Return List",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "amount": "Amount",
+      "approve": "Approve",
+      "note": "Note"
     },
     "pagination": {
       "show": "Show",

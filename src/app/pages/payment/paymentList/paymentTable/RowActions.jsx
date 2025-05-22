@@ -16,6 +16,7 @@ import {
 import clsx from "clsx";
 import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
@@ -47,6 +48,8 @@ export function RowActions({ row, table }) {
   const [deleteError, setDeleteError] = useState(false);
 
   const [isOpen, { open, close }] = useDisclosure(false);
+
+  const { t } = useTranslation();
 
   // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
   //   useDisclosure(false);
@@ -161,7 +164,7 @@ export function RowActions({ row, table }) {
                       handleApprove(row.original);
                     }}
                   >
-                    <span>Approve</span>
+                    <span>{t("nav.table_fields.approve")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -175,7 +178,7 @@ export function RowActions({ row, table }) {
                     )}
                     onClick={open}
                   >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -188,7 +191,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>

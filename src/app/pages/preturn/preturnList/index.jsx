@@ -19,8 +19,7 @@ const PurchaseList = () => {
             <div className="flex items-center gap-2">
               <PaymentIcon className="size-6 shrink-0 stroke-[1.5]" />
               <h2 className="dark:text-dark-50 truncate text-xl font-medium tracking-wide text-gray-800">
-                {t("nav.return.return")}
-                {t("nav.return.list")}
+                {t("nav.table_fields.return_list")}
               </h2>
             </div>
             <Breadcrumbs items={breadcrumbs} />
