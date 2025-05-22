@@ -27,6 +27,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -41,12 +42,20 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
   const navigate = useNavigate();
 
   const { t } = useTranslation();
 
   const exportTableToExcel = async () => {
-    const response = await fetch(`${API_URL}/api/purchase/get_all`);
+    const response = await fetch(`${API_URL}/api/purchase/get_all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const result = await response.json();
 
     const purchases = result || [];

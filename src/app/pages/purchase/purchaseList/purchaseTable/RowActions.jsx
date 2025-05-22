@@ -27,6 +27,7 @@ import { PreturnModal } from "components/shared/PreturnModal";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -47,6 +48,10 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const { t } = useTranslation();
 
@@ -74,6 +79,9 @@ export function RowActions({ row, table }) {
       `${API_URL}/api/purchase/delete/${row.original?.id}`,
       {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
     );
 

@@ -22,6 +22,7 @@ import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { Combobox } from "components/shared/form/Combobox";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -40,6 +41,10 @@ const EditPurchase = () => {
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
   const [supplier, setSupplier] = useState([]);
+
+  const [cookie] = useCookies()
+
+  const token = cookie.authToken
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -90,6 +95,11 @@ const EditPurchase = () => {
 
       const res = await fetch(
         `${API_URL}/api/purchase/get_detail?purchaseId=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       const result = await res.json();
       if (!res.ok) return;
@@ -185,6 +195,9 @@ const EditPurchase = () => {
       const res = await fetch(`${API_URL}/api/purchase/update`, {
         method: "POST",
         body: form,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const result = await res.json();

@@ -25,6 +25,7 @@ import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -67,6 +68,10 @@ export default function PurchaseTable() {
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const table = useReactTable({
     data: orders,
@@ -157,6 +162,11 @@ export default function PurchaseTable() {
 
         const response = await fetch(
           `${API_URL}/api/purchase/search_pending?${queryString}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         const result = await response.json();
@@ -172,6 +182,7 @@ export default function PurchaseTable() {
 
     fetchData();
   }, [
+    token,
     globalFilter,
     pageIndex,
     pageSize,

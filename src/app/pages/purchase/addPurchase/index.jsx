@@ -22,6 +22,7 @@ import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useNavigate } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -59,6 +60,10 @@ const AddPurchase = () => {
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
   const [supplier, setSupplier] = useState([]);
+
+  const [cookie] = useCookies();
+
+  const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -171,6 +176,9 @@ const AddPurchase = () => {
       const res = await fetch(`${API_URL}/api/purchase/create`, {
         method: "POST",
         body: form,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const result = await res.json();

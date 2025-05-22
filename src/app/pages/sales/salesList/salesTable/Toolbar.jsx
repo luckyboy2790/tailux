@@ -23,6 +23,10 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { Combobox } from "components/shared/form/Combobox";
 import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import dayjs from "dayjs";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -37,6 +41,56 @@ export function Toolbar({
   const { t } = useTranslation();
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
+  const exportTableToExcel = async () => {
+    const response = await fetch(`${API_URL}/api/sales/get_all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const result = await response.json();
+
+    const sales = result?.data || [];
+
+    const data = sales.map((s, index) => {
+      let status = "paid";
+      if (s.paid_amount === 0) {
+        status = "partial";
+      } else if (s.paid_amount < s.total_amount) {
+        status = "pending";
+      }
+
+      return {
+        No: index + 1,
+        Date: dayjs(s.timestamp).format("YYYY-MM-DD"),
+        Reference_No: s.reference_no,
+        customer: s.customer_name || "",
+        Grand_Total: s.total_amount,
+        Paid_Amount: s.paid_amount,
+        Balance: s.total_amount - s.paid_amount,
+        Order_Status: status,
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sales");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(blob, "SalesReport.xlsx");
+  };
 
   return (
     <div className="table-toolbar">
@@ -87,6 +141,7 @@ export function Toolbar({
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => exportTableToExcel()}
                   >
                     <span>{t("nav.export.export_excel")}</span>
                   </button>
@@ -127,6 +182,7 @@ export function Toolbar({
                         focus &&
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
+                      onClick={() => exportTableToExcel()}
                     >
                       <span>{t("nav.export.export_excel")}</span>
                     </button>

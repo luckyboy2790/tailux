@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -25,6 +26,10 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function SelectedRowsActions({ table }) {
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const selectedRows = table.getSelectedRowModel().rows;
 
@@ -35,6 +40,9 @@ export function SelectedRowsActions({ table }) {
         selectedRows.map((row) =>
           fetch(`${API_URL}/api/purchase/delete/${row.original?.id}`, {
             method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }),
         ),
       );
@@ -52,7 +60,6 @@ export function SelectedRowsActions({ table }) {
 
   const exportTableToExcel = async (table) => {
     const purchases = table || [];
-    console.log(purchases);
 
     const data = purchases.map((p, index) => {
       let status = "paid";
