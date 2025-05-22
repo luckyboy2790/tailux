@@ -19,6 +19,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useCookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,6 +29,8 @@ export function SelectedRowsActions({ table }) {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const [cookies] = useCookies(["authToken"]);
+
+  const { t } = useTranslation();
 
   const token = cookies.authToken;
 
@@ -112,10 +115,12 @@ export function SelectedRowsActions({ table }) {
         <div className="w-full max-w-xl px-2 py-4 sm:absolute sm:-translate-y-1/2 sm:px-4">
           <div className="dark:bg-dark-50 dark:text-dark-900 pointer-events-auto flex items-center justify-between rounded-lg bg-gray-800 px-3 py-2 font-medium text-gray-100 sm:px-4 sm:py-3">
             <p>
-              <span>{selectedRows.length} Selected</span>
+              <span>
+                {selectedRows.length} {t("nav.select_row.select")}
+              </span>
               <span className="max-sm:hidden">
                 {" "}
-                from {table.getCoreRowModel().rows.length}
+                {t("nav.select_row.from")} {table.getCoreRowModel().rows.length}
               </span>
             </p>
             <div className="flex space-x-1.5">
@@ -135,7 +140,9 @@ export function SelectedRowsActions({ table }) {
                 ) : (
                   <TrashIcon className="size-4 shrink-0" />
                 )}
-                <span className="max-sm:hidden">Delete</span>
+                <span className="max-sm:hidden">
+                  {t("nav.select_row.delete")}
+                </span>
               </Button>
               <Menu as="div" className="relative inline-block text-left">
                 <MenuButton
@@ -143,7 +150,9 @@ export function SelectedRowsActions({ table }) {
                   className="text-xs-plus w-7 gap-1.5 rounded-full px-3 py-1.5 sm:w-auto sm:rounded-sm"
                 >
                   <EllipsisHorizontalIcon className="size-4 shrink-0" />
-                  <span className="max-sm:hidden"> More</span>{" "}
+                  <span className="max-sm:hidden">
+                    {t("nav.select_row.more")}
+                  </span>{" "}
                 </MenuButton>
                 <Transition
                   as={MenuItems}
@@ -169,7 +178,7 @@ export function SelectedRowsActions({ table }) {
                         }}
                       >
                         <ArrowUpTrayIcon className="size-4.5" />
-                        <span>Export Excel</span>
+                        <span>{t("nav.export.export_excel")}</span>
                       </button>
                     )}
                   </MenuItem>

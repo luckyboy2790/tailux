@@ -28,15 +28,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
+
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -44,6 +36,16 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const confirmMessages = {
+    pending: {
+      description:
+        t("nav.sale.confirmDelete.pending.description"),
+    },
+    success: {
+      title: t("nav.sale.confirmDelete.success.title"),
+    },
+  };
 
   const navigate = useNavigate();
 

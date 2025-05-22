@@ -65,7 +65,30 @@
       "purchase_order": "Purchase Orders",
       "list": "List",
       "received_order": "Received Orders",
-      "purchase_date_range": "Purchase Date Range"
+      "purchase_date_range": "Purchase Date Range",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Purchase Delete Failed"
+        },
+        "success": {
+          "title": "Purchase Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Purchase Approve Failed"
+        },
+        "success": {
+          "title": "Purchase Approved"
+        }
+      }
     },
     "return": {
       "return": "Return",
@@ -80,7 +103,30 @@
       "choose_files": "Choose Files",
       "cancel": "Cancel",
       "save": "Save",
-      "saving": "Saving"
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Return Delete Failed"
+        },
+        "success": {
+          "title": "Return Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Return Approve Failed"
+        },
+        "success": {
+          "title": "Return Approved"
+        }
+      }
     },
     "sale": {
       "sale": "Sale",
@@ -93,7 +139,30 @@
       "sub_total": "Subtotal",
       "sale_date_required": "Sale Date is required",
       "sale_date_range": "Sale Date Range",
-      "sale_update": "Update Sale"
+      "sale_update": "Update Sale",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Sale Delete Failed"
+        },
+        "success": {
+          "title": "Sale Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Sale Approve Failed"
+        },
+        "success": {
+          "title": "Sale Approved"
+        }
+      }
     },
     "payment": {
       "payment": "Payment",
@@ -112,7 +181,30 @@
       "choose_files": "Choose Files",
       "cancel": "Cancel",
       "save": "Save",
-      "saving": "Saving"
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Payment Delete Failed"
+        },
+        "success": {
+          "title": "Payment Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Payment Approve Failed"
+        },
+        "success": {
+          "title": "Payment Approved"
+        }
+      }
     },
     "product": {
       "product": "Product",
@@ -235,6 +327,12 @@
       "created_by": "Created By",
       "created_at": "Created At"
     },
+    "select_row": {
+      "select": "Select",
+      "from": "from",
+      "delete": "Delete",
+      "more": "More"
+    },
     "choose_file": "Choose File",
     "select": {
       "select_supplier": "Select Supplier",
@@ -242,6 +340,11 @@
       "select_store": "Select Store",
       "select_customer": "Select Customer",
       "select_product": "Select Product"
+    },
+    "confirm_message": {
+      "sure": "Are you sure?",
+      "delete": "Delete",
+      "cancel": "Cancel"
     }
   }
 }

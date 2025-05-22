@@ -32,18 +32,17 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t("nav.return.confirmDelete.pending.description"),
+    },
+    success: {
+      title: t("nav.return.confirmDelete.success.title"),
+    },
+  };
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
@@ -82,7 +81,7 @@ export function RowActions({ row, table }) {
     );
 
     if (!response.ok) {
-      toast.error("Delete Return Failed");
+      toast.error(t("nav.return.confirmDelete.failed.title"));
 
       setConfirmDeleteLoading(false);
 
@@ -91,7 +90,7 @@ export function RowActions({ row, table }) {
       throw new Error("Something went wrong");
     }
 
-    toast.success("Delete Return Successfully");
+    toast.success(t("nav.return.confirmDelete.success.title"));
 
     setDeleteSuccess(true);
     setConfirmDeleteLoading(false);
@@ -108,7 +107,7 @@ export function RowActions({ row, table }) {
   const handleApprove = async (item) => {
     try {
       if (Number(item.status) === 1) {
-        toast.success("Already approved");
+        toast.success(t("nav.return.confirmApprove.success.title"));
       } else {
         const response = await fetch(
           `${API_URL}/api/preturn/approve/${row.original?.id}`,
@@ -128,7 +127,7 @@ export function RowActions({ row, table }) {
           return;
         }
 
-        toast.success("Approved Successfully");
+        toast.success(t("nav.return.confirmApprove.success.title"));
 
         if (typeof table.options.meta?.refetch === "function") {
           await table.options.meta.refetch();

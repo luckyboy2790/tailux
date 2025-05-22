@@ -33,16 +33,6 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
-
 export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
@@ -54,6 +44,15 @@ export function RowActions({ row, table }) {
   const token = cookies.authToken;
 
   const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t("nav.purchase.confirmDelete.pending.description"),
+    },
+    success: {
+      title: t("nav.purchase.confirmDelete.success.title"),
+    },
+  };
 
   const navigate = useNavigate();
 
@@ -86,7 +85,7 @@ export function RowActions({ row, table }) {
     );
 
     if (!response.ok) {
-      toast.error("Delete Purchase Failed");
+      toast.error(t("nav.purchase.confirmDelete.failed.title"));
 
       setConfirmDeleteLoading(false);
 
@@ -95,7 +94,7 @@ export function RowActions({ row, table }) {
       throw new Error("Something went wrong");
     }
 
-    toast.success("Delete Purchase Successfully");
+    toast.success(t("nav.purchase.confirmDelete.success.title"));
 
     setDeleteSuccess(true);
     setConfirmDeleteLoading(false);

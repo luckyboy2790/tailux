@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Spinner } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -18,7 +18,7 @@ import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
-import { columns } from "./columns";
+import { getColumns } from "./columns";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
@@ -26,6 +26,7 @@ import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
 import { useCookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -73,6 +74,66 @@ export default function PurchaseTable() {
 
   const token = cookies.authToken;
 
+  const { t } = useTranslation();
+
+  const columns = getColumns(t);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const dateSort = sorting.find((sort) => sort.id === "timestamp");
+      const sortDirection = dateSort
+        ? dateSort.desc
+          ? "desc"
+          : "asc"
+        : "desc";
+
+      const queryString = new URLSearchParams({
+        company_id: companyId,
+        keyword: globalFilter,
+        page: (pageIndex + 1).toString(),
+        per_page: pageSize.toString(),
+        sort_by_date: sortDirection,
+        startDate,
+        endDate,
+        supplier_id: supplierId,
+      }).toString();
+
+      const response = await fetch(
+        `${API_URL}/api/purchase/search_pending?${queryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const result = await response.json();
+
+      setOrders(result.data.data);
+      setTotalCount(result.data.total);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [
+    token,
+    companyId,
+    endDate,
+    globalFilter,
+    pageIndex,
+    pageSize,
+    sorting,
+    startDate,
+    supplierId,
+  ]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const table = useReactTable({
     data: orders,
     columns: columns,
@@ -110,6 +171,7 @@ export default function PurchaseTable() {
         setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
       },
       setTableSettings,
+      refetch: fetchData,
     },
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -136,62 +198,6 @@ export default function PurchaseTable() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const dateSort = sorting.find((sort) => sort.id === "timestamp");
-        const sortDirection = dateSort
-          ? dateSort.desc
-            ? "desc"
-            : "asc"
-          : "desc";
-
-        const queryString = new URLSearchParams({
-          company_id: companyId,
-          keyword: globalFilter,
-          page: (pageIndex + 1).toString(),
-          per_page: pageSize.toString(),
-          sort_by_date: sortDirection,
-          startDate,
-          endDate,
-          supplier_id: supplierId,
-        }).toString();
-
-        const response = await fetch(
-          `${API_URL}/api/purchase/search_pending?${queryString}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const result = await response.json();
-
-        setOrders(result.data.data);
-        setTotalCount(result.data.total);
-
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [
-    token,
-    globalFilter,
-    pageIndex,
-    pageSize,
-    startDate,
-    endDate,
-    companyId,
-    supplierId,
-    sorting,
-  ]);
 
   return (
     <Page title="Orders Datatable v1">

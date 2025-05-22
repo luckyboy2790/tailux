@@ -17,34 +17,9 @@ import { useRef } from "react";
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
 import { AnimatedTick } from "./AnimatedTick";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
-
-const defaultMessages = {
-  pending: {
-    Icon: ExclamationTriangleIcon,
-    iconClassName: "text-warning",
-    title: "Are you sure?",
-    description:
-      "Are you sure you want to delete this record? Once deleted, it cannot be restored.",
-    actionText: "Delete",
-  },
-  success: {
-    Icon: AnimatedTick,
-    iconClassName: "text-success",
-    title: "Record Deleted",
-    description: "You have successfully deleted the record from the database.",
-    actionText: "Done",
-  },
-  error: {
-    Icon: XCircleIcon,
-    title: "Opps... Something failed.",
-    description:
-      "Ensure internet is on and retry. Contact support if issue remains.",
-    actionText: "Retry",
-    iconClassName: "text-error",
-  },
-};
 
 export function ConfirmModal(props) {
   const { show, onClose, onOk, confirmLoading, className, state, messages } =
@@ -90,7 +65,7 @@ export function ConfirmModal(props) {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
         className={clsx(
-          "scrollbar-sm relative flex w-full max-w-md flex-col overflow-y-auto rounded-lg bg-white px-4 py-6 text-center transition-opacity duration-300 dark:bg-dark-700 sm:px-5",
+          "scrollbar-sm dark:bg-dark-700 relative flex w-full max-w-md flex-col overflow-y-auto rounded-lg bg-white px-4 py-6 text-center transition-opacity duration-300 sm:px-5",
           className,
         )}
       >
@@ -110,6 +85,35 @@ export function ConfirmModal(props) {
 }
 
 function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
+  const { t } = useTranslation();
+
+  const defaultMessages = {
+    pending: {
+      Icon: ExclamationTriangleIcon,
+      iconClassName: "text-warning",
+      title: t("nav.confirm_message.sure"),
+      description:
+        "Are you sure you want to delete this record? Once deleted, it cannot be restored.",
+      actionText: t("nav.confirm_message.delete"),
+    },
+    success: {
+      Icon: AnimatedTick,
+      iconClassName: "text-success",
+      title: "Record Deleted",
+      description:
+        "You have successfully deleted the record from the database.",
+      actionText: "Done",
+    },
+    error: {
+      Icon: XCircleIcon,
+      title: "Opps... Something failed.",
+      description:
+        "Ensure internet is on and retry. Contact support if issue remains.",
+      actionText: "Retry",
+      iconClassName: "text-error",
+    },
+  };
+
   const mergedMessages = merge(defaultMessages, messages);
   const Icon = mergedMessages[state].Icon;
   const spinner = <GhostSpinner variant="soft" className="size-4 border-2" />;
@@ -123,7 +127,7 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
         )}
       />
       <div className="mt-4">
-        <h3 className="text-xl text-gray-800 dark:text-dark-100">
+        <h3 className="dark:text-dark-100 text-xl text-gray-800">
           {mergedMessages[state].title}
         </h3>
         <p className="mx-auto mt-2 max-w-xs">
@@ -139,13 +143,13 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
             {mergedMessages[state].actionText}
           </Button>
         ) : (
-          <div className="mt-12 flex justify-center space-x-3 ">
+          <div className="mt-12 flex justify-center space-x-3">
             <Button
               onClick={onClose}
               variant="outlined"
               className="h-9 min-w-[7rem]"
             >
-              Cancel
+              {t("nav.confirm_message.cancel")}
             </Button>
 
             {state === "pending" && (
@@ -153,7 +157,7 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
                 ref={focusRef}
                 onClick={onOk}
                 color="primary"
-                className="h-9 min-w-[7rem] space-x-2 "
+                className="h-9 min-w-[7rem] space-x-2"
               >
                 {confirmLoading && spinner}
                 <span> {mergedMessages[state].actionText}</span>
@@ -164,7 +168,7 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
               <Button
                 onClick={onOk}
                 color="error"
-                className="h-9 min-w-[7rem] space-x-2 "
+                className="h-9 min-w-[7rem] space-x-2"
               >
                 {confirmLoading && spinner}
                 <span> {mergedMessages[state].actionText}</span>

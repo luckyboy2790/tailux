@@ -3,7 +3,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import dayjs from "dayjs";
 
 // Local Imports
@@ -42,13 +42,11 @@ const EditPurchase = () => {
   const [stores, setStores] = useState([]);
   const [supplier, setSupplier] = useState([]);
 
-  const [cookie] = useCookies()
+  const [cookie] = useCookies();
 
-  const token = cookie.authToken
+  const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   const methods = useForm({
     resolver: yupResolver(useValidationSchema()),
@@ -138,7 +136,7 @@ const EditPurchase = () => {
     };
 
     init();
-  }, [id, reset, t]);
+  }, [id, reset, t, token]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -203,7 +201,7 @@ const EditPurchase = () => {
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Something went wrong");
 
-      navigate("/purchase/list");
+      window.history.back();
     } catch (error) {
       console.error("Error submitting form:", error.message);
     } finally {

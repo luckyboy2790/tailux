@@ -65,7 +65,30 @@
       "purchase_order": "Órdenes de compra",
       "list": "Lista",
       "received_order": "Pedidos recibidos",
-      "purchase_date_range": "Rango de fechas de compra"
+      "purchase_date_range": "Rango de fechas de compra",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "Purchase Delete Failed"
+        },
+        "success": {
+          "title": "Compra Eliminada"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "Purchase Approve Failed"
+        },
+        "success": {
+          "title": "Compra Aprobada"
+        }
+      }
     },
     "return": {
       "return": "Devoluciones",
@@ -80,7 +103,30 @@
       "choose_files": "Elegir Archivos",
       "cancel": "Cancelar",
       "save": "Guardar",
-      "saving": "Guardando"
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "Return Delete Failed"
+        },
+        "success": {
+          "title": "Devolucion Eliminada"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "Return Approve Failed"
+        },
+        "success": {
+          "title": "Devolucion Aprobada"
+        }
+      }
     },
     "sale": {
       "sale": "Venta",
@@ -93,7 +139,30 @@
       "sub_total": "Total parcial",
       "sale_date_required": "La fecha de venta es obligatoria",
       "sale_date_range": "Rango de fechas de venta",
-      "sale_update": "Actualizar Venta"
+      "sale_update": "Actualizar Venta",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "Sale Delete Failed"
+        },
+        "success": {
+          "title": "Venta Eliminada"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "Sale Approve Failed"
+        },
+        "success": {
+          "title": "Venta Aprobada"
+        }
+      }
     },
     "payment": {
       "payment": "Pago",
@@ -112,7 +181,30 @@
       "choose_files": "Elegir Archivos",
       "cancel": "Cancelar",
       "save": "Guardar",
-      "saving": "Guardando"
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "Payment Delete Failed"
+        },
+        "success": {
+          "title": "Pago Eliminado"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "Payment Approve Failed"
+        },
+        "success": {
+          "title": "Pago Aprobado"
+        }
+      }
     },
     "product": {
       "product": "Producto",
@@ -235,6 +327,12 @@
       "created_by": "Creado Por",
       "created_at": "Creado En"
     },
+    "select_row": {
+      "select": "Seleccionar",
+      "from": "de",
+      "delete": "Eliminar",
+      "more": "Mas"
+    },
     "choose_file": "Seleccionar archivo",
     "select": {
       "select_supplier": "Seleccionar Proveedor",
@@ -242,6 +340,11 @@
       "select_store": "Seleccionar Tienda",
       "select_customer": "Seleccionar Cliente",
       "select_product": "Seleccionar Producto"
+    },
+    "confirm_message": {
+      "sure": "¿Estás seguro?",
+      "delete": "Eliminar",
+      "cancel": "Cancelar"
     }
   }
 }

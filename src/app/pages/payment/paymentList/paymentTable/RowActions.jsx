@@ -32,16 +32,6 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
-
 export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
@@ -55,6 +45,15 @@ export function RowActions({ row, table }) {
   const [isOpen, { open, close }] = useDisclosure(false);
 
   const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t("nav.payment.confirmDelete.pending.description"),
+    },
+    success: {
+      title: t("nav.payment.confirmDelete.success.title"),
+    },
+  };
 
   // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
   //   useDisclosure(false);
@@ -82,7 +81,7 @@ export function RowActions({ row, table }) {
     );
 
     if (!response.ok) {
-      toast.error("Delete Payment Failed");
+      toast.error(t("nav.payment.confirmDelete.failed.title"));
 
       setConfirmDeleteLoading(false);
 
@@ -91,7 +90,7 @@ export function RowActions({ row, table }) {
       throw new Error("Something went wrong");
     }
 
-    toast.success("Delete Payment Successfully");
+    toast.success(t("nav.payment.confirmDelete.success.title"));
 
     setDeleteSuccess(true);
     setConfirmDeleteLoading(false);
@@ -110,7 +109,7 @@ export function RowActions({ row, table }) {
   const handleApprove = async (item) => {
     try {
       if (Number(item.status) === 1) {
-        toast.success("Already approved");
+        toast.success(t("nav.payment.confirmApprove.success.title"));
       } else {
         const response = await fetch(
           `${API_URL}/api/payment/approve/${row.original?.id}`,
@@ -130,7 +129,7 @@ export function RowActions({ row, table }) {
           return;
         }
 
-        toast.success("Approved Successfully");
+        toast.success(t("nav.payment.confirmApprove.success.title"));
 
         if (typeof table.options.meta?.refetch === "function") {
           await table.options.meta.refetch();

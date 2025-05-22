@@ -23,9 +23,12 @@ import {
   Tr,
   Td,
 } from "components/ui";
-import { orderStatusOptions } from "./data";
+import { getOrderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { Image } from "antd";
+import { useTranslation } from "react-i18next";
+
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +45,10 @@ const paymentCols = ["#", "Date", "Reference No", "Amount", "Note"];
 
 export function OrdersDrawer({ isOpen, close, row }) {
   let orderStatus;
+
+  const { t } = useTranslation();
+
+  const orderStatusOptions = getOrderStatusOptions(t);
 
   const val = row.original;
 
@@ -96,7 +103,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
-              <div className="font-semibold">Reference NO:</div>
+              <div className="font-semibold">
+                {t("nav.detail.reference_no")}:
+              </div>
               <div className="text-primary-600 dark:text-primary-400 text-xl font-medium">
                 {row.original.reference_no} &nbsp;
                 <Badge className="align-text-bottom" color={statusOption.color}>
@@ -118,14 +127,16 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">supplier:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.supplier")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original.supplier.name}
               </div>
             </div>
             <div className="text-end">
-              <div className="font-semibold">Email:</div>
+              <div className="font-semibold">{t("nav.detail.email")}:</div>
               <div className="mt-1.5">
                 <p className="font-medium">{row.original?.supplier.email}</p>
               </div>
@@ -134,7 +145,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">company:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.company")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original.supplier.company}
@@ -149,14 +162,18 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">Store:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.store")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original?.store.name}
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="mb-1.5 text-end font-semibold">Company:</div>
+              <div className="mb-1.5 text-end font-semibold">
+                {t("nav.detail.company")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
                 {row.original?.store.company.name}
@@ -170,12 +187,20 @@ export function OrdersDrawer({ isOpen, close, row }) {
           />
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
-            <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">Attachments:</div>
+            <div className="flex w-full flex-col">
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.attachments")}:
+              </div>
 
-              <div>
+              <div className="flex w-full gap-4 overflow-x-auto">
                 {row.original?.images.map((item, key) => (
-                  <Image key={key} width={100} height={100} src={item.path} />
+                  <div className="w-25" key={key}>
+                    <Image
+                      width={100}
+                      height={100}
+                      src={`${IMG_URL}${item.path}`}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -187,7 +212,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           />
 
           <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
-            Order Items
+            {t("nav.detail.order_item")}
           </p>
 
           <div className="mt-1 h-auto min-h-90 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
@@ -228,7 +253,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={4} className="text-end">
-                    Total (COP)
+                    {t("nav.detail.total_cop")}
                   </Td>
                   <Td>{sums.quantity.toLocaleString()}</Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
@@ -238,7 +263,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Discount (COP)
+                    {t("nav.detail.discount")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {row.original?.discount.toLocaleString()}
@@ -247,7 +272,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Shipping (COP)
+                    {t("nav.detail.shipping")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {row.original?.shipping.toLocaleString()}
@@ -256,25 +281,29 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Returns
+                    {t("nav.detail.returns")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.returns.toLocaleString()}
+                    {(row.original?.returned_amount || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Total Amount (COP)
+                    {t("nav.detail.total_amount")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.total_amount.toLocaleString()}
+                    {(
+                      Number(row.original?.total_amount) -
+                      Number(row.original?.discount) +
+                      Number(row.original?.shipping)
+                    ).toLocaleString()}
                   </Td>
                 </Tr>
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Paid (COP)
+                    {t("nav.detail.paid")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {Number(row.original?.paid_amount).toLocaleString()}
@@ -283,11 +312,14 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Balance (COP)
+                    {t("nav.detail.balance")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {(
-                      row.original?.total_amount - row.original?.paid_amount
+                      Number(row.original?.total_amount) -
+                      Number(row.original?.discount) +
+                      Number(row.original?.shipping) -
+                      Number(row.original?.paid_amount)
                     ).toLocaleString()}
                   </Td>
                 </Tr>
@@ -301,7 +333,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           />
 
           <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
-            Payment List
+            {t("nav.detail.payment_list")}
           </p>
 
           <div className="mt-1 h-auto min-h-30 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
