@@ -8,6 +8,7 @@ import {
 } from "@headlessui/react";
 import { PaperClipIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { Textarea, Button, Input, Upload } from "components/ui";
@@ -19,6 +20,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 // ----------------------------------------------------------------------
 
 export function PreturnModal({ type, row, isOpen, close }) {
+  const { t } = useTranslation();
   const saveRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
@@ -41,6 +43,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
         amount: Number(rowData?.amount),
         attachment: [],
         reference_no: rowData.reference_no,
+        note: rowData.note || "",
       });
     } else {
       setData({
@@ -48,6 +51,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
         amount: 0,
         attachment: [],
         reference_no: "",
+        note: "",
       });
     }
   }, [type, row.original]);
@@ -57,7 +61,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
   const filesList =
     data.attachment.length > 0
       ? data.attachment.map((file) => file.name).join(", ")
-      : "Choose Files";
+      : t("nav.return.choose_files");
 
   const handleSave = async () => {
     if (loading) return;
@@ -88,6 +92,9 @@ export function PreturnModal({ type, row, isOpen, close }) {
         {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
       );
 
@@ -144,7 +151,11 @@ export function PreturnModal({ type, row, isOpen, close }) {
                   as="h3"
                   className="dark:text-dark-100 text-base font-medium text-gray-800"
                 >
-                  {type === "add" ? "Add" : "Edit"} Return
+                  {t(
+                    type === "add"
+                      ? "nav.return.add_return"
+                      : "nav.return.edit_return",
+                  )}
                 </DialogTitle>
                 <Button
                   onClick={close}
@@ -159,7 +170,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
               <div className="flex flex-col overflow-y-auto px-4 py-4 sm:px-5">
                 <div className="mt-4 space-y-5">
                   <DatePicker
-                    label={"Date"}
+                    label={t("nav.return.date")}
                     value={data.date}
                     onChange={(date) =>
                       setData({
@@ -170,8 +181,8 @@ export function PreturnModal({ type, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder="Reference No"
-                    label="Reference No"
+                    placeholder={t("nav.return.reference_no")}
+                    label={t("nav.return.reference_no")}
                     value={data.reference_no}
                     onChange={(e) =>
                       setData({ ...data, reference_no: e.target.value })
@@ -179,8 +190,8 @@ export function PreturnModal({ type, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder="Amount"
-                    label="Amount"
+                    placeholder={t("nav.return.amount")}
+                    label={t("nav.return.amount")}
                     type="number"
                     value={data.amount}
                     onChange={(e) =>
@@ -190,7 +201,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
 
                   <Upload
                     name="file"
-                    label="Attachments"
+                    label={t("nav.return.attachments")}
                     onChange={(files) => {
                       setData({ ...data, attachment: [files] });
                     }}
@@ -226,8 +237,8 @@ export function PreturnModal({ type, row, isOpen, close }) {
                   </Upload>
 
                   <Textarea
-                    placeholder="Note"
-                    label="Note"
+                    placeholder={t("nav.return.note")}
+                    label={t("nav.return.note")}
                     value={data.note}
                     onChange={(e) => {
                       setData({ ...data, note: e.target.value });
@@ -241,7 +252,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
                     variant="outlined"
                     className="min-w-[7rem] rounded-full"
                   >
-                    Cancel
+                    {t("nav.return.cancel")}
                   </Button>
                   <Button
                     onClick={handleSave}
@@ -249,7 +260,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
                     ref={saveRef}
                     className="min-w-[7rem] rounded-full"
                   >
-                    {loading ? "Saving..." : "Save"}
+                    {loading ? t("nav.return.saving") : t("nav.return.save")}
                   </Button>
                 </div>
               </div>

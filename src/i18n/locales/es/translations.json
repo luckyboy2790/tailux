@@ -69,7 +69,18 @@
     },
     "return": {
       "return": "Devoluciones",
-      "list": "Lista"
+      "list": "Lista",
+      "add_return": "Añadir Devolución",
+      "edit_return": "Editar Devolución",
+      "date": "Fecha",
+      "reference_no": "Número de Referencia",
+      "amount": "Cantidad",
+      "attachments": "Adjuntos",
+      "note": "Nota",
+      "choose_files": "Elegir Archivos",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando"
     },
     "sale": {
       "sale": "Venta",
@@ -90,7 +101,18 @@
       "concurrent_payments": "Pagos concurrentes",
       "form": "Formulario",
       "select_supplier": "Seleccione un proveedor",
-      "list": "Lista"
+      "list": "Lista",
+      "add_payment": "Añadir Pago",
+      "edit_payment": "Editar Pago",
+      "date": "Fecha",
+      "reference_no": "Número de Referencia",
+      "amount": "Cantidad",
+      "attachments": "Adjuntos",
+      "note": "Nota",
+      "choose_files": "Elegir Archivos",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando"
     },
     "product": {
       "product": "Producto",

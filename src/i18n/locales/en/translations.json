@@ -69,7 +69,18 @@
     },
     "return": {
       "return": "Return",
-      "list": "List"
+      "list": "List",
+      "add_return": "Add Return",
+      "edit_return": "Edit Return",
+      "date": "Date",
+      "reference_no": "Reference No",
+      "amount": "Amount",
+      "attachments": "Attachments",
+      "note": "Note",
+      "choose_files": "Choose Files",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving"
     },
     "sale": {
       "sale": "Sale",
@@ -90,7 +101,18 @@
       "concurrent_payments": "Concurrent Payments",
       "form": "Form",
       "select_supplier": "Select a supplier",
-      "list": "List"
+      "list": "List",
+      "add_payment": "Add Payment",
+      "edit_payment": "Edit Payment",
+      "date": "Date",
+      "reference_no": "Reference No",
+      "amount": "Amount",
+      "attachments": "Attachments",
+      "note": "Note",
+      "choose_files": "Choose Files",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving"
     },
     "product": {
       "product": "Product",

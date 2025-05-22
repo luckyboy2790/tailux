@@ -270,6 +270,7 @@ const EditSale = () => {
                         />
                       )}
                     />
+
                     <Input
                       label={t("nav.purchase.reference_no")}
                       placeholder={t("nav.purchase.reference_no")}

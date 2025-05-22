@@ -8,6 +8,7 @@ import {
 } from "@headlessui/react";
 import { PaperClipIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Fragment, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { Textarea, Button, Input, Upload } from "components/ui";
@@ -19,6 +20,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 // ----------------------------------------------------------------------
 
 export function PaymentModal({ type, paymentType, row, isOpen, close }) {
+  const { t } = useTranslation();
   const saveRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
@@ -61,7 +63,7 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
   const filesList =
     data.attachment?.length > 0
       ? data.attachment.map((file) => file.name).join(", ")
-      : "Choose Files";
+      : t("nav.payment.choose_files");
 
   const handleSave = async () => {
     if (loading) return;
@@ -95,6 +97,9 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
         {
           method: "POST",
           body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
       );
 
@@ -151,7 +156,11 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   as="h3"
                   className="dark:text-dark-100 text-base font-medium text-gray-800"
                 >
-                  {type === "add" ? "Add" : "Edit"} Payment
+                  {t(
+                    type === "add"
+                      ? "nav.payment.add_payment"
+                      : "nav.payment.edit_payment",
+                  )}
                 </DialogTitle>
                 <Button
                   onClick={close}
@@ -166,7 +175,7 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
               <div className="flex flex-col overflow-y-auto px-4 py-4 sm:px-5">
                 <div className="mt-4 space-y-5">
                   <DatePicker
-                    label={"Date"}
+                    label={t("nav.payment.date")}
                     value={data.date}
                     onChange={(date) =>
                       setData({
@@ -177,8 +186,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder="Reference No"
-                    label="Reference No"
+                    placeholder={t("nav.payment.reference_no")}
+                    label={t("nav.payment.reference_no")}
                     value={data.reference_no}
                     onChange={(e) =>
                       setData({ ...data, reference_no: e.target.value })
@@ -186,8 +195,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder="Amount"
-                    label="Amount"
+                    placeholder={t("nav.payment.amount")}
+                    label={t("nav.payment.amount")}
                     type="number"
                     value={data.amount}
                     onChange={(e) =>
@@ -197,7 +206,7 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
 
                   <Upload
                     name="file"
-                    label="Attachments"
+                    label={t("nav.payment.attachments")}
                     onChange={(files) => {
                       setData({ ...data, attachment: files });
                     }}
@@ -234,8 +243,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   </Upload>
 
                   <Textarea
-                    placeholder="Note"
-                    label="Note"
+                    placeholder={t("nav.payment.note")}
+                    label={t("nav.payment.note")}
                     value={data.note}
                     onChange={(e) => {
                       setData({ ...data, note: e.target.value });
@@ -249,7 +258,7 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                     variant="outlined"
                     className="min-w-[7rem] rounded-full"
                   >
-                    Cancel
+                    {t("nav.payment.cancel")}
                   </Button>
                   <Button
                     onClick={handleSave}
@@ -257,7 +266,9 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                     ref={saveRef}
                     className="min-w-[7rem] rounded-full"
                   >
-                    {loading ? "Saving..." : "Save"}
+                    {loading
+                      ? `${t("nav.payment.saving")}...`
+                      : t("nav.payment.save")}
                   </Button>
                 </div>
               </div>
