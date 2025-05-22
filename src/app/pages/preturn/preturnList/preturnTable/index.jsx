@@ -25,6 +25,7 @@ import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -32,6 +33,10 @@ const isSafari = getUserAgentBrowser() === "Safari";
 
 export default function PreturnTable() {
   const { cardSkin } = useThemeContext();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const { t } = useTranslation();
 
@@ -74,6 +79,11 @@ export default function PreturnTable() {
 
       const response = await fetch(
         `${API_URL}/api/preturn/search?${queryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const result = await response.json();
@@ -84,7 +94,7 @@ export default function PreturnTable() {
     } catch (error) {
       console.log(error);
     }
-  }, [params.purchase_id]);
+  }, [params.purchase_id, token]);
 
   const table = useReactTable({
     data: orders,

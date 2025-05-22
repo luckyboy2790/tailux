@@ -24,6 +24,7 @@ import { Button } from "components/ui";
 import { useDisclosure } from "hooks";
 import { toast } from "sonner";
 import { PreturnModal } from "components/shared/PreturnModal";
+import { useCookies } from "react-cookie";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
 
@@ -49,6 +50,10 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
 
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
   // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
   //   useDisclosure(false);
 
@@ -70,6 +75,9 @@ export function RowActions({ row, table }) {
       `${API_URL}/api/preturn/delete/${row.original?.id}`,
       {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
     );
 
@@ -106,6 +114,9 @@ export function RowActions({ row, table }) {
           `${API_URL}/api/preturn/approve/${row.original?.id}`,
           {
             method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
         );
 

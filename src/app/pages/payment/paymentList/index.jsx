@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import PaymentTable from "./paymentTable";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,6 +16,10 @@ const PurchaseList = () => {
     { title: t("nav.payment.list") },
   ];
 
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
   const [referenceNo, setReferenceNo] = useState("");
 
   const params = useParams();
@@ -23,6 +28,11 @@ const PurchaseList = () => {
     const fetchData = async () => {
       const response = await fetch(
         `${API_URL}/api/${params.type === "purchase" ? "purchase" : "sales"}/get_detail?${params.type}Id=${params.purchase_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const result = await response.json();
@@ -31,7 +41,7 @@ const PurchaseList = () => {
     };
 
     fetchData();
-  }, [params.purchase_id, params.type]);
+  }, [params.purchase_id, params.type, token]);
 
   return (
     <Page title="Homepage">

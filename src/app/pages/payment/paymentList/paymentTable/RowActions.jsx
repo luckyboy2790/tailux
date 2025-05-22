@@ -24,6 +24,7 @@ import { Button } from "components/ui";
 import { toast } from "sonner";
 import { PaymentModal } from "components/shared/PaymentModal";
 import { useDisclosure } from "hooks";
+import { useCookies } from "react-cookie";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
 
@@ -46,6 +47,10 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [isOpen, { open, close }] = useDisclosure(false);
 
@@ -70,6 +75,9 @@ export function RowActions({ row, table }) {
       `${API_URL}/api/payment/delete/${row.original?.id}`,
       {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
     );
 
@@ -108,6 +116,9 @@ export function RowActions({ row, table }) {
           `${API_URL}/api/payment/approve/${row.original?.id}`,
           {
             method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
         );
 

@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { Textarea, Button, Input, Upload } from "components/ui";
 import { DatePicker } from "./form/Datepicker";
 import dayjs from "dayjs";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,6 +23,10 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 export function PaymentModal({ type, paymentType, row, isOpen, close }) {
   const { t } = useTranslation();
   const saveRef = useRef(null);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [loading, setLoading] = useState(false);
 
@@ -98,7 +103,7 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
           method: "POST",
           body: formData,
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );

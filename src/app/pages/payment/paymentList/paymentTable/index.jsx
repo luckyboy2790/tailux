@@ -25,6 +25,7 @@ import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -34,6 +35,10 @@ export default function PaymentTable() {
   const { cardSkin } = useThemeContext();
 
   const { t } = useTranslation();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const columns = getColumns(t);
 
@@ -75,6 +80,11 @@ export default function PaymentTable() {
 
       const response = await fetch(
         `${API_URL}/api/payment/search?${queryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const result = await response.json();
@@ -85,7 +95,7 @@ export default function PaymentTable() {
     } catch (error) {
       console.log(error);
     }
-  }, [params.purchase_id, params.type]);
+  }, [params.purchase_id, params.type, token]);
 
   const table = useReactTable({
     data: orders,
