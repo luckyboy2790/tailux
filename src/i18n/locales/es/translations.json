@@ -80,7 +80,9 @@
       "sale_date": "Fecha de Venta",
       "quantity": "Cantidad",
       "sub_total": "Total parcial",
-      "sale_date_required": "La fecha de venta es obligatoria"
+      "sale_date_required": "La fecha de venta es obligatoria",
+      "sale_date_range": "Rango de fechas de venta",
+      "sale_update": "Actualizar Venta"
     },
     "payment": {
       "payment": "Pago",
@@ -144,6 +146,7 @@
       "view": "Ver",
       "table_view": "Vista de tabla",
       "full_screen": "Pantalla completa",
+      "row_dense": "Hilera densa",
       "column_visibility": "Visibilidad de columna",
       "show_all_columns": "Mostrar todas las columnas"
     },

@@ -23,7 +23,7 @@ import {
   Tr,
   Td,
 } from "components/ui";
-import { orderStatusOptions } from "./data";
+import { getOrderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { useTranslation } from "react-i18next";
 import { Image } from "antd";
@@ -32,21 +32,29 @@ const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 // ----------------------------------------------------------------------
 
-const cols = [
-  "#",
-  "Product Code",
-  "Product Name",
-  "Product Cost",
-  "Quantity",
-  "Total",
-];
-
-const paymentCols = ["#", "Date", "Reference No", "Amount", "Note"];
-
 export function OrdersDrawer({ isOpen, close, row }) {
   let orderStatus;
 
   const { t } = useTranslation();
+
+  const cols = [
+    "#",
+    t("nav.detail.product_code"),
+    t("nav.detail.product_name"),
+    t("nav.detail.product_cost"),
+    t("nav.detail.quantity"),
+    t("nav.detail.sub_total"),
+  ];
+
+  const paymentCols = [
+    "#",
+    t("nav.detail.date"),
+    t("nav.detail.reference_no"),
+    t("nav.detail.amount"),
+    t("nav.detail.note"),
+  ];
+
+  const orderStatusOptions = getOrderStatusOptions(t);
 
   const val = row.original;
 
@@ -101,7 +109,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
-              <div className="font-semibold">Reference NO:</div>
+              <div className="font-semibold">
+                {t("nav.detail.reference_no")}:
+              </div>
               <div className="text-primary-600 dark:text-primary-400 text-xl font-medium">
                 {row.original.reference_no} &nbsp;
                 <Badge className="align-text-bottom" color={statusOption.color}>
@@ -123,14 +133,16 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">Customer:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.people.customer")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original.customer.name}
               </div>
             </div>
             <div className="text-end">
-              <div className="font-semibold">Email:</div>
+              <div className="font-semibold">{t("nav.detail.email")}:</div>
               <div className="mt-1.5">
                 <p className="font-medium">{row.original?.customer.email}</p>
               </div>
@@ -139,7 +151,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">company:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.company")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original.customer.company}
@@ -154,14 +168,18 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">Store:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.store")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original?.store.name}
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="mb-1.5 text-end font-semibold">Company:</div>
+              <div className="mb-1.5 text-end font-semibold">
+                {t("nav.detail.company")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
                 {row.original?.store.company.name}
@@ -200,7 +218,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           />
 
           <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
-            Order Items
+            {t("nav.detail.order_item")}
           </p>
 
           <div className="mt-1 h-auto min-h-60 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
@@ -241,7 +259,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={4} className="text-end">
-                    Total (COP)
+                    {t("nav.detail.total_cop")}
                   </Td>
                   <Td>{sums.quantity.toLocaleString()}</Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
@@ -251,7 +269,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Paid (COP)
+                    {t("nav.detail.paid")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {Number(row.original?.paid_amount).toLocaleString()}
@@ -260,7 +278,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   <Td colSpan={5} className="text-end">
-                    Balance (COP)
+                    {t("nav.detail.balance")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {(
@@ -274,7 +292,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           </div>
 
           <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
-            Payment List
+            {t("nav.detail.payment_list")}
           </p>
 
           <div className="mt-1 h-auto min-h-30 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
@@ -319,14 +337,18 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">Created By:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.created_by")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
                 {row.original?.user_username}
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="mb-1.5 text-end font-semibold">Created At:</div>
+              <div className="mb-1.5 text-end font-semibold">
+                {t("nav.detail.created_at")}:
+              </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
                 {dayjs(row.original?.created_at)

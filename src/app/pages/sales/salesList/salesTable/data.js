@@ -4,22 +4,22 @@ import {
   ClockIcon,
 } from "@heroicons/react/24/outline";
 
-export const orderStatusOptions = [
+export const getOrderStatusOptions = (t) => [
   {
     value: "pending",
-    label: "Pending",
+    label: t("nav.detail.pending"),
     color: "warning",
     icon: ClockIcon,
   },
   {
     value: "paid",
-    label: "Paid",
+    label: t("nav.detail.paid_status"),
     color: "success",
     icon: CheckBadgeIcon,
   },
   {
     value: "partial",
-    label: "Partial",
+    label: t("nav.detail.partial"),
     color: "primary",
     icon: ArrowPathIcon,
   },

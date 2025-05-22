@@ -67,6 +67,8 @@ const EditableSelect = ({
   const [products, setProducts] = useState([]);
   const [value, setValue] = useState(null);
 
+  const { t } = useTranslation();
+
   const onBlur = () => {
     table.options.meta?.updateData(index, id, value?.value || "");
   };
@@ -77,7 +79,12 @@ const EditableSelect = ({
       const result = await response.json();
 
       const productData = [
-        { key: -1, value: "", label: "Select product", disabled: false },
+        {
+          key: -1,
+          value: "",
+          label: t("nav.select.select_product"),
+          disabled: false,
+        },
         ...(Array.isArray(result?.data) ? result.data : []).map(
           (item, key) => ({
             key,
@@ -95,7 +102,7 @@ const EditableSelect = ({
     };
 
     fetchData();
-  }, [initialValue]);
+  }, [initialValue, t]);
 
   return (
     <Combobox

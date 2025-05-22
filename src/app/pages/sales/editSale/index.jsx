@@ -105,7 +105,7 @@ const EditSale = () => {
       );
       const customerResult = await customerRes.json();
       const customerData = [
-        { key: -1, value: "", label: "Select customer" },
+        { key: -1, value: "", label: t("nav.select.select_customer") },
         ...(customerResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -146,7 +146,7 @@ const EditSale = () => {
     };
 
     init();
-  }, [id, reset, cookie.authToken]);
+  }, [id, reset, cookie.authToken, t]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -223,7 +223,7 @@ const EditSale = () => {
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="size-6" />
             <h2 className="dark:text-dark-50 text-xl font-medium text-gray-700">
-              {t("nav.purchase.update_purchase")}
+              {t("nav.sale.sale_update")}
             </h2>
           </div>
           <Button
@@ -271,14 +271,14 @@ const EditSale = () => {
                       )}
                     />
                     <Input
-                      label={t("nav.sale.reference_no")}
-                      placeholder={t("nav.sale.reference_no")}
+                      label={t("nav.purchase.reference_no")}
+                      placeholder={t("nav.purchase.reference_no")}
                       {...register("reference_no")}
                       error={errors?.reference_no?.message}
                     />
 
                     <Select
-                      label={t("nav.sale.user")}
+                      label={t("nav.people.user")}
                       data={users}
                       {...register("user_id")}
                       error={errors?.user_id?.message}
@@ -286,7 +286,7 @@ const EditSale = () => {
                     />
 
                     <Select
-                      label={t("nav.sale.store")}
+                      label={t("nav.purchase.store")}
                       data={stores}
                       {...register("store")}
                       error={errors?.store?.message}
@@ -305,7 +305,7 @@ const EditSale = () => {
                       control={control}
                       render={({ field }) => (
                         <CoverImageUpload
-                          label={t("nav.sale.attachment")}
+                          label={t("nav.purchase.attachment")}
                           error={errors?.attachment?.message}
                           {...field}
                         />
@@ -319,7 +319,7 @@ const EditSale = () => {
 
                   <div className="mt-5 space-y-5">
                     <Textarea
-                      label={t("nav.sale.note")}
+                      label={t("nav.purchase.note")}
                       rows="5"
                       {...register("note")}
                       error={errors?.note?.message}

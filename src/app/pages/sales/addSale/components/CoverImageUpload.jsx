@@ -5,16 +5,19 @@ import { PaperClipIcon } from "@heroicons/react/24/solid";
 
 // Local Imports
 import { Upload, Button, Input } from "components/ui";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 const CoverImageUpload = ({ label, value = [], onChange }) => {
   const uploadRef = useRef();
 
+  const { t } = useTranslation();
+
   const filesList =
     value.length > 0
       ? value.map((file) => file.name || file).join(", ")
-      : "Choose Files";
+      : t("nav.choose_file");
 
   const handleFileChange = (newFiles) => {
     // newFiles could be FileList or array

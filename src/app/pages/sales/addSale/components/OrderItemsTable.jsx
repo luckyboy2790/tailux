@@ -70,6 +70,8 @@ const EditableSelect = ({
   const [value, setValue] = useState(initialValue || "Apple");
   const [products, setProducts] = useState([]);
 
+  const { t } = useTranslation();
+
   const onBlur = () => {
     table.options.meta?.updateData(index, id, value);
   };
@@ -84,7 +86,12 @@ const EditableSelect = ({
       const result = await response.json();
 
       const productData = [
-        { key: -1, value: "", label: "Select supplier", disabled: false },
+        {
+          key: -1,
+          value: "",
+          label: t("nav.select.select_product"),
+          disabled: false,
+        },
         ...(Array.isArray(result?.data) ? result.data : []).map(
           (item, key) => ({
             key,
@@ -99,7 +106,7 @@ const EditableSelect = ({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   return (
     <Select

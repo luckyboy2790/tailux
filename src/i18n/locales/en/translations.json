@@ -80,7 +80,9 @@
       "sale_date": "Sale Date",
       "quantity": "Quantity",
       "sub_total": "Subtotal",
-      "sale_date_required": "Sale Date is required"
+      "sale_date_required": "Sale Date is required",
+      "sale_date_range": "Sale Date Range",
+      "sale_update": "Update Sale"
     },
     "payment": {
       "payment": "Payment",
@@ -144,6 +146,7 @@
       "view": "View",
       "table_view": "Table View",
       "full_screen": "Full Screen",
+      "row_dense": "Row Dense",
       "column_visibility": "Column Visibility",
       "show_all_columns": "Show All Columns"
     },

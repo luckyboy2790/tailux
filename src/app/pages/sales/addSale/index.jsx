@@ -107,7 +107,7 @@ const AddSale = () => {
       );
       const customerResult = await customerRes.json();
       const customerData = [
-        { key: -1, value: "", label: "Select customer" },
+        { key: -1, value: "", label: t("nav.select.select_customer") },
         ...(customerResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -123,7 +123,7 @@ const AddSale = () => {
     };
 
     init();
-  }, [id, reset, user, cookie.authToken]);
+  }, [id, reset, user, cookie.authToken, t]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);

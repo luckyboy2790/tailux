@@ -22,6 +22,7 @@ import { useDisclosure } from "hooks";
 import { PaymentModal } from "components/shared/PaymentModal";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -38,6 +39,7 @@ const confirmMessages = {
 };
 
 export function RowActions({ row, table }) {
+  const { t } = useTranslation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -136,7 +138,7 @@ export function RowActions({ row, table }) {
                       navigate(`/payments/sale/${row.original?.id}`);
                     }}
                   >
-                    <span>Payment List</span>
+                    <span>{t("nav.table_fields.payment_list")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -150,7 +152,7 @@ export function RowActions({ row, table }) {
                     )}
                     onClick={open}
                   >
-                    <span>Add Payment</span>
+                    <span>{t("nav.table_fields.add_payment")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -166,7 +168,7 @@ export function RowActions({ row, table }) {
                       navigate(`/sale/edit/${row.original?.id}`);
                     }}
                   >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -179,7 +181,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>

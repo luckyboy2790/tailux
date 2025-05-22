@@ -21,6 +21,8 @@ import { Button, Input, Select } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
+import { Combobox } from "components/shared/form/Combobox";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -32,6 +34,7 @@ export function Toolbar({
   customerId,
   setCustomerId,
 }) {
+  const { t } = useTranslation();
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
@@ -71,7 +74,7 @@ export function Toolbar({
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
-                    <span>New Order</span>
+                    <span>{t("nav.sale.sale_add")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -85,20 +88,7 @@ export function Toolbar({
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
-                    <span>Export as PDF</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Export as CSV</span>
+                    <span>{t("nav.export.export_excel")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -116,7 +106,7 @@ export function Toolbar({
                 className="h-8 space-x-2 rounded-md px-3 text-xs"
               >
                 <TbUpload className="size-4" />
-                <span>Export</span>
+                <span>{t("nav.export.export")}</span>
                 <ChevronUpDownIcon className="size-4" />
               </MenuButton>
               <Transition
@@ -138,20 +128,7 @@ export function Toolbar({
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
                     >
-                      <span>Export as PDF</span>
-                    </button>
-                  )}
-                </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Export as CSV</span>
+                      <span>{t("nav.export.export_excel")}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -188,7 +165,7 @@ export function Toolbar({
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
                     >
-                      <span>New Order</span>
+                      <span>{t("nav.sale.sale_add")}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -257,6 +234,7 @@ export function Toolbar({
 }
 
 function SearchInput({ table }) {
+  const { t } = useTranslation();
   return (
     <Input
       value={table.getState().globalFilter}
@@ -266,7 +244,7 @@ function SearchInput({ table }) {
         input: "ring-primary-500/50 h-8 text-xs focus:ring-3",
         root: "shrink-0",
       }}
-      placeholder="Search ID, Customer..."
+      placeholder={t("nav.search_placeholder")}
     />
   );
 }
@@ -285,6 +263,8 @@ function Filters({
 
   const [customer, setCustomer] = useState([]);
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     const fetchData = async () => {
       const companyResponse = await fetch(
@@ -297,7 +277,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: "All Companies",
+          label: t("nav.all_companies"),
           disabled: false,
         },
         ...(Array.isArray(companyResult?.data) ? companyResult.data : []).map(
@@ -314,7 +294,7 @@ function Filters({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -328,7 +308,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: "All Customers",
+          label: t("nav.all_customers"),
           disabled: false,
         },
         ...(Array.isArray(customerResult?.data) ? customerResult.data : []).map(
@@ -345,14 +325,14 @@ function Filters({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   return (
     <>
       {table.getColumn("timestamp") && (
         <DateFilter
           onChange={onDateRangeChange}
-          title="Purchase Date Range"
+          title={t("nav.sale.sale_date_range")}
           config={{
             mode: "range",
           }}
@@ -368,13 +348,14 @@ function Filters({
         className="h-8 min-w-30 py-1 text-xs"
       />
 
-      <Select
-        value={customerId || ""}
+      <Combobox
         data={customer}
-        onChange={(e) => {
-          setCustomerId(e.target.value);
-        }}
-        className="h-8 min-w-30 py-1 text-xs"
+        value={customer.find((c) => c.value === customerId) || null}
+        onChange={(selected) => setCustomerId(selected?.value || "")}
+        placeholder={t("nav.all_customers")}
+        displayField="label"
+        searchFields={["label"]}
+        className="h-8 min-w-70 text-xs"
       />
 
       {isFiltered && (

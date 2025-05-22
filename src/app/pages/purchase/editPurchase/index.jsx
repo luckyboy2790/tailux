@@ -63,7 +63,7 @@ const EditPurchase = () => {
       const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
       const storeResult = await storeRes.json();
       const storeData = [
-        { key: -1, value: "", label: "Select store" },
+        { key: -1, value: "", label: t("nav.select.select_store") },
         ...(storeResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -77,7 +77,7 @@ const EditPurchase = () => {
       );
       const supplierResult = await supplierRes.json();
       const supplierData = [
-        { key: -1, value: "", label: "Select supplier" },
+        { key: -1, value: "", label: t("nav.select.select_supplier") },
         ...(supplierResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -128,7 +128,7 @@ const EditPurchase = () => {
     };
 
     init();
-  }, [id, reset]);
+  }, [id, reset, t]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);

@@ -22,7 +22,7 @@ export function TableSettings({ table }) {
             "enableFullScreen",
           ) && (
             <Switch
-              label="Full Screen"
+              label={t("nav.view.full_screen")}
               checked={tableSettings.enableFullScreen}
               onChange={(e) =>
                 setTableSettings((state) => ({
@@ -38,7 +38,7 @@ export function TableSettings({ table }) {
             "enableRowDense",
           ) && (
             <Switch
-              label="Row Dense"
+              label={t("nav.view.row_dense")}
               checked={tableSettings.enableRowDense}
               onChange={(e) =>
                 setTableSettings((state) => ({
