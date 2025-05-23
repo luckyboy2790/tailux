@@ -25,7 +25,7 @@ export const baseNavigation = [
   {
     id: "purchase",
     type: NAV_TYPE_ITEM,
-    path: "/purchases",
+    path: "/purchase",
     title: "Purchase",
     transKey: "nav.purchase.purchase",
     Icon: PurchaseIcon,
@@ -33,7 +33,7 @@ export const baseNavigation = [
   {
     id: "sale",
     type: NAV_TYPE_ITEM,
-    path: "/sales",
+    path: "/sale",
     title: "Sale",
     transKey: "nav.sale.sale",
     Icon: SaleIcon,
@@ -41,7 +41,7 @@ export const baseNavigation = [
   {
     id: "pendingPurchase",
     type: NAV_TYPE_ITEM,
-    path: "/purchase",
+    path: "/pending-data/purchase",
     title: "Pending Purchase",
     transKey: "nav.purchase.pending",
     Icon: PendingPurchaseIcon,
@@ -65,7 +65,7 @@ export const baseNavigation = [
   {
     id: "purchaseOrder",
     type: NAV_TYPE_ITEM,
-    path: "/purchase/order",
+    path: "/purchase-order/list",
     title: "Order Purchase",
     transKey: "nav.purchase.order",
     Icon: PurchaseOrderIcon,
@@ -73,7 +73,7 @@ export const baseNavigation = [
   {
     id: "order",
     type: NAV_TYPE_ITEM,
-    path: "/order",
+    path: "/received-order/list",
     title: "Received Order",
     transKey: "nav.order.received",
     Icon: ReceiveIcon,
