@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Spinner } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -18,7 +18,7 @@ import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
-import { columns } from "./columns";
+import { getColumns } from "./columns";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
@@ -26,6 +26,7 @@ import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
 import { useCookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,6 +34,10 @@ const isSafari = getUserAgentBrowser() === "Safari";
 
 export default function PurchaseTable() {
   const { cardSkin } = useThemeContext();
+
+  const { t } = useTranslation();
+
+  const columns = getColumns(t);
 
   const [cookies] = useCookies(["authToken"]);
 
@@ -72,6 +77,51 @@ export default function PurchaseTable() {
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const dateSort = sorting.find((sort) => sort.id === "timestamp");
+      const sortDirection = dateSort
+        ? dateSort.desc
+          ? "desc"
+          : "asc"
+        : "desc";
+
+      const queryString = new URLSearchParams({
+        company_id: companyId,
+        keyword: globalFilter,
+        page: (pageIndex + 1).toString(),
+        per_page: pageSize.toString(),
+        sort_by_date: sortDirection,
+        startDate,
+        endDate,
+      }).toString();
+
+      const response = await fetch(
+        `${API_URL}/api/payment/search_pending?${queryString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const result = await response.json();
+
+      setOrders(result.data.data);
+      setTotalCount(result.data.total);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [token, globalFilter, pageIndex, pageSize, sorting, startDate, endDate]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const table = useReactTable({
     data: orders,
     columns: columns,
@@ -109,6 +159,7 @@ export default function PurchaseTable() {
         setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
       },
       setTableSettings,
+      refetch: fetchData,
     },
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -135,60 +186,6 @@ export default function PurchaseTable() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const dateSort = sorting.find((sort) => sort.id === "timestamp");
-        const sortDirection = dateSort
-          ? dateSort.desc
-            ? "desc"
-            : "asc"
-          : "desc";
-
-        const queryString = new URLSearchParams({
-          company_id: companyId,
-          keyword: globalFilter,
-          page: (pageIndex + 1).toString(),
-          per_page: pageSize.toString(),
-          sort_by_date: sortDirection,
-          startDate,
-          endDate,
-        }).toString();
-
-        const response = await fetch(
-          `${API_URL}/api/payment/search_pending?${queryString}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const result = await response.json();
-
-        setOrders(result.data.data);
-        setTotalCount(result.data.total);
-
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [
-    token,
-    globalFilter,
-    pageIndex,
-    pageSize,
-    startDate,
-    endDate,
-    companyId,
-    sorting,
-  ]);
 
   return (
     <Page title="Orders Datatable v1">
@@ -362,9 +359,11 @@ export default function PurchaseTable() {
               {!isLoading && table.getCoreRowModel().rows.length <= 0 && (
                 <div className="flex h-60 w-full flex-col items-center justify-center text-gray-500">
                   <FileNotFound />
-                  <p className="text-lg font-medium">No results found</p>
+                  <p className="text-lg font-medium">
+                    {t("nav.no_data.title")}
+                  </p>
                   <p className="text-sm text-gray-400">
-                    Try changing filters or search terms
+                    {t("nav.no_data.description")}
                   </p>
                 </div>
               )}

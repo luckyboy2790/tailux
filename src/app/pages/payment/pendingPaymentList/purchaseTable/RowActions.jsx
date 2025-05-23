@@ -14,32 +14,46 @@ import {
   // TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
+import { toast } from "sonner";
+import { PaymentModal } from "components/shared/PaymentModal";
+import { useDisclosure } from "hooks";
+import { useCookies } from "react-cookie";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
 
-// ----------------------------------------------------------------------
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
+// ----------------------------------------------------------------------
 
 export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
+  const [isOpen, { open, close }] = useDisclosure(false);
+
+  const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t("nav.payment.confirmDelete.pending.description"),
+    },
+    success: {
+      title: t("nav.payment.confirmDelete.success.title"),
+    },
+  };
 
   // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
   //   useDisclosure(false);
@@ -54,29 +68,83 @@ export function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(() => {
+  const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    setTimeout(() => {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+    const response = await fetch(
+      `${API_URL}/api/payment/delete/${row.original?.id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      toast.error(t("nav.payment.confirmDelete.failed.title"));
+
       setConfirmDeleteLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+
+      closeModal();
+
+      throw new Error("Something went wrong");
+    }
+
+    toast.success(t("nav.payment.confirmDelete.success.title"));
+
+    setDeleteSuccess(true);
+    setConfirmDeleteLoading(false);
+
+    closeModal();
+
+    if (typeof table.options.meta?.refetch === "function") {
+      await table.options.meta.refetch();
+    } else {
+      console.warn("Refetch function not available in table meta.");
+    }
+  };
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
+
+  const handleApprove = async (item) => {
+    try {
+      if (Number(item.status) === 1) {
+        toast.success(t("nav.payment.confirmApprove.success.title"));
+      } else {
+        const response = await fetch(
+          `${API_URL}/api/payment/approve/${row.original?.id}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          toast.error(result.error);
+
+          return;
+        }
+
+        toast.success(t("nav.payment.confirmApprove.success.title"));
+
+        if (typeof table.options.meta?.refetch === "function") {
+          await table.options.meta.refetch();
+        } else {
+          console.warn("Refetch function not available in table meta.");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <div className="flex justify-center space-x-1.5">
-        {/* <Button
-          isIcon
-          className="size-8 rounded-full"
-          onClick={() => openDrawer()}
-        >
-          <ArrowUpRightIcon className="size-4" />
-        </Button> */}
-
         <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
             <EllipsisHorizontalIcon className="size-4.5" />
@@ -102,8 +170,11 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={() => {
+                      handleApprove(row.original);
+                    }}
                   >
-                    <span>View</span>
+                    <span>{t("nav.table_fields.approve")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -115,86 +186,9 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={open}
                   >
-                    <span>Payment List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Return List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Payment</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Return</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Report</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Email</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -207,7 +201,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -223,6 +217,13 @@ export function RowActions({ row, table }) {
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+
+      <PaymentModal
+        type={"edit"}
+        row={{ ...row, refetch: table.options.meta?.refetch }}
+        isOpen={isOpen}
+        close={close}
       />
 
       {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}

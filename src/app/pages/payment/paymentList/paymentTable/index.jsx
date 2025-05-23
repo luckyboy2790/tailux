@@ -307,9 +307,11 @@ export default function PaymentTable() {
               {!isLoading && table.getCoreRowModel().rows.length <= 0 && (
                 <div className="flex h-60 w-full flex-col items-center justify-center text-gray-500">
                   <FileNotFound />
-                  <p className="text-lg font-medium">No results found</p>
+                  <p className="text-lg font-medium">
+                    {t("nav.no_data.title")}
+                  </p>
                   <p className="text-sm text-gray-400">
-                    Try changing filters or search terms
+                    {t("nav.no_data.description")}
                   </p>
                 </div>
               )}

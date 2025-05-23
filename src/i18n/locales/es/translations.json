@@ -182,6 +182,7 @@
       "cancel": "Cancelar",
       "save": "Guardar",
       "saving": "Guardando",
+      "payment_date_range": "Rango de fechas de pago",
       "confirmDelete": {
         "pending": {
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
@@ -345,6 +346,10 @@
       "sure": "¿Estás seguro?",
       "delete": "Eliminar",
       "cancel": "Cancelar"
+    },
+    "no_data": {
+      "title": "No se encontraron resultados",
+      "description": "Intenta cambiar los filtros o los términos de búsqueda"
     }
   }
 }
