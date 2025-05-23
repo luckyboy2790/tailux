@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import { PaymentModal } from "components/shared/PaymentModal";
 import { useDisclosure } from "hooks";
 import { useCookies } from "react-cookie";
+import { useAuthContext } from "app/contexts/auth/context";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
 
@@ -45,6 +46,8 @@ export function RowActions({ row, table }) {
   const [isOpen, { open, close }] = useDisclosure(false);
 
   const { t } = useTranslation();
+
+  const { user } = useAuthContext();
 
   const confirmMessages = {
     pending: {
@@ -162,22 +165,24 @@ export function RowActions({ row, table }) {
               anchor={{ to: "bottom end", gap: 12 }}
               className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                    onClick={() => {
-                      handleApprove(row.original);
-                    }}
-                  >
-                    <span>{t("nav.table_fields.approve")}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {user.role === "admin" || user.role === "staff" ? (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                        focus &&
+                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                      )}
+                      onClick={() => {
+                        handleApprove(row.original);
+                      }}
+                    >
+                      <span>{t("nav.table_fields.approve")}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              ) : null}
               <MenuItem>
                 {({ focus }) => (
                   <button
