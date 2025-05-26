@@ -6,10 +6,12 @@ import PropTypes from "prop-types";
 import { TableSettings } from "components/shared/table/TableSettings";
 import { ResponsiveFilter } from "components/shared/table/ResponsiveFilter";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export function TableConfig({ table }) {
+  const { t } = useTranslation();
   const { smAndDown } = useBreakpointsContext();
   return (
     <ResponsiveFilter
@@ -17,7 +19,7 @@ export function TableConfig({ table }) {
       buttonContent={
         <>
           <ViewColumnsIcon className="size-4" />
-          <span>View</span>
+          <span>{t("nav.view.view")}</span>
         </>
       }
       classNames={{
@@ -25,18 +27,18 @@ export function TableConfig({ table }) {
       }}
     >
       {smAndDown ? (
-        <div className="mx-auto flex h-12 w-full shrink-0 items-center justify-between border-b border-gray-200 px-3 dark:border-dark-500">
-          <p className="truncate text-start text-base font-medium text-gray-800 dark:text-dark-50">
-            Table View
+        <div className="dark:border-dark-500 mx-auto flex h-12 w-full shrink-0 items-center justify-between border-b border-gray-200 px-3">
+          <p className="dark:text-dark-50 truncate text-start text-base font-medium text-gray-800">
+            {t("nav.view.table_view")}
           </p>
         </div>
       ) : (
-        <h3 className="px-3 pt-2.5 text-sm-plus font-medium tracking-wide text-gray-800 dark:text-dark-100">
-          Table View
+        <h3 className="text-sm-plus dark:text-dark-100 px-3 pt-2.5 font-medium tracking-wide text-gray-800">
+          {t("nav.view.table_view")}
         </h3>
       )}
 
-      <div className="flex sm:w-64 flex-col max-sm:overflow-hidden">
+      <div className="flex flex-col max-sm:overflow-hidden sm:w-64">
         <TableSettings table={table} />
       </div>
     </ResponsiveFilter>

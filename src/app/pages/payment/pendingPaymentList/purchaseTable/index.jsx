@@ -116,7 +116,16 @@ export default function PurchaseTable() {
     } catch (error) {
       console.log(error);
     }
-  }, [token, globalFilter, pageIndex, pageSize, sorting, startDate, endDate]);
+  }, [
+    token,
+    globalFilter,
+    pageIndex,
+    pageSize,
+    sorting,
+    startDate,
+    endDate,
+    companyId,
+  ]);
 
   useEffect(() => {
     fetchData();

@@ -209,7 +209,31 @@
     },
     "product": {
       "product": "Product",
-      "product_list": "Product List"
+      "product_list": "Product List",
+      "product_code": "Code",
+      "product_name": "Name",
+      "product_cost": "Cost",
+      "product_price": "Price",
+      "product_unit": "Product Unit",
+      "quantity": "Quantity",
+      "product_attachment": "Attachments",
+      "alert_quantity": "Alert Quantity",
+      "add_product": "Add Product",
+      "edit_product": "Edit Product",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Product Delete Failed"
+        },
+        "success": {
+          "title": "Product Deleted"
+        }
+      }
     },
     "order": {
       "received": "Received Orders"

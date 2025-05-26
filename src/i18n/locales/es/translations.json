@@ -71,7 +71,7 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "Purchase Delete Failed"
+          "title": "La eliminación de la compra falló"
         },
         "success": {
           "title": "Compra Eliminada"
@@ -83,7 +83,7 @@
           "actionText": "Aprobar"
         },
         "failed": {
-          "title": "Purchase Approve Failed"
+          "title": "La aprobación de la compra falló"
         },
         "success": {
           "title": "Compra Aprobada"
@@ -109,7 +109,7 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "Return Delete Failed"
+          "title": "La eliminación de la devolución falló"
         },
         "success": {
           "title": "Devolucion Eliminada"
@@ -121,7 +121,7 @@
           "actionText": "Aprobar"
         },
         "failed": {
-          "title": "Return Approve Failed"
+          "title": "La aprobación de la devolución falló"
         },
         "success": {
           "title": "Devolucion Aprobada"
@@ -145,7 +145,7 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "Sale Delete Failed"
+          "title": "La eliminación de la venta falló"
         },
         "success": {
           "title": "Venta Eliminada"
@@ -157,7 +157,7 @@
           "actionText": "Aprobar"
         },
         "failed": {
-          "title": "Sale Approve Failed"
+          "title": "La aprobación de la venta falló"
         },
         "success": {
           "title": "Venta Aprobada"
@@ -188,7 +188,7 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "Payment Delete Failed"
+          "title": "La eliminación del pago falló"
         },
         "success": {
           "title": "Pago Eliminado"
@@ -200,7 +200,7 @@
           "actionText": "Aprobar"
         },
         "failed": {
-          "title": "Payment Approve Failed"
+          "title": "La aprobación del pago falló"
         },
         "success": {
           "title": "Pago Aprobado"
@@ -209,7 +209,31 @@
     },
     "product": {
       "product": "Producto",
-      "product_list": "Lista de Productos"
+      "product_list": "Lista de Productos",
+      "product_code": "Código",
+      "product_name": "Nombre",
+      "product_cost": "Costo",
+      "product_price": "Precio",
+      "product_unit": "Unidad del Producto",
+      "product_attachment": "Adjuntos",
+      "quantity": "Cantidad",
+      "alert_quantity": "Cantidad Alerta",
+      "add_product": "Agregar Producto",
+      "edit_product": "Editar Producto",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación del producto falló"
+        },
+        "success": {
+          "title": "Producto Eliminado"
+        }
+      }
     },
     "order": {
       "received": "Pedidos recibidos"

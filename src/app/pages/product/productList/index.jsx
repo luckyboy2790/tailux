@@ -2,9 +2,9 @@ import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import ProductIcon from "assets/dualicons/products.svg?react";
 import { useTranslation } from "react-i18next";
-import PurchaseTable from "./productTable";
+import ProductTable from "./productTable";
 
-const PurchaseList = () => {
+const ProductList = () => {
   const { t } = useTranslation();
   const breadcrumbs = [
     { title: t("nav.product.product"), path: "/product" },
@@ -25,11 +25,11 @@ const PurchaseList = () => {
             <Breadcrumbs items={breadcrumbs} />
           </div>
 
-          <PurchaseTable />
+          <ProductTable />
         </div>
       </div>
     </Page>
   );
 };
 
-export default PurchaseList;
+export default ProductList;
