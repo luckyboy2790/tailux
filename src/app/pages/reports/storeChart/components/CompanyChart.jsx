@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { DateFilter } from "components/shared/table/DateFilter";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -14,6 +15,10 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function CompanyChart() {
   const { t } = useTranslation();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -88,6 +93,11 @@ export function CompanyChart() {
     const fetchData = async () => {
       const response = await fetch(
         `${API_URL}/api/report/store_chart?startDate=${startDate}&endDate=${endDate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const storeCartData = await response.json();

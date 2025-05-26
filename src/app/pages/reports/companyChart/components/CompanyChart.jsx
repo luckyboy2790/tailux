@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { DateFilter } from "components/shared/table/DateFilter";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -17,6 +18,10 @@ export function CompanyChart() {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [series, setSerise] = useState([
     {
@@ -85,81 +90,100 @@ export function CompanyChart() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
-        `${API_URL}/api/report/company_chart?startDate=${startDate}&endDate=${endDate}`,
-      );
-
-      const companyCartData = await response.json();
-
-      setSerise([
-        {
-          name: "Purchase",
-          data: companyCartData.data.company_purchases_array,
-        },
-        {
-          name: "Sale",
-          data: companyCartData.data.company_sales_array,
-        },
-      ]);
-
-      setChartConfig({
-        colors: ["#4467EF", "#FF9800"],
-        chart: {
-          parentHeightOffset: 0,
-          toolbar: {
-            show: false,
-          },
-        },
-        stroke: {
-          show: true,
-          width: 0,
-          colors: ["transparent"],
-        },
-        plotOptions: {
-          bar: {
-            borderRadius: 0,
-            columnWidth: "55%",
-            dataLabels: {
-              position: "top",
+      try {
+        const response = await fetch(
+          `${API_URL}/api/report/company_chart?startDate=${startDate}&endDate=${endDate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
           },
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: function (val) {
-            return val >= 1000 ? (val / 1000).toFixed(2) + "k" : val;
+        );
+
+        const companyCartData = await response.json();
+
+        console.log(companyCartData);
+
+        if (companyCartData.status !== "Success") {
+          console.error(
+            "Failed to fetch company chart data:",
+            companyCartData.message,
+          );
+          return;
+        }
+
+        setSerise([
+          {
+            name: t("nav.purchase.purchase"),
+            data: companyCartData.data.company_purchases_array,
           },
-          offsetY: -30,
-        },
-        xaxis: {
-          categories: companyCartData.data.company_names,
-          position: "top",
-          axisBorder: {
-            show: false,
+          {
+            name: t("nav.sale.sale"),
+            data: companyCartData.data.company_sales_array,
           },
-          axisTicks: {
-            show: false,
+        ]);
+
+        setChartConfig({
+          colors: ["#4467EF", "#FF9800"],
+          chart: {
+            parentHeightOffset: 0,
+            toolbar: {
+              show: false,
+            },
           },
-          tooltip: {
-            enabled: false,
+          stroke: {
+            show: true,
+            width: 0,
+            colors: ["transparent"],
           },
-        },
-        yaxis: {
-          axisBorder: {
-            show: false,
+          plotOptions: {
+            bar: {
+              borderRadius: 0,
+              columnWidth: "55%",
+              dataLabels: {
+                position: "top",
+              },
+            },
           },
-          axisTicks: {
-            show: false,
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return val >= 1000 ? (val / 1000).toFixed(2) + "k" : val;
+            },
+            offsetY: -30,
           },
-          labels: {
-            show: false,
+          xaxis: {
+            categories: companyCartData.data.company_names,
+            position: "top",
+            axisBorder: {
+              show: false,
+            },
+            axisTicks: {
+              show: false,
+            },
+            tooltip: {
+              enabled: false,
+            },
           },
-        },
-      });
+          yaxis: {
+            axisBorder: {
+              show: false,
+            },
+            axisTicks: {
+              show: false,
+            },
+            labels: {
+              show: false,
+            },
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching company chart data:", error);
+      }
     };
 
     fetchData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, t]);
 
   const handleDateChange = (dates) => {
     if (!dates || dates.length !== 2) return;

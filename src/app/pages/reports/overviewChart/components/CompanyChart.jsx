@@ -5,6 +5,8 @@ import Chart from "react-apexcharts";
 import { Card, Select } from "components/ui";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,6 +14,12 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 export function CompanyChart() {
   const { t } = useTranslation();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
+  const { user } = useAuthContext();
 
   const [companies, setCompanies] = useState([]);
 
@@ -39,6 +47,11 @@ export function CompanyChart() {
 
       const overviewChartResponse = await fetch(
         `${API_URL}/api/report/overview_chart?company_id=${companyId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const overviewData = await overviewChartResponse.json();
@@ -128,16 +141,18 @@ export function CompanyChart() {
         <h2 className="text-sm-plus dark:text-dark-100 truncate font-medium tracking-wide text-gray-800">
           {t("nav.report.overview_chart")}
         </h2>
-        <div className="flex items-center gap-3">
-          <h2 className="text-sm">{t("nav.company")} :</h2>
-          <Select
-            defaultValue="Potato"
-            data={companies}
-            onChange={(e) => {
-              setCompanyId(e.target.value);
-            }}
-          />
-        </div>
+        {user?.role === "admin" && (
+          <div className="flex items-center gap-3">
+            <h2 className="text-sm">{t("nav.company")} :</h2>
+            <Select
+              defaultValue="Potato"
+              data={companies}
+              onChange={(e) => {
+                setCompanyId(e.target.value);
+              }}
+            />
+          </div>
+        )}
       </div>
       <div className="ax-transparent-gridline ltr:pr-2 rtl:pl-2">
         <Chart type="bar" height="265" options={config} series={series} />

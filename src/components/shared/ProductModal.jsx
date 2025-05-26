@@ -43,8 +43,6 @@ export function ProductModal({ type, row, isOpen, close }) {
     if (type === "edit") {
       const rowData = row.original;
 
-      console.log(rowData);
-
       setData({
         product_name: rowData?.name,
         product_code: rowData?.code,
