@@ -15,19 +15,19 @@ import {
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.timestamp, {
     id: "timestamp",
-    label: "Order Date",
-    header: "Date",
+    label: t("nav.purchase.purchase_date"),
+    header: t("nav.date"),
     cell: DateCell,
     filterFn: "inNumberRange",
     enableSorting: true,
   }),
   columnHelper.accessor((row) => row?.reference_no, {
     id: "reference_no",
-    label: "Reference No",
-    header: "Reference No",
+    label: t("nav.detail.reference_no"),
+    header: t("nav.detail.reference_no"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -39,29 +39,29 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.company.name, {
     id: "company",
-    label: "Company",
-    header: "Company",
+    label: t("nav.detail.company"),
+    header: t("nav.detail.company"),
     cell: CustomerCell,
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.store.name, {
     id: "store",
-    label: "Store",
-    header: "Store",
+    label: t("nav.detail.store"),
+    header: t("nav.detail.store"),
     cell: CustomerCell,
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.supplier.name, {
+  columnHelper.accessor((row) => row?.supplier.company, {
     id: "supplier",
-    label: "Supplier",
-    header: "Supplier",
+    label: t("nav.supplier"),
+    header: t("nav.supplier"),
     cell: CustomerCell,
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.reference_no, {
     id: "products",
-    label: "Products",
-    header: "Products",
+    label: t("nav.product.product"),
+    header: t("nav.product.product"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -75,24 +75,24 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.grand_total, {
     id: "total",
-    label: "Total",
-    header: "Grand Total",
+    label: t("nav.table_fields.grand_total"),
+    header: t("nav.table_fields.grand_total"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.paid_amount, {
     id: "paid",
-    label: "Paid",
-    header: "Paid",
+    label: t("nav.table_fields.paid"),
+    header: t("nav.table_fields.paid"),
     cell: ProfitCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
     id: "balance",
-    label: "Balance",
-    header: "Balance",
+    label: t("nav.table_fields.balance"),
+    header: t("nav.table_fields.balance"),
     cell: (props) => (
       <p
         className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
@@ -112,8 +112,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row, {
     id: "order_status",
-    label: "Order Status",
-    header: "Order Status",
+    label: t("nav.table_fields.order_status"),
+    header: t("nav.table_fields.order_status"),
     cell: OrderStatusCell,
     filterFn: "arrIncludesSome",
     enableSorting: false,

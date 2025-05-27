@@ -168,6 +168,7 @@
       "payment": "Pago",
       "pending": "Pagos pendientes",
       "concurrent_payments": "Pagos concurrentes",
+      "purchase_reference": "Referencia de Compra",
       "form": "Formulario",
       "select_supplier": "Seleccione un proveedor",
       "list": "Lista",
@@ -223,6 +224,7 @@
       "cancel": "Cancelar",
       "save": "Guardar",
       "saving": "Guardando",
+      "profit": "Ganancia (pérdida)",
       "confirmDelete": {
         "pending": {
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
@@ -237,6 +239,17 @@
     },
     "order": {
       "received": "Pedidos recibidos"
+    },
+    "customer_table": {
+      "company": "Empresa",
+      "name": "Nombre",
+      "phone_number": "Móvil",
+      "email": "Email",
+      "total_sales": "Venta Totales",
+      "total_amount": "Cantidad Total",
+      "paid": "Pagado",
+      "balance": "Balance",
+      "action": "Accion"
     },
     "report": {
       "report": "Reporte",
@@ -325,6 +338,7 @@
       "reference_no": "Referencia No",
       "pending": "Pendiente",
       "paid_status": "Pagado",
+      "received": "Recibido",
       "partial": "Parcial",
       "date": "Fecha",
       "supplier": "Proveedores",
@@ -364,7 +378,8 @@
       "select_user": "Seleccionar Usuario",
       "select_store": "Seleccionar Tienda",
       "select_customer": "Seleccionar Cliente",
-      "select_product": "Seleccionar Producto"
+      "select_product": "Seleccionar Producto",
+      "select_company": "Seleccionar Empresa"
     },
     "confirm_message": {
       "sure": "¿Estás seguro?",

@@ -22,7 +22,7 @@ import {
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.images, {
     id: "attachment",
     label: "",
@@ -32,8 +32,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.product.code, {
     id: "code",
-    label: "Code",
-    header: "Code",
+    label: t("nav.product.product_code"),
+    header: t("nav.product.product_code"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -45,8 +45,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.product.name, {
     id: "product_name",
-    label: "Product Name",
-    header: "Product Name",
+    label: t("nav.product.product_name"),
+    header: t("nav.product.product_name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -58,8 +58,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.orderable.reference_no, {
     id: "reference_no",
-    label: "Reference No",
-    header: "Reference No",
+    label: t("nav.table_fields.reference_no"),
+    header: t("nav.table_fields.reference_no"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -71,15 +71,15 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.orderable.expiry_date, {
     id: "expiry_date",
-    label: "Expiry Date",
-    header: "Expiry Date",
+    label: t("nav.purchase.expiry_date"),
+    header: t("nav.purchase.expiry_date"),
     cell: DateCell,
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.orderable.timestamp, {
     id: "purchase_date",
-    label: "Purchase Date",
-    header: "Purchase Date",
+    label: t("nav.purchase.purchase_date"),
+    header: t("nav.purchase.purchase_date"),
     cell: DateCell,
     enableSorting: false,
   }),

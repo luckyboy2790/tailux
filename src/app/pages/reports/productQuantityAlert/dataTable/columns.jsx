@@ -15,7 +15,6 @@ import {
   //   OrderIdCell,
   // OrderStatusCell,
   // ProfitCell,
-  TotalCell,
   // TotalCell,
 } from "./rows";
 
@@ -23,7 +22,7 @@ import {
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.images, {
     id: "attachment",
     label: "",
@@ -33,8 +32,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.code, {
     id: "code",
-    label: "Code",
-    header: "Code",
+    label: t("nav.product.product_code"),
+    header: t("nav.product.product_code"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -46,8 +45,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.name, {
     id: "name",
-    label: "Name",
-    header: "Name",
+    label: t("nav.product.product_name"),
+    header: t("nav.product.product_name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -59,16 +58,28 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.quantity, {
     id: "quantity",
-    label: "Quantity",
-    header: "Quantity",
-    cell: TotalCell,
+    label: t("nav.product.quantity"),
+    header: t("nav.product.quantity"),
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {Number(props.row.original?.quantity).toLocaleString()}
+        </p>
+      );
+    },
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.alert_quantity, {
     id: "alert_quantity",
-    label: "Alert Quantity",
-    header: "Alert Quantity",
-    cell: TotalCell,
+    label: t("nav.product.alert_quantity"),
+    header: t("nav.product.alert_quantity"),
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {Number(props.row.original?.alert_quantity).toLocaleString()}
+        </p>
+      );
+    },
     filterFn: "inNumberRange",
     enableSorting: false,
   }),

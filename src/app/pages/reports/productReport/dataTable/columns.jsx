@@ -17,7 +17,7 @@ import {
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.images, {
     id: "attachment",
     label: "",
@@ -27,8 +27,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.code, {
     id: "code",
-    label: "Product Code",
-    header: "Product Code",
+    label: t("nav.detail.product_code"),
+    header: t("nav.detail.product_code"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -40,8 +40,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.name, {
     id: "name",
-    label: "Product Name",
-    header: "Product Name",
+    label: t("nav.detail.product_name"),
+    header: t("nav.detail.product_name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -53,49 +53,49 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.purchased_quantity, {
     id: "purchased",
-    label: "Purchased",
-    header: "Purchased",
+    label: t("nav.purchase.purchase"),
+    header: t("nav.purchase.purchase"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.sold_quantity, {
     id: "sold",
-    label: "Sold",
-    header: "Sold",
+    label: t("nav.sale.sale"),
+    header: t("nav.sale.sale"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.purchased_amount, {
     id: "purchased_amount",
-    label: "Purchase Amount",
-    header: "Purchase Amount",
+    label: t("nav.purchase.purchase"),
+    header: t("nav.purchase.purchase") + " " + t("nav.table_fields.amount"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.sold_amount, {
     id: "sold_amount",
-    label: "Sold Amount",
-    header: "Sold Amount",
+    label: t("nav.sale.sale"),
+    header: t("nav.sale.sale") + " " + t("nav.table_fields.amount"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.purchased_amount, {
-    id: "quantity",
-    label: "Quantity",
-    header: "Quantity",
+    id: "profit",
+    label: t("nav.product.profit"),
+    header: t("nav.product.profit"),
     cell: (props) => {
       const formatCurrency = (value) => {
         return new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
-          signDisplay: "always", // This will show + or - sign
+          signDisplay: "always",
         })
           .format(value)
-          .replace("+", ""); // Remove + sign if present
+          .replace("+", "");
       };
 
       return (

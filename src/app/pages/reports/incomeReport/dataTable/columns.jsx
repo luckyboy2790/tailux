@@ -5,17 +5,17 @@ import { CustomerCell, DateCell, TotalCell } from "./rows";
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.timestamp, {
     id: "timestamp",
-    header: "Date",
+    header: t("nav.table_fields.date"),
     cell: DateCell,
     filterFn: "inNumberRange",
     enableSorting: true,
   }),
   columnHelper.accessor((row) => row?.reference_no, {
     id: "reference_no",
-    header: "Reference No",
+    header: t("nav.table_fields.reference_no"),
     cell: (props) => (
       <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
         {props.row.original?.reference_no}
@@ -23,27 +23,22 @@ export const columns = [
     ),
   }),
   columnHelper.accessor((row) => row?.paymentable?.reference_no, {
-    id: "sale_reference",
-    header: "Sale Reference",
+    id: "purchase_reference",
+    header: t("nav.payment.purchase_reference"),
     cell: (props) => (
       <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
         {props.row.original?.paymentable?.reference_no}
       </p>
     ),
   }),
-  columnHelper.accessor(
-    (row) =>
-      row?.paymentable?.supplier?.company ||
-      row?.paymentable?.customer?.company,
-    {
-      id: "party_company",
-      header: "Customer",
-      cell: CustomerCell,
-    },
-  ),
+  columnHelper.accessor((row) => row?.paymentable?.customer_company, {
+    id: "party_company",
+    header: t("nav.people.customer"),
+    cell: CustomerCell,
+  }),
   columnHelper.accessor((row) => row?.amount, {
     id: "amount",
-    header: "Amount",
+    header: t("nav.table_fields.amount"),
     cell: TotalCell,
     filterFn: "inNumberRange",
   }),

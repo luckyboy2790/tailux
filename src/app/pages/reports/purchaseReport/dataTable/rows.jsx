@@ -16,7 +16,8 @@ import { Highlight } from "components/shared/Highlight";
 import { Badge, Tag } from "components/ui";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
-import { orderStatusOptions } from "./data";
+import { getOrderStatusOptions } from "./data";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -86,6 +87,10 @@ export function ProfitCell({ getValue, row }) {
 
 export function OrderStatusCell({ getValue }) {
   const val = getValue();
+
+  const { t } = useTranslation();
+
+  const orderStatusOptions = getOrderStatusOptions(t);
 
   let purchaseStatus;
 

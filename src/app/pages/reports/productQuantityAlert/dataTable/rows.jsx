@@ -20,6 +20,8 @@ import { ensureString } from "utils/ensureString";
 import { orderStatusOptions } from "./data";
 import { Image } from "antd";
 
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
+
 // ----------------------------------------------------------------------
 
 export function OrderIdCell({ getValue }) {
@@ -71,9 +73,14 @@ export function ImageCell({ getValue }) {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-1">
+      <div className="grid min-w-[104px] grid-cols-2 gap-1">
         {images?.map((item, key) => (
-          <Image key={key} src={item.src} width={50} height={50} />
+          <Image
+            key={key}
+            src={`${IMG_URL}${item.path}`}
+            width={50}
+            height={50}
+          />
         ))}
       </div>
     </>
