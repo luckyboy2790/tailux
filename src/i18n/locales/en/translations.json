@@ -291,6 +291,44 @@
       "supplier": "Supplier",
       "user": "User"
     },
+    "customer": {
+      "name": "Name",
+      "company": "Company",
+      "email": "Email",
+      "phone_number": "Phone Number",
+      "city": "City",
+      "address": "Address",
+      "action": "Action",
+      "note": "Note",
+      "add_customer": "Add Customer",
+      "edit_customer": "Edit Customer",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Customer Delete Failed"
+        },
+        "success": {
+          "title": "Customer Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Customer Approve Failed"
+        },
+        "success": {
+          "title": "Customer Approved"
+        }
+      }
+    },
     "setting": {
       "setting": "Setting",
       "company": "Company",

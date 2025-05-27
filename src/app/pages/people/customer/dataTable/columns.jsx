@@ -8,11 +8,11 @@ import { RowActions } from "./RowActions";
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.company, {
     id: "company",
-    label: "Company",
-    header: "Company",
+    label: t("nav.customer.company"),
+    header: t("nav.customer.company"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -24,8 +24,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.name, {
     id: "name",
-    label: "Name",
-    header: "Name",
+    label: t("nav.customer.name"),
+    header: t("nav.customer.name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -37,8 +37,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.email, {
     id: "email",
-    label: "Email",
-    header: "Email",
+    label: t("nav.customer.email"),
+    header: t("nav.customer.email"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -50,8 +50,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.phone_number, {
     id: "phone_number",
-    label: "Phone number",
-    header: "Phone number",
+    label: t("nav.customer.phone_number"),
+    header: t("nav.customer.phone_number"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -63,8 +63,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.city, {
     id: "city",
-    label: "City",
-    header: "City",
+    label: t("nav.customer.city"),
+    header: t("nav.customer.city"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -76,8 +76,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.address, {
     id: "address",
-    label: "Address",
-    header: "Address",
+    label: t("nav.customer.address"),
+    header: t("nav.customer.address"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -98,8 +98,8 @@ export const columns = [
   //   ),
   columnHelper.display({
     id: "actions",
-    label: "Row Actions",
-    header: "Actions",
+    label: t("nav.customer.action"),
+    header: t("nav.table_fields.actions"),
     cell: RowActions,
   }),
 ];

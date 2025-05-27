@@ -291,6 +291,44 @@
       "supplier": "Proveedore",
       "user": "Usuario"
     },
+    "customer": {
+      "name": "Nombre",
+      "company": "Empresa",
+      "email": "Email",
+      "phone_number": "Móvil",
+      "city": "Ciudad",
+      "address": "Dirección",
+      "action": "Accion",
+      "note": "Nota",
+      "add_customer": "Agregar Cliente",
+      "edit_customer": "Editar Cliente",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación del cliente falló"
+        },
+        "success": {
+          "title": "Cliente Eliminado"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "La aprobación del cliente falló"
+        },
+        "success": {
+          "title": "Cliente Aprobado"
+        }
+      }
+    },
     "setting": {
       "setting": "Configuracion",
       "company": "Empresa",
