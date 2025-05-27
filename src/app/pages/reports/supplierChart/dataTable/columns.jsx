@@ -17,11 +17,11 @@ import {
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.company, {
     id: "company",
-    label: "Company",
-    header: "Company",
+    label: t("nav.customer_table.company"),
+    header: t("nav.customer_table.company"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -33,8 +33,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.name, {
     id: "name",
-    label: "Name",
-    header: "Name",
+    label: t("nav.customer_table.name"),
+    header: t("nav.customer_table.name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -46,8 +46,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.phone_number, {
     id: "phone_number",
-    label: "Phone number",
-    header: "Phone number",
+    label: t("nav.customer_table.phone_number"),
+    header: t("nav.customer_table.phone_number"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -59,8 +59,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.email, {
     id: "email",
-    label: "Email",
-    header: "Email",
+    label: t("nav.customer_table.email"),
+    header: t("nav.customer_table.email"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -72,32 +72,32 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.total_sales, {
     id: "total_sales",
-    label: "Total Sales",
-    header: "Total Sales",
+    label: t("nav.total_purchase"),
+    header: t("nav.total_purchase"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.total_amount, {
     id: "total_amount",
-    label: "Total Amount",
-    header: "Total Amount",
+    label: t("nav.customer_table.total_amount"),
+    header: t("nav.customer_table.total_amount"),
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.paid_amount, {
     id: "paid_amount",
-    label: "Paid Amount",
-    header: "Paid Amount",
+    label: t("nav.customer_table.paid"),
+    header: t("nav.customer_table.paid"),
     cell: ProfitCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.purchased_amount, {
     id: "quantity",
-    label: "Quantity",
-    header: "Quantity",
+    label: t("nav.customer_table.balance"),
+    header: t("nav.customer_table.balance"),
     cell: (props) => {
       const formatCurrency = (value) => {
         return new Intl.NumberFormat("en-US", {
@@ -131,8 +131,8 @@ export const columns = [
   //   ),
   columnHelper.display({
     id: "actions",
-    label: "Row Actions",
-    header: "Actions",
+    label: t("nav.table_fields.actions"),
+    header: t("nav.table_fields.actions"),
     cell: RowActions,
   }),
 ];

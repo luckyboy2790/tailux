@@ -17,8 +17,9 @@ import { Highlight } from "components/shared/Highlight";
 import { Badge, Tag } from "components/ui";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
-import { orderStatusOptions } from "./data";
+import { getOrderStatusOptions } from "./data";
 import { Image } from "antd";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -112,6 +113,10 @@ export function OrderStatusCell({ getValue, row, column, table }) {
   } else if (Number(val?.status) === 0) {
     purchaseStatus = "inactive";
   }
+
+  const { t } = useTranslation();
+
+  const orderStatusOptions = getOrderStatusOptions(t);
 
   const option = orderStatusOptions.find(
     (item) => item.value === purchaseStatus,

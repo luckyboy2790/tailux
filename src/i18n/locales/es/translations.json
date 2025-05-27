@@ -90,6 +90,22 @@
         }
       }
     },
+    "user": {
+      "username": "Nombre de Usuario",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "company_name": "Nombre de la Empresa",
+      "phone_number": "Número de Teléfono",
+      "role": "Rol",
+      "total_sales": "Total de Ventas",
+      "action": "Acción",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "user": "Usuario",
+      "secretary": "Secretaria",
+      "admin": "Admin",
+      "buyer": "Comprador"
+    },
     "return": {
       "return": "Devoluciones",
       "list": "Lista",
@@ -266,7 +282,8 @@
       "income_report": "Reporte de Ingresos",
       "customers_report": "Reporte de Clientes",
       "suppliers_report": "Reporte de Proveedores",
-      "users_report": "Reportes de Usuarios"
+      "users_report": "Reportes de Usuarios",
+      "view_report": "Ver Reporte"
     },
     "people": {
       "people": "Personas",
@@ -287,6 +304,7 @@
     "company": "Empresa",
     "date": "Fecha",
     "supplier": "Proveedores",
+    "total_purchase": "Total Purchase",
     "choose_date": "Elija fecha",
     "select_supplier": "Seleccione un proveedor",
     "select_date_range": "Por favor seleccione fechas",

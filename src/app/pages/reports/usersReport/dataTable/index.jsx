@@ -18,13 +18,15 @@ import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
-import { columns } from "./columns";
+import { getColumns } from "./columns";
 import { PaginationSection } from "components/shared/table/PaginationSection";
 import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
+import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,7 +35,15 @@ const isSafari = getUserAgentBrowser() === "Safari";
 export default function PurchaseTable() {
   const { cardSkin } = useThemeContext();
 
+  const { t } = useTranslation();
+
+  const columns = getColumns(t);
+
   const [orders, setOrders] = useState([]);
+
+  const [cookies] = useCookies("authToken");
+
+  const token = cookies.authToken;
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -139,6 +149,11 @@ export default function PurchaseTable() {
 
         const response = await fetch(
           `${API_URL}/api/report/users?${queryString}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         const result = await response.json();
@@ -153,7 +168,7 @@ export default function PurchaseTable() {
     };
 
     fetchData();
-  }, [globalFilter, pageIndex, pageSize]);
+  }, [globalFilter, pageIndex, pageSize, token]);
 
   return (
     <Page title="Orders Datatable v1">

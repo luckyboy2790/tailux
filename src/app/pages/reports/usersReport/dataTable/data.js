@@ -1,15 +1,15 @@
 import { CheckBadgeIcon, ClockIcon } from "@heroicons/react/24/outline";
 
-export const orderStatusOptions = [
+export const getOrderStatusOptions = (t) => [
   {
     value: "inactive",
-    label: "Inactive",
+    label: t("nav.user.inactive"),
     color: "warning",
     icon: ClockIcon,
   },
   {
     value: "active",
-    label: "Active",
+    label: t("nav.user.active"),
     color: "success",
     icon: CheckBadgeIcon,
   },

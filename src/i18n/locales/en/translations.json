@@ -90,6 +90,22 @@
         }
       }
     },
+    "user": {
+      "username": "Username",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "company_name": "Company Name",
+      "phone_number": "Phone Number",
+      "role": "Role",
+      "total_sales": "Total Sales",
+      "action": "Action",
+      "active": "Active",
+      "inactive": "Inactive",
+      "user": "User",
+      "secretary": "Secretary",
+      "admin": "Admin",
+      "buyer": "Buyer"
+    },
     "return": {
       "return": "Return",
       "list": "List",
@@ -266,7 +282,8 @@
       "income_report": "Income Report",
       "customers_report": "Customers Report",
       "suppliers_report": "Suppliers Report",
-      "users_report": "Users Report"
+      "users_report": "Users Report",
+      "view_report": "View Report"
     },
     "people": {
       "people": "People",
@@ -287,6 +304,7 @@
     "company": "Company",
     "date": "Date",
     "supplier": "Supplier",
+    "total_purchase": "Total Purchase",
     "choose_date": "Choose Date",
     "select_supplier": "Please select a supplier",
     "select_date_range": "Please select dates",

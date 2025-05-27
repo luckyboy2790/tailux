@@ -1,4 +1,3 @@
-// Import Dependencies
 import {
   Menu,
   MenuButton,
@@ -6,77 +5,59 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
-import {
-  // ArrowUpRightIcon,
-  EllipsisHorizontalIcon,
-  // EyeIcon,
-  // PencilIcon,
-  // TrashIcon,
-} from "@heroicons/react/24/outline";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import dayjs from "dayjs";
 
-// Local Imports
-import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
-// import { OrdersDrawer } from "./OrdersDrawer";
-// import { useDisclosure } from "hooks";
 
-// ----------------------------------------------------------------------
+export function RowActions({ row }) {
+  const { t } = useTranslation();
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
+  const exportRowToExcel = () => {
+    if (!row) return;
 
-export function RowActions({ row, table }) {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
-  const [deleteSuccess, setDeleteSuccess] = useState(false);
-  const [deleteError, setDeleteError] = useState(false);
+    const rowData = row.original;
+    if (!rowData) return;
 
-  // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
-  //   useDisclosure(false);
+    // Only include specific fields
+    const data = [
+      {
+        company: rowData.company || "",
+        name: rowData.name || "",
+        "phone number": rowData.phone_number || "",
+        email: rowData.email || "",
+        "total sales": rowData.total_sales || 0,
+        "total amount": rowData.total_amount || 0,
+        "paid amount": rowData.paid_amount || 0,
+        balance: rowData.total_amount - rowData.paid_amount || 0,
+      },
+    ];
 
-  const closeModal = () => {
-    setDeleteModalOpen(false);
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(blob, `Customer_Report_${dayjs().format("YYYY-MM-DD")}.xlsx`);
   };
-
-  const openModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
-  };
-
-  const handleDeleteRows = useCallback(() => {
-    setConfirmDeleteLoading(true);
-    setTimeout(() => {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
-      setConfirmDeleteLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
-
-  const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 
   return (
     <>
       <div className="flex justify-center space-x-1.5">
-        {/* <Button
-          isIcon
-          className="size-8 rounded-full"
-          onClick={() => openDrawer()}
-        >
-          <ArrowUpRightIcon className="size-4" />
-        </Button> */}
-
         <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
             <EllipsisHorizontalIcon className="size-4.5" />
@@ -97,117 +78,14 @@ export function RowActions({ row, table }) {
               <MenuItem>
                 {({ focus }) => (
                   <button
+                    onClick={exportRowToExcel}
                     className={clsx(
                       "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
                   >
-                    <span>View</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Payment List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Return List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Payment</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Return</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Report</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Email</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Edit</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      "this:error text-this dark:text-this-light flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus && "bg-this/10 dark:bg-this-light/10",
-                    )}
-                  >
-                    <span>Delete</span>
+                    <span>{t("nav.export.export_excel")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -215,17 +93,6 @@ export function RowActions({ row, table }) {
           </Transition>
         </Menu>
       </div>
-
-      <ConfirmModal
-        show={deleteModalOpen}
-        onClose={closeModal}
-        messages={confirmMessages}
-        onOk={handleDeleteRows}
-        confirmLoading={confirmDeleteLoading}
-        state={state}
-      />
-
-      {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}
     </>
   );
 }
