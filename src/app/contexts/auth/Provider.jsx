@@ -125,6 +125,9 @@ export function AuthProvider({ children }) {
       const queryParams = new URLSearchParams(window.location.search);
       const redirect = queryParams.get("redirect");
 
+      console.log(user?.enable_google2fa);
+      console.log(user?.google2fa_secret);
+
       if (user?.enable_google2fa && user?.google2fa_secret) {
         localStorage.setItem("pending2FAUser", JSON.stringify(user));
         localStorage.setItem(
@@ -138,7 +141,7 @@ export function AuthProvider({ children }) {
 
         window.location.href = verificationURL;
         return;
-      } else if (!user?.google2fa_secret && !user?.enable_google2fa) {
+      } else if (!user?.google2fa_secret && user?.enable_google2fa) {
         localStorage.setItem("pending2FAUser", JSON.stringify(user));
         localStorage.setItem(
           "pendingUserToken",

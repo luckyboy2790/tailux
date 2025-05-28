@@ -7,7 +7,7 @@ import PurchaseTable from "./dataTable";
 const PurchaseList = () => {
   const { t } = useTranslation();
   const breadcrumbs = [
-    { title: t("nav.people.report"), path: "/report" },
+    { title: t("nav.people.people"), path: "/people" },
     { title: t("nav.people.user") },
   ];
 

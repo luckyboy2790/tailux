@@ -101,10 +101,39 @@
       "action": "Acción",
       "active": "Activo",
       "inactive": "Inactivo",
+      "ip_address": "Dirección IP",
       "user": "Usuario",
       "secretary": "Secretaria",
       "admin": "Admin",
-      "buyer": "Comprador"
+      "buyer": "Comprador",
+      "add_user": "Agregar Usuario",
+      "edit_user": "Editar Usuario",
+      "enable_google2fa": "Google Authenticator",
+      "password": "Contraseña",
+      "confirm": "Confirmar Contraseña",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación del usuario falló"
+        },
+        "success": {
+          "title": "Usuario Eliminado"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "La aprobación del usuario falló"
+        },
+        "success": {
+          "title": "Usuario Aprobado"
+        }
+      }
     },
     "return": {
       "return": "Devoluciones",

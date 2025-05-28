@@ -14,32 +14,44 @@ import {
   // TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
+import { useTranslation } from "react-i18next";
+import { useDisclosure } from "hooks";
+import { toast } from "sonner";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import dayjs from "dayjs";
+import { UserModal } from "components/shared/UserModal";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
 
-// ----------------------------------------------------------------------
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
+// ----------------------------------------------------------------------
 
 export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t("nav.user.confirmDelete.pending.description"),
+    },
+    success: {
+      title: t("nav.user.confirmDelete.success.title"),
+    },
+  };
+
+  const [isOpen, { open, close }] = useDisclosure(false);
 
   // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
   //   useDisclosure(false);
@@ -54,15 +66,75 @@ export function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(() => {
+  const exportRowToExcel = () => {
+    if (!row) return;
+
+    const rowData = row.original;
+    if (!rowData) return;
+
+    console.log(rowData);
+
+    // Only include specific fields
+    const data = [
+      {
+        username: rowData.username || "",
+        "first name": rowData.first_name || "",
+        "last name": rowData.last_name || "",
+        "company name": rowData.company_name || "",
+        "phone number": rowData.phone_number || "",
+        role: rowData.role || "",
+        "ip address": rowData.ip_address || "",
+      },
+    ];
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(blob, `User_Report_${dayjs().format("YYYY-MM-DD")}.xlsx`);
+  };
+
+  const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    setTimeout(() => {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+    const response = await fetch(
+      `${API_URL}/api/users/delete/${row.original?.id}`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      toast.error(t("nav.user.confirmDelete.failed.title"));
+
       setConfirmDeleteLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+
+      closeModal();
+
+      throw new Error("Something went wrong");
+    }
+
+    toast.success(t("nav.user.confirmDelete.success.title"));
+
+    setDeleteSuccess(true);
+    setConfirmDeleteLoading(false);
+
+    closeModal();
+
+    if (typeof table.options.meta?.refetch === "function") {
+      await table.options.meta.refetch();
+    } else {
+      console.warn("Refetch function not available in table meta.");
+    }
+  };
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 
@@ -102,8 +174,9 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={exportRowToExcel}
                   >
-                    <span>View</span>
+                    <span>{t("nav.export.export")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -115,86 +188,9 @@ export function RowActions({ row, table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={open}
                   >
-                    <span>Payment List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Return List</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Payment</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Add Return</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Report</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Email</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -207,7 +203,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -223,6 +219,13 @@ export function RowActions({ row, table }) {
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+
+      <UserModal
+        type={"edit"}
+        row={{ ...row, refetch: table.options.meta.refetch }}
+        isOpen={isOpen}
+        close={close}
       />
 
       {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}

@@ -24,7 +24,10 @@ export default function QRGenerate() {
       try {
         const userData = JSON.parse(localStorage.getItem("pending2FAUser"));
 
-        if (userData?.enable_google2fa) {
+        console.log(userData?.enable_google2fa);
+        console.log(userData?.google2fa_secret);
+
+        if (userData?.enable_google2fa && userData?.google2fa_secret) {
           const queryParams = new URLSearchParams(window.location.search);
           const redirect = queryParams.get("redirect");
 
@@ -53,7 +56,7 @@ export default function QRGenerate() {
     };
 
     generateQR();
-  }, []);
+  }, [navigate]);
 
   const handleQRScan = () => {
     const queryParams = new URLSearchParams(window.location.search);

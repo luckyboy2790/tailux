@@ -101,10 +101,39 @@
       "action": "Action",
       "active": "Active",
       "inactive": "Inactive",
+      "ip_address": "IP Address",
       "user": "User",
       "secretary": "Secretary",
       "admin": "Admin",
-      "buyer": "Buyer"
+      "buyer": "Buyer",
+      "add_user": "Add User",
+      "edit_user": "Edit User",
+      "password": "Password",
+      "confirm": "Password Confirm",
+      "enable_google2fa": "Google Authenticator",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "User Delete Failed"
+        },
+        "success": {
+          "title": "User Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "User Approve Failed"
+        },
+        "success": {
+          "title": "User Approved"
+        }
+      }
     },
     "return": {
       "return": "Return",

@@ -8,11 +8,11 @@ import { RowActions } from "./RowActions";
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.username, {
     id: "username",
-    label: "Username",
-    header: "Username",
+    label: t("nav.user.username"),
+    header: t("nav.user.username"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -24,8 +24,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.first_name, {
     id: "first_name",
-    label: "First Name",
-    header: "First Name",
+    label: t("nav.user.first_name"),
+    header: t("nav.user.first_name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -35,10 +35,10 @@ export const columns = [
     },
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.first_name, {
+  columnHelper.accessor((row) => row?.last_name, {
     id: "last_name",
-    label: "Last Name",
-    header: "Last Name",
+    label: t("nav.user.last_name"),
+    header: t("nav.user.last_name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -50,8 +50,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.company?.name, {
     id: "company_name",
-    label: "Company Name",
-    header: "Company Name",
+    label: t("nav.user.company_name"),
+    header: t("nav.user.company_name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -63,8 +63,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.phone_number, {
     id: "phone_number",
-    label: "Phone number",
-    header: "Phone number",
+    label: t("nav.user.phone_number"),
+    header: t("nav.user.phone_number"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -76,12 +76,14 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.role, {
     id: "role",
-    label: "Role",
-    header: "Role",
+    label: t("nav.user.role"),
+    header: t("nav.user.role"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800 capitalize">
-          {props.row.original?.role}
+          {props.row.original?.role
+            ? t(`nav.user.${props.row.original?.role}`)
+            : ""}
         </p>
       );
     },
@@ -89,8 +91,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.ip_address, {
     id: "ip_address",
-    label: "IP Address",
-    header: "IP Address",
+    label: t("nav.user.ip_address"),
+    header: t("nav.user.ip_address"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800 capitalize">
@@ -111,8 +113,8 @@ export const columns = [
   //   ),
   columnHelper.display({
     id: "actions",
-    label: "Row Actions",
-    header: "Actions",
+    label: t("nav.table_fields.actions"),
+    header: t("nav.table_fields.actions"),
     cell: RowActions,
   }),
 ];
