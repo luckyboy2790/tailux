@@ -406,6 +406,28 @@
       "submit": "Entregar"
     },
     "company": "Empresa",
+    "company_fields": {
+      "name": "Nombre",
+      "stores": "Tiendas",
+      "users": "Usuarios",
+      "active": "Activo",
+      "add_company": "Agregar Empresa",
+      "edit_company": "Editar Empresa",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación de la empresa falló"
+        },
+        "success": {
+          "title": "Empresa Eliminada"
+        }
+      }
+    },
     "date": "Fecha",
     "supplier": "Proveedores",
     "total_purchase": "Total Purchase",

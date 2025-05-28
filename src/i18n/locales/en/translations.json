@@ -407,6 +407,28 @@
       "submit": "Submit"
     },
     "company": "Company",
+    "company_fields": {
+      "name": "Name",
+      "stores": "Stores",
+      "users": "Users",
+      "active": "Active",
+      "add_company": "Add Company",
+      "edit_company": "Edit Company",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Company Delete Failed"
+        },
+        "success": {
+          "title": "Company Deleted"
+        }
+      }
+    },
     "date": "Date",
     "supplier": "Supplier",
     "total_purchase": "Total Purchase",

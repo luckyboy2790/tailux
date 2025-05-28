@@ -1,9 +1,5 @@
 // Import Dependencies
-import {
-  ChevronUpDownIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
-import { TbUpload } from "react-icons/tb";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import {
   Menu,
@@ -20,6 +16,9 @@ import PropTypes from "prop-types";
 import { Button, Input } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
+import { useTranslation } from "react-i18next";
+import { useDisclosure } from "hooks";
+import { CompanyModal } from "components/shared/CompanyModal";
 // import { useEffect, useState } from "react";
 
 // const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -27,6 +26,9 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 export function Toolbar({ table }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { t } = useTranslation();
+
+  const [isOpen, { open, close }] = useDisclosure(false);
 
   return (
     <div className="table-toolbar">
@@ -63,35 +65,9 @@ export function Toolbar({ table }) {
                       focus &&
                         "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                     )}
+                    onClick={open}
                   >
-                    <span>New Order</span>
-                  </button>
-                )}
-              </MenuItem>
-              <hr className="border-gray-150 dark:border-dark-500 mx-3 my-1.5 h-px" />
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Export as PDF</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                  >
-                    <span>Export as CSV</span>
+                    <span>{t("nav.company_fields.add_company")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -99,58 +75,6 @@ export function Toolbar({ table }) {
           </Menu>
         ) : (
           <div className="flex space-x-2">
-            <Menu
-              as="div"
-              className="relative inline-block text-left whitespace-nowrap"
-            >
-              <MenuButton
-                as={Button}
-                variant="outlined"
-                className="h-8 space-x-2 rounded-md px-3 text-xs"
-              >
-                <TbUpload className="size-4" />
-                <span>Export</span>
-                <ChevronUpDownIcon className="size-4" />
-              </MenuButton>
-              <Transition
-                as={MenuItems}
-                enter="transition ease-out"
-                enterFrom="opacity-0 translate-y-2"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-2"
-                className="dark:border-dark-500 dark:bg-dark-700 absolute z-100 mt-1.5 min-w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
-              >
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Export as PDF</span>
-                    </button>
-                  )}
-                </MenuItem>
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                    >
-                      <span>Export as CSV</span>
-                    </button>
-                  )}
-                </MenuItem>
-              </Transition>
-            </Menu>
-
             <Menu
               as="div"
               className="relative inline-block text-left whitespace-nowrap"
@@ -180,8 +104,9 @@ export function Toolbar({ table }) {
                         focus &&
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
+                      onClick={open}
                     >
-                      <span>New Order</span>
+                      <span>{t("nav.company_fields.add_company")}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -222,11 +147,20 @@ export function Toolbar({ table }) {
           <TableConfig table={table} />
         </div>
       )}
+
+      <CompanyModal
+        type={"add"}
+        row={{ refetch: table.options.meta.refetch }}
+        isOpen={isOpen}
+        close={close}
+      />
     </div>
   );
 }
 
 function SearchInput({ table }) {
+  const { t } = useTranslation();
+
   return (
     <Input
       value={table.getState().globalFilter}
@@ -236,7 +170,7 @@ function SearchInput({ table }) {
         input: "ring-primary-500/50 h-8 text-xs focus:ring-3",
         root: "shrink-0",
       }}
-      placeholder="Search ID, Customer..."
+      placeholder={t("nav.search_placeholder")}
     />
   );
 }

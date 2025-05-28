@@ -8,11 +8,16 @@ import { RowActions } from "./RowActions";
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+/**
+ * Get columns with translations
+ * @param {function} t - Translation function
+ * @returns {Array} Translated columns
+ */
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.name, {
     id: "name",
-    label: "Name",
-    header: "Name",
+    label: t("nav.company_fields.name"),
+    header: t("nav.company_fields.name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -24,8 +29,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.stores, {
     id: "stores",
-    label: "Stores",
-    header: "Stores",
+    label: t("nav.company_fields.stores"),
+    header: t("nav.company_fields.stores"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -37,8 +42,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.users, {
     id: "users",
-    label: "Users",
-    header: "Users",
+    label: t("nav.company_fields.users"),
+    header: t("nav.company_fields.users"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -59,8 +64,8 @@ export const columns = [
   //   ),
   columnHelper.display({
     id: "actions",
-    label: "Row Actions",
-    header: "Actions",
+    label: t("nav.table_fields.actions"),
+    header: t("nav.table_fields.actions"),
     cell: RowActions,
   }),
 ];
