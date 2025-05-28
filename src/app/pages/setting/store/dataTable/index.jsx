@@ -9,7 +9,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Spinner } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -18,22 +18,26 @@ import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
-import { columns } from "./columns";
+import { getColumns } from "./columns";
 import { PaginationSection } from "components/shared/table/PaginationSection";
-import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
 import FileNotFound from "assets/emptyIcon";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const isSafari = getUserAgentBrowser() === "Safari";
 
 export default function PurchaseTable() {
+  const { t } = useTranslation();
+
   const { cardSkin } = useThemeContext();
 
   const [orders, setOrders] = useState([]);
+
+  const columns = getColumns(t);
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -61,6 +65,31 @@ export default function PurchaseTable() {
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const queryString = new URLSearchParams({
+        keyword: globalFilter,
+        page: (pageIndex + 1).toString(),
+        per_page: pageSize.toString(),
+      }).toString();
+
+      const response = await fetch(
+        `${API_URL}/api/store/search?${queryString}`,
+      );
+
+      const result = await response.json();
+
+      setOrders(result.data.data);
+      setTotalCount(result.data.total);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [globalFilter, pageIndex, pageSize]);
 
   const table = useReactTable({
     data: orders,
@@ -99,6 +128,7 @@ export default function PurchaseTable() {
         setOrders((old) => old.filter((row) => !rowIds.includes(row.order_id)));
       },
       setTableSettings,
+      refetch: fetchData,
     },
     filterFns: {
       fuzzy: fuzzyFilter,
@@ -127,33 +157,8 @@ export default function PurchaseTable() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        const queryString = new URLSearchParams({
-          keyword: globalFilter,
-          page: (pageIndex + 1).toString(),
-          per_page: pageSize.toString(),
-        }).toString();
-
-        const response = await fetch(
-          `${API_URL}/api/store/search?${queryString}`,
-        );
-
-        const result = await response.json();
-
-        setOrders(result.data.data);
-        setTotalCount(result.data.total);
-
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchData();
-  }, [globalFilter, pageIndex, pageSize]);
+  }, [fetchData]);
 
   return (
     <Page title="Orders Datatable v1">
@@ -292,7 +297,6 @@ export default function PurchaseTable() {
                   </TBody>
                 </Table>
               </div>
-              <SelectedRowsActions table={table} />
               {!isLoading && table.getCoreRowModel().rows.length > 0 && (
                 <div
                   className={clsx(

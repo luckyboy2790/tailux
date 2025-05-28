@@ -8,11 +8,16 @@ import { RowActions } from "./RowActions";
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+/**
+ * Get columns with translations
+ * @param {function} t - Translation function
+ * @returns {Array} Translated columns
+ */
+export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.name, {
     id: "name",
-    label: "Name",
-    header: "Name",
+    label: t("nav.store.name"),
+    header: t("nav.store.name"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -24,8 +29,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row?.company?.name, {
     id: "company",
-    label: "Company",
-    header: "Company",
+    label: t("nav.store.company"),
+    header: t("nav.store.company"),
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
@@ -46,8 +51,8 @@ export const columns = [
   //   ),
   columnHelper.display({
     id: "actions",
-    label: "Row Actions",
-    header: "Actions",
+    label: t("nav.table_fields.actions"),
+    header: t("nav.table_fields.actions"),
     cell: RowActions,
   }),
 ];

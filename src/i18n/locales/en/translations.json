@@ -429,6 +429,27 @@
         }
       }
     },
+    "store": {
+      "name": "Name",
+      "company": "Company",
+      "active": "Active",
+      "add_store": "Add Store",
+      "edit_store": "Edit Store",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Store Delete Failed"
+        },
+        "success": {
+          "title": "Store Deleted"
+        }
+      }
+    },
     "date": "Date",
     "supplier": "Supplier",
     "total_purchase": "Total Purchase",

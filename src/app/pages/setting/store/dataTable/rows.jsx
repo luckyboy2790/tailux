@@ -102,76 +102,6 @@ export function ProfitCell({ getValue, row }) {
   );
 }
 
-export function OrderStatusCell({ getValue, row, column, table }) {
-  const val = getValue();
-
-  let purchaseStatus;
-
-  if (Number(val?.status) === 1) {
-    purchaseStatus = "active";
-  } else if (Number(val?.status) === 0) {
-    purchaseStatus = "inactive";
-  }
-
-  const option = orderStatusOptions.find(
-    (item) => item.value === purchaseStatus,
-  );
-
-  const handleChangeStatus = (status) => {
-    table.options.meta?.updateData(row.index, column.id, status);
-    toast.success(`Order status updated to ${option.label}`);
-  };
-
-  return (
-    <Listbox onChange={handleChangeStatus} value={val}>
-      <ListboxButton
-        as={Tag}
-        component="button"
-        color={option.color}
-        className="cursor-pointer gap-1.5"
-      >
-        {option.icon && <option.icon className="h-4 w-4" />}
-
-        <span>{option.label}</span>
-      </ListboxButton>
-      {/* <Transition
-        as={ListboxOptions}
-        enter="transition ease-out"
-        enterFrom="opacity-0 translate-y-2"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-2"
-        anchor={{ to: "bottom start", gap: "8px" }}
-        className="text-xs-plus shadow-soft dark:border-dark-500 dark:bg-dark-750 z-100 max-h-60 w-40 overflow-auto rounded-lg border border-gray-300 bg-white py-1 capitalize outline-hidden focus-visible:outline-hidden dark:shadow-none"
-      >
-        {orderStatusOptions.map((item) => (
-          <ListboxOption
-            key={item.value}
-            value={item.value}
-            className={({ focus }) =>
-              clsx(
-                "dark:text-dark-100 relative flex cursor-pointer items-center justify-between space-x-2 px-3 py-2 text-gray-800 outline-hidden transition-colors select-none",
-                focus && "dark:bg-dark-600 bg-gray-100",
-              )
-            }
-          >
-            {({ selected }) => (
-              <div className="flex w-full items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  {item.icon && <item.icon className="size-4.5 stroke-1" />}
-                  <span className="block truncate">{item.label}</span>
-                </div>
-                {selected && <CheckIcon className="-mr-1 size-4.5 stroke-1" />}
-              </div>
-            )}
-          </ListboxOption>
-        ))}
-      </Transition> */}
-    </Listbox>
-  );
-}
-
 export function AddressCell({ getValue, column, table }) {
   const globalQuery = ensureString(table.getState().globalFilter);
   const columnQuery = ensureString(column.getFilterValue());
@@ -203,13 +133,6 @@ TotalCell.propTypes = {
 ProfitCell.propTypes = {
   getValue: PropTypes.func,
   row: PropTypes.object,
-};
-
-OrderStatusCell.propTypes = {
-  getValue: PropTypes.func,
-  row: PropTypes.object,
-  column: PropTypes.object,
-  table: PropTypes.object,
 };
 
 AddressCell.propTypes = {

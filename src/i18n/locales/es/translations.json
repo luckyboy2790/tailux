@@ -428,6 +428,27 @@
         }
       }
     },
+    "store": {
+      "name": "Nombre",
+      "company": "Empresa",
+      "active": "Activo",
+      "add_store": "Agregar Tienda",
+      "edit_store": "Editar Tienda",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación de la tienda falló"
+        },
+        "success": {
+          "title": "Tienda Eliminada"
+        }
+      }
+    },
     "date": "Fecha",
     "supplier": "Proveedores",
     "total_purchase": "Total Purchase",
