@@ -329,6 +329,44 @@
         }
       }
     },
+    "suppliers": {
+      "company": "Company",
+      "name": "Name",
+      "email": "Email",
+      "phone_number": "Phone Number",
+      "city": "City",
+      "address": "Address",
+      "note": "Note",
+      "action": "Action",
+      "add_supplier": "Add Supplier",
+      "edit_supplier": "Edit Supplier",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Supplier Delete Failed"
+        },
+        "success": {
+          "title": "Supplier Deleted"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Supplier Approve Failed"
+        },
+        "success": {
+          "title": "Supplier Approved"
+        }
+      }
+    },
     "setting": {
       "setting": "Setting",
       "company": "Company",

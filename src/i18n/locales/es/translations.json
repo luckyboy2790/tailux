@@ -299,7 +299,6 @@
       "city": "Ciudad",
       "address": "Dirección",
       "action": "Accion",
-      "note": "Nota",
       "add_customer": "Agregar Cliente",
       "edit_customer": "Editar Cliente",
       "cancel": "Cancelar",
@@ -326,6 +325,44 @@
         },
         "success": {
           "title": "Cliente Aprobado"
+        }
+      }
+    },
+    "suppliers": {
+      "company": "Empresa",
+      "name": "Nombre",
+      "email": "Email",
+      "phone_number": "Móvil",
+      "city": "Ciudad",
+      "address": "Dirección",
+      "note": "Nota",
+      "action": "Accion",
+      "add_supplier": "Agregar Proveedor",
+      "edit_supplier": "Editar Proveedor",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación del proveedor falló"
+        },
+        "success": {
+          "title": "Proveedor Eliminado"
+        }
+      },
+      "confirmApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "La aprobación del proveedor falló"
+        },
+        "success": {
+          "title": "Proveedor Aprobado"
         }
       }
     },
