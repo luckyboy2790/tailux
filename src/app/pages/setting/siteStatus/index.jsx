@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { IoCloseSharp } from "react-icons/io5";
+import { format } from "date-fns";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,6 +23,7 @@ const promise = () =>
 
 const PurchaseList = () => {
   const { t } = useTranslation();
+
   const breadcrumbs = [
     { title: t("nav.setting.setting"), path: "/setting" },
     { title: t("nav.setting.site_status") },
@@ -32,6 +34,9 @@ const PurchaseList = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
+
   const [settings, setSettings] = useState([]);
 
   const state = error ? "error" : success ? "success" : "pending";
@@ -39,13 +44,14 @@ const PurchaseList = () => {
   const messages = {
     pending: {
       Icon: ExclamationTriangleIcon,
-      title: "Are you sure?",
+      title: t("nav.confirm_message.sure"),
       description: "",
-      actionText: "Ok",
+      actionText: t("nav.site_status.save"),
     },
     success: {
-      title: "Success!",
+      title: t("nav.confirm_message.success"),
       description: "",
+      actionText: t("nav.site_status.done"),
     },
   };
 
@@ -77,6 +83,61 @@ const PurchaseList = () => {
     fetchData();
   }, []);
 
+  const handleAddTime = async () => {
+    if (!start || !end) {
+      alert("Please select start and end time.");
+      return;
+    }
+
+    console.log(format(start, "HH:mm"));
+    console.log(format(end, "HH:mm"));
+
+    const newEntry = {
+      start: format(start, "HH:mm"),
+      end: format(end, "HH:mm"),
+    };
+
+    const updatedTimeline = [...settings, newEntry];
+
+    console.log(updatedTimeline);
+
+    const res = await fetch(`${API_URL}/api/site_setting/set`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        key: "site_disable_time",
+        value: JSON.stringify(updatedTimeline),
+      }),
+    });
+
+    if (res.ok) {
+      setSettings(updatedTimeline);
+      setStart(null);
+      setEnd(null);
+    } else {
+      alert("Failed to save time range.");
+    }
+  };
+
+  const handleRemoveTime = async (index) => {
+    const updatedTimeline = settings.filter((_, i) => i !== index);
+
+    const res = await fetch(`${API_URL}/api/site_setting/set`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        key: "site_disable_time",
+        value: JSON.stringify(updatedTimeline),
+      }),
+    });
+
+    if (res.ok) {
+      setSettings(updatedTimeline);
+    } else {
+      alert("Failed to remove time range.");
+    }
+  };
+
   return (
     <Page title="Homepage">
       <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
@@ -93,7 +154,7 @@ const PurchaseList = () => {
 
           <Box className="shadow-soft dark:bg-dark-700 flex flex-col gap-4 rounded-lg bg-white px-4 py-4 sm:gap-5 sm:px-5 dark:shadow-none">
             <h3 className="dark:text-dark-50 truncate text-lg font-medium tracking-wide text-gray-800">
-              Disable all domains
+              {t("nav.site_status.disable_all_domains")}
             </h3>
 
             <Button
@@ -104,45 +165,53 @@ const PurchaseList = () => {
                 open();
               }}
             >
-              Disable Site
+              {t("nav.site_status.disable_site")}
             </Button>
           </Box>
 
           <Box className="shadow-soft dark:bg-dark-700 flex flex-col gap-4 rounded-lg bg-white px-4 py-4 sm:gap-7 sm:px-5 dark:shadow-none">
             <h3 className="dark:text-dark-50 truncate text-lg font-medium tracking-wide text-gray-800">
-              Disable time for secretary
+              {t("nav.site_status.disable_time_for_secretary")}
             </h3>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
               <div className="flex w-auto items-center gap-3">
                 <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
-                  Start :
+                  {t("nav.site_status.start")} :
                 </h3>
                 <DatePicker
                   options={{
                     enableTime: true,
                     noCalendar: true,
                   }}
-                  placeholder="Select time"
+                  value={start ?? undefined}
+                  onChange={(date) => setStart(date)}
+                  placeholder={t("nav.select.select_time")}
                   hasCalenderIcon={false}
                 />
               </div>
               <div className="flex w-auto items-center gap-3">
                 <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
-                  End :
+                  {t("nav.site_status.end")} :
                 </h3>
                 <DatePicker
                   options={{
                     enableTime: true,
                     noCalendar: true,
                   }}
-                  placeholder="Select time"
+                  value={end ?? undefined}
+                  onChange={(date) => setEnd(date)}
+                  placeholder={t("nav.select.select_time")}
                   hasCalenderIcon={false}
                 />
               </div>
-              <Button color="primary" className="flex items-center gap-2">
+              <Button
+                color="primary"
+                className="flex items-center gap-2"
+                onClick={handleAddTime}
+              >
                 <FaPlus />
-                Add
+                {t("nav.site_status.add")}
               </Button>
             </div>
 
@@ -155,7 +224,7 @@ const PurchaseList = () => {
                   <div className="flex items-center justify-start gap-3">
                     <div className="flex items-center justify-start gap-2">
                       <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
-                        From
+                        {t("nav.site_status.from")}
                       </h3>
                       <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
                         {item.start}
@@ -165,7 +234,7 @@ const PurchaseList = () => {
                     <div>
                       <div className="flex items-center justify-start gap-2">
                         <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
-                          To
+                          {t("nav.site_status.to")}
                         </h3>
                         <h3 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
                           {item.end}
@@ -174,7 +243,10 @@ const PurchaseList = () => {
                     </div>
                   </div>
                   <div>
-                    <IoCloseSharp className="dark:text-dark-50 cursor-pointer truncate text-sm font-medium tracking-wide text-gray-800" />
+                    <IoCloseSharp
+                      className="dark:text-dark-50 cursor-pointer truncate text-sm font-medium tracking-wide text-gray-800"
+                      onClick={() => handleRemoveTime(index)}
+                    />
                   </div>
                 </Box>
               ))}

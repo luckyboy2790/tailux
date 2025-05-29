@@ -450,6 +450,19 @@
         }
       }
     },
+    "site_status": {
+      "disable_all_domains": "Disable All Domains",
+      "disable_site": "Disable Site",
+      "disable_time_for_secretary": "Disable Time for Secretary",
+      "start": "Start",
+      "end": "End",
+      "add": "Add",
+      "from": "From",
+      "to": "To",
+      "save": "Save",
+      "cancel": "Cancel",
+      "done": "Done"
+    },
     "date": "Date",
     "supplier": "Supplier",
     "total_purchase": "Total Purchase",
@@ -545,10 +558,12 @@
       "select_store": "Select Store",
       "select_customer": "Select Customer",
       "select_product": "Select Product",
-      "select_company": "Select Company"
+      "select_company": "Select Company",
+      "select_time": "Select Time"
     },
     "confirm_message": {
       "sure": "Are you sure?",
+      "success": "Success!",
       "delete": "Delete",
       "cancel": "Cancel"
     },
