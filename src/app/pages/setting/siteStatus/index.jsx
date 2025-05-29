@@ -11,15 +11,9 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { IoCloseSharp } from "react-icons/io5";
 import { format } from "date-fns";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-
-const promise = () =>
-  new Promise((resolve) =>
-    setTimeout(() => {
-      resolve();
-    }, 2000),
-  );
 
 const PurchaseList = () => {
   const { t } = useTranslation();
@@ -33,6 +27,10 @@ const PurchaseList = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
@@ -55,18 +53,26 @@ const PurchaseList = () => {
     },
   };
 
-  const onOk = () => {
+  const onOk = async () => {
     setConfirmLoading(true);
-    promise()
-      .then(() => {
-        setConfirmLoading(false);
-        setSuccess(true);
-        setError(false);
-      })
-      .catch(() => {
-        setConfirmLoading(false);
-        setError(true);
-      });
+    const res = await fetch(`${API_URL}/api/site_setting/disable`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.ok) {
+      setConfirmLoading(false);
+      setSuccess(true);
+      setError(false);
+    } else {
+      setConfirmLoading(false);
+      setError(true);
+    }
+
+    close();
   };
 
   useEffect(() => {
