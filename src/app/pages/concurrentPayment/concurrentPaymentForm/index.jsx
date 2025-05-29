@@ -2,12 +2,13 @@ import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import CompanyIcon from "assets/dualicons/company.svg?react";
 import { useTranslation } from "react-i18next";
-import { Box, Button, Input, Select } from "components/ui";
+import { Box, Button, Input } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { FilePond } from "components/shared/form/Filepond";
 import { ConcurrentTable } from "./components/ConcurrentTable";
 import { FaFileInvoice } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -91,13 +92,16 @@ const PurchaseList = () => {
           </div>
 
           <Box className="shadow-soft dark:bg-dark-700 flex flex-col gap-4 rounded-lg bg-white px-4 py-4 sm:gap-5 sm:px-5 dark:shadow-none">
-            <Select
+            <Combobox
               label={t("nav.payment.select_supplier")}
-              value={supplierId || ""}
+              value={supplier.find((item) => item.value === supplierId) || null}
               data={supplier}
-              onChange={(e) => {
-                setSupplierId(e.target.value);
+              displayField="label"
+              searchFields={["label"]}
+              onChange={(selectedItem) => {
+                setSupplierId(selectedItem?.value || "");
               }}
+              placeholder={t("nav.select.select_supplier")}
             />
           </Box>
 

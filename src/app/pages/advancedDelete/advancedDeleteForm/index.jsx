@@ -48,8 +48,8 @@ const PurchaseList = () => {
                 mode: "range",
                 dateFormat: "Y-m-d",
               }}
-              placeholder={t("nav.select_supplier")}
-              label={t("nav.supplier")}
+              placeholder={t("nav.choose_date")}
+              label={t("nav.date")}
             />
 
             <Listbox
@@ -57,8 +57,8 @@ const PurchaseList = () => {
               value={selected}
               onChange={setSelected}
               displayField="name"
-              placeholder={t("nav.choose_date")}
-              label={t("nav.date")}
+              placeholder={t("nav.select_supplier")}
+              label={t("nav.supplier")}
               multiple
             />
 

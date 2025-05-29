@@ -18,7 +18,7 @@ const cols = [
   "Amount",
 ];
 
-const EditableInput = (initialValue) => {
+const EditableInput = ({ initialValue }) => {
   const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ const EditableInput = (initialValue) => {
 };
 
 export function ConcurrentTable({ tableData }) {
-  console.log(tableData);
   const { locale } = useLocaleContext();
 
   return (
@@ -106,9 +105,11 @@ export function ConcurrentTable({ tableData }) {
                 }
               </Td>
               <Td>
-                {EditableInput(
-                  Number(tr?.grand_total || 0) - Number(tr?.paid_amount || 0),
-                )}
+                <EditableInput
+                  initialValue={
+                    Number(tr?.grand_total || 0) - Number(tr?.paid_amount || 0)
+                  }
+                />
               </Td>
             </Tr>
           ))}

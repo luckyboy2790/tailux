@@ -12,6 +12,7 @@ import { ConfirmModal } from "components/shared/ConfirmModal";
 import { IoCloseSharp } from "react-icons/io5";
 import { format } from "date-fns";
 import { useCookies } from "react-cookie";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,6 +32,8 @@ const PurchaseList = () => {
   const [cookies] = useCookies(["authToken"]);
 
   const token = cookies.authToken;
+
+  const { logout } = useAuthContext();
 
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
@@ -67,6 +70,8 @@ const PurchaseList = () => {
       setConfirmLoading(false);
       setSuccess(true);
       setError(false);
+
+      logout();
     } else {
       setConfirmLoading(false);
       setError(true);

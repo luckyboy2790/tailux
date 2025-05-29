@@ -1,11 +1,13 @@
 // Import Dependencies
 import { useCallback, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
+import { DateTime } from "luxon";
 
 // Local Imports
 import axios from "utils/axios";
 import { AuthContext } from "./context";
 import { useCookies } from "react-cookie";
+import { toast } from "sonner";
 
 // ----------------------------------------------------------------------
 
@@ -86,8 +88,32 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const init = async () => {
-      const token = cookies.authToken;
+      const path = window.location.pathname;
+      const route = path.split("/")[1];
 
+      try {
+        const { data } = await axios.get("/api/site_setting/status");
+
+        if (data.data === "disabled") {
+          if (route !== "activate" && route !== "disabled") {
+            logout();
+            window.location.replace("/disabled");
+            return;
+          }
+
+          dispatch({
+            type: "INITIALIZE",
+            payload: { isAuthenticated: false, user: null },
+          });
+
+          return;
+        }
+      } catch (err) {
+        console.error("Failed to fetch site status", err);
+        return;
+      }
+
+      const token = cookies.authToken;
       if (token) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`;
         try {
@@ -101,6 +127,12 @@ export function AuthProvider({ children }) {
           logout();
         }
       } else {
+        if (route !== "login" && route !== "qr" && route !== "verification") {
+          window.location.replace("/login");
+
+          return;
+        }
+
         dispatch({
           type: "INITIALIZE",
           payload: { isAuthenticated: false, user: null },
@@ -122,11 +154,41 @@ export function AuthProvider({ children }) {
 
       const { authToken, user, expires_in } = data;
 
+      if (user?.role === "secretary") {
+        const { data } = await axios.get("/api/site_setting/disable_time");
+
+        const disabledTimes = JSON.parse(data.data);
+
+        const nowBogota = DateTime.now().setZone("America/Bogota");
+        const nowMinutes = nowBogota.hour * 60 + nowBogota.minute;
+
+        console.log(nowBogota.toString(), nowMinutes);
+
+        for (const { start, end } of disabledTimes) {
+          const [startH, startM] = start.split(":").map(Number);
+          const [endH, endM] = end.split(":").map(Number);
+
+          const startMinutes = startH * 60 + startM;
+          const endMinutes = endH * 60 + endM;
+
+          let inRange = false;
+
+          if (endMinutes > startMinutes) {
+            inRange = nowMinutes >= startMinutes && nowMinutes <= endMinutes;
+          } else {
+            inRange = nowMinutes >= startMinutes || nowMinutes <= endMinutes;
+          }
+
+          if (inRange) {
+            toast.error("The site is disabled, please try to login later.");
+
+            return;
+          }
+        }
+      }
+
       const queryParams = new URLSearchParams(window.location.search);
       const redirect = queryParams.get("redirect");
-
-      console.log(user?.enable_google2fa);
-      console.log(user?.google2fa_secret);
 
       if (user?.enable_google2fa && user?.google2fa_secret) {
         localStorage.setItem("pending2FAUser", JSON.stringify(user));

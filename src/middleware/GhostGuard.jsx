@@ -11,9 +11,10 @@ export default function GhostGuard() {
   const outlet = useOutlet();
   const { isAuthenticated } = useAuthContext();
 
-  const url = `${new URLSearchParams(window.location.search).get(
+  const rawRedirect = new URLSearchParams(window.location.search).get(
     REDIRECT_URL_KEY,
-  )}`;
+  );
+  const url = rawRedirect && rawRedirect !== "null" ? rawRedirect : null;
 
   if (isAuthenticated) {
     if (url && url !== "") {
