@@ -112,7 +112,7 @@ const OverviewChart = ({
 
           const date = new Date(`${currentYear}-${month}-${day}`);
 
-          return date.toISOString().split("T")[0] + "T1:00:00";
+          return date.toISOString().split("T")[0] + "T01:00:00";
         }) || [],
     },
     colors: [primaryColorScheme[500], "#ffba1a"],
