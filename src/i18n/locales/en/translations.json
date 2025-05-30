@@ -104,6 +104,7 @@
       "ip_address": "IP Address",
       "user": "User",
       "secretary": "Secretary",
+      "email": "Email",
       "admin": "Admin",
       "buyer": "Buyer",
       "add_user": "Add User",

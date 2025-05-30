@@ -55,6 +55,7 @@ export function UserModal({ type, row, isOpen, close }) {
     phone_number: "",
     ip_address: "",
     role: "",
+    email: "",
     company: "",
     password: "",
     confirm: "",
@@ -74,6 +75,7 @@ export function UserModal({ type, row, isOpen, close }) {
         phone_number: rowData?.phone_number,
         ip_address: rowData?.ip_address,
         role: rowData?.role,
+        email: rowData?.email,
         company: rowData?.company_id,
         enable_google2fa: rowData?.enable_google2fa === 1 ? "1" : "0",
       });
@@ -85,6 +87,7 @@ export function UserModal({ type, row, isOpen, close }) {
         phone_number: "",
         ip_address: "",
         role: "admin",
+        email: "",
         company: "",
         enable_google2fa: "1",
       });
@@ -161,6 +164,7 @@ export function UserModal({ type, row, isOpen, close }) {
     formData.append("ip_address", data.ip_address);
     formData.append("role", data.role);
     formData.append("company_id", data.company);
+    formData.append("email", data.email);
     formData.append("password", data.password);
     formData.append("enable_google2fa", data.enable_google2fa);
 
@@ -199,6 +203,7 @@ export function UserModal({ type, row, isOpen, close }) {
         phone_number: "",
         ip_address: "",
         role: "admin",
+        email: "",
         company: "",
         enable_google2fa: "1",
         password: "",
@@ -295,6 +300,15 @@ export function UserModal({ type, row, isOpen, close }) {
                     value={data.last_name}
                     onChange={(e) =>
                       setData({ ...data, last_name: e.target.value })
+                    }
+                  />
+
+                  <Input
+                    placeholder={t("nav.user.email")}
+                    label={t("nav.user.email")}
+                    value={data.email}
+                    onChange={(e) =>
+                      setData({ ...data, email: e.target.value })
                     }
                   />
 
