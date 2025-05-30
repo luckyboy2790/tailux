@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
@@ -6,6 +6,7 @@ import DashboardIcon from "assets/dualicons/dashboards.svg?react";
 import Overview from "./overview";
 import OverviewChart from "./overview_chart";
 import { Spinner } from "components/ui";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,20 +28,6 @@ const getCurrentMonthRange = () => {
   };
 };
 
-const fetchData = async (url, params, signal) => {
-  const queryString = new URLSearchParams(params).toString();
-  const response = await fetch(`${url}?${queryString}`, {
-    headers: { "Content-Type": "application/json" },
-    signal,
-  });
-
-  if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  return response.json();
-};
-
 export default function Home() {
   const { t } = useTranslation();
   const [dashboardData, setDashboardData] = useState(null);
@@ -56,6 +43,27 @@ export default function Home() {
     { title: t("nav.dashboards.dashboards"), path: "/dashboards" },
     { title: t("nav.dashboards.home") },
   ];
+
+  const [cookies] = useCookies("authToken");
+
+  const token = cookies.authToken;
+
+  const fetchData = useCallback(async (url, params, signal) => {
+    const queryString = new URLSearchParams(params).toString();
+    const response = await fetch(`${url}?${queryString}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    return response.json();
+  }, [token]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -100,7 +108,7 @@ export default function Home() {
     loadData();
 
     return () => abortController.abort();
-  }, [companyId, startDate, endDate]);
+  }, [companyId, startDate, endDate, fetchData]);
 
   if (loading) {
     return (

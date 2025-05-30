@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const Overivew = ({ data, extraData, companyId, setCompanyId }) => {
+const Overview = ({ data, extraData, companyId, setCompanyId }) => {
   const { t } = useTranslation();
   const [companies, setCompanies] = useState([]);
 
@@ -94,7 +94,7 @@ const Overivew = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.week_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.week_sales.total || 0}
+              {data?.week_purchases.total || 0}
             </p>
           </div>
           <Avatar
@@ -174,7 +174,7 @@ const Overivew = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.week_sales")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.week_purchases.total || 0}
+              {data?.week_sales.total || 0}
             </p>
           </div>
           <Avatar
@@ -231,4 +231,4 @@ const Overivew = ({ data, extraData, companyId, setCompanyId }) => {
   );
 };
 
-export default Overivew;
+export default Overview;
