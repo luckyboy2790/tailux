@@ -78,6 +78,8 @@ const OverviewChart = ({
 }) => {
   const { primaryColorScheme } = useThemeContext();
 
+  const currentYear = new Date().getFullYear();
+
   const { firstDay, lastDay } = getCurrentMonthRange();
 
   const { t } = useTranslation();
@@ -102,7 +104,17 @@ const OverviewChart = ({
 
   const chartOptions = {
     ...options,
-    xaxis: { type: "datetime", categories: data?.key_array || [] },
+    xaxis: {
+      type: "datetime",
+      categories:
+        data?.key_array.map((d) => {
+          const [month, day] = d.split("/");
+
+          const date = new Date(`${currentYear}-${month}-${day}`);
+
+          return date.toISOString().split("T")[0] + "T1:00:00";
+        }) || [],
+    },
     colors: [primaryColorScheme[500], "#ffba1a"],
   };
 
