@@ -170,7 +170,7 @@ export function CompanyChart() {
     };
 
     fetchData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, token]);
 
   const handleDateChange = (dates) => {
     if (!dates || dates.length !== 2) return;

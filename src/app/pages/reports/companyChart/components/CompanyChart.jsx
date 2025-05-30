@@ -183,7 +183,7 @@ export function CompanyChart() {
     };
 
     fetchData();
-  }, [startDate, endDate, t]);
+  }, [startDate, endDate, t, token]);
 
   const handleDateChange = (dates) => {
     if (!dates || dates.length !== 2) return;

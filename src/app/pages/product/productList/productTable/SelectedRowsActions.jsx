@@ -7,23 +7,46 @@ import PropTypes from "prop-types";
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
 import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
+import { toast } from "sonner";
 
 // ----------------------------------------------------------------------
 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 export function SelectedRowsActions({ table }) {
   const { t } = useTranslation();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const selectedRows = table.getSelectedRowModel().rows;
 
-  const handleDeleteRows = () => {
+  const handleDeleteRows = async () => {
     if (selectedRows.length > 0) {
       setDeleteLoading(true);
-      setTimeout(() => {
-        table.options.meta?.deleteRows(selectedRows);
-        setDeleteLoading(false);
-      }, 1000);
+      await Promise.all(
+        selectedRows.map((row) =>
+          fetch(`${API_URL}/api/product/delete/${row.original?.id}`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ),
+      );
+
+      toast.success("Delete Products successfully");
+      setDeleteLoading(false);
+
+      if (typeof table.options.meta?.refetch === "function") {
+        await table.options.meta.refetch();
+      } else {
+        console.warn("Refetch function not available in table meta.");
+      }
     }
   };
 

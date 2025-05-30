@@ -20,7 +20,6 @@ import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
 import { getColumns } from "./columns";
 import { PaginationSection } from "components/shared/table/PaginationSection";
-import { SelectedRowsActions } from "./SelectedRowsActions";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { statusFilter } from "utils/react-table/statusFilter";
@@ -307,7 +306,6 @@ export default function PurchaseTable() {
                   </TBody>
                 </Table>
               </div>
-              <SelectedRowsActions table={table} />
               {!isLoading && table.getCoreRowModel().rows.length > 0 && (
                 <div
                   className={clsx(

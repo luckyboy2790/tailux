@@ -7,6 +7,10 @@ import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
+import { useCookies } from "react-cookie";
+import { toast } from "sonner";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -15,15 +19,34 @@ export function SelectedRowsActions({ table }) {
 
   const { t } = useTranslation();
 
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
   const selectedRows = table.getSelectedRowModel().rows;
 
-  const handleDeleteRows = () => {
+  const handleDeleteRows = async () => {
     if (selectedRows.length > 0) {
       setDeleteLoading(true);
-      setTimeout(() => {
-        table.options.meta?.deleteRows(selectedRows);
-        setDeleteLoading(false);
-      }, 1000);
+      await Promise.all(
+        selectedRows.map((row) =>
+          fetch(`${API_URL}/api/payment/delete/${row.original?.id}`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ),
+      );
+
+      toast.success(t("nav.payment.confirmDelete.success.title"));
+      setDeleteLoading(false);
+
+      if (typeof table.options.meta?.refetch === "function") {
+        await table.options.meta.refetch();
+      } else {
+        console.warn("Refetch function not available in table meta.");
+      }
     }
   };
 
@@ -67,7 +90,9 @@ export function SelectedRowsActions({ table }) {
                 ) : (
                   <TrashIcon className="size-4 shrink-0" />
                 )}
-                <span className="max-sm:hidden">{t("nav.select_row.delete")}</span>
+                <span className="max-sm:hidden">
+                  {t("nav.select_row.delete")}
+                </span>
               </Button>
             </div>
           </div>

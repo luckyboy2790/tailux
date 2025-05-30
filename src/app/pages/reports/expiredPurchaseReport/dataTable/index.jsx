@@ -161,7 +161,7 @@ export default function PurchaseTable() {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         const result = await response.json();
@@ -176,7 +176,7 @@ export default function PurchaseTable() {
     };
 
     fetchData();
-  }, [globalFilter, pageIndex, pageSize, sorting]);
+  }, [globalFilter, pageIndex, pageSize, sorting, token]);
 
   return (
     <Page title="Orders Datatable v1">

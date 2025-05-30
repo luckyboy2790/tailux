@@ -133,7 +133,7 @@ export function CompanyChart() {
     };
 
     fetchData();
-  }, [companyId]);
+  }, [companyId, token]);
 
   return (
     <Card className="overflow-hidden">

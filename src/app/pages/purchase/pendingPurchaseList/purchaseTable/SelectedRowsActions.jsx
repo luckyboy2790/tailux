@@ -7,23 +7,45 @@ import { useTranslation } from "react-i18next";
 
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
+import { useCookies } from "react-cookie";
+import { toast } from "sonner";
 
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 // ----------------------------------------------------------------------
 
 export function SelectedRowsActions({ table }) {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const selectedRows = table.getSelectedRowModel().rows;
 
-  const handleDeleteRows = () => {
+  const handleDeleteRows = async () => {
     if (selectedRows.length > 0) {
       setDeleteLoading(true);
-      setTimeout(() => {
-        table.options.meta?.deleteRows(selectedRows);
-        setDeleteLoading(false);
-      }, 1000);
+      await Promise.all(
+        selectedRows.map((row) =>
+          fetch(`${API_URL}/api/purchase/delete/${row.original?.id}`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ),
+      );
+
+      toast.success(t("nav.purchase.confirmDelete.success.title"));
+      setDeleteLoading(false);
+
+      if (typeof table.options.meta?.refetch === "function") {
+        await table.options.meta.refetch();
+      } else {
+        console.warn("Refetch function not available in table meta.");
+      }
     }
   };
 
@@ -42,7 +64,9 @@ export function SelectedRowsActions({ table }) {
         <div className="w-full max-w-xl px-2 py-4 sm:absolute sm:-translate-y-1/2 sm:px-4">
           <div className="dark:bg-dark-50 dark:text-dark-900 pointer-events-auto flex items-center justify-between rounded-lg bg-gray-800 px-3 py-2 font-medium text-gray-100 sm:px-4 sm:py-3">
             <p>
-              <span>{selectedRows.length} {t("nav.select_row.select")}</span>
+              <span>
+                {selectedRows.length} {t("nav.select_row.select")}
+              </span>
               <span className="max-sm:hidden">
                 {" "}
                 {t("nav.select_row.from")} {table.getCoreRowModel().rows.length}
@@ -65,7 +89,9 @@ export function SelectedRowsActions({ table }) {
                 ) : (
                   <TrashIcon className="size-4 shrink-0" />
                 )}
-                <span className="max-sm:hidden">{t("nav.select_row.delete")}</span>
+                <span className="max-sm:hidden">
+                  {t("nav.select_row.delete")}
+                </span>
               </Button>
             </div>
           </div>
