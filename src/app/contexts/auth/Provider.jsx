@@ -290,6 +290,7 @@ export function AuthProvider({ children }) {
         login,
         checkOTP,
         logout,
+        dispatch,
       }}
     >
       {children}

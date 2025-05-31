@@ -155,6 +155,12 @@ export function UserModal({ type, row, isOpen, close }) {
       return;
     }
 
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(data.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append("username", data.username);
