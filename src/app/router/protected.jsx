@@ -433,6 +433,14 @@ const protectedRoutes = {
               }),
             },
             {
+              path: "google2fa",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/settings/sections/Google2Fa")
+                ).default,
+              }),
+            },
+            {
               path: "appearance",
               lazy: async () => ({
                 Component: (
