@@ -425,6 +425,14 @@ const protectedRoutes = {
               }),
             },
             {
+              path: "password",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/settings/sections/Password")
+                ).default,
+              }),
+            },
+            {
               path: "appearance",
               lazy: async () => ({
                 Component: (

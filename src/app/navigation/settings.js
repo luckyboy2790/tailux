@@ -1,5 +1,6 @@
 // Import Dependencies
 import { UserIcon } from "@heroicons/react/24/outline";
+import { BsFillShieldLockFill } from "react-icons/bs";
 import { TbPalette } from "react-icons/tb";
 
 // Local Imports
@@ -23,6 +24,14 @@ export const settings = {
             title: 'General',
             transKey: 'nav.settings.general',
             Icon: UserIcon,
+        },
+        {
+            id: 'password',
+            type: NAV_TYPE_ITEM,
+            path: '/settings/password',
+            title: 'Password',
+            transKey: 'nav.settings.password',
+            Icon: BsFillShieldLockFill,
         },
         {
             id: 'appearance',

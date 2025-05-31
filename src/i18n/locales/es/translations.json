@@ -16,6 +16,10 @@
     "settings": {
       "settings": "Configuración",
       "general": "General",
+      "password": "Contraseña",
+      "password_description": "Actualice su contraseña.",
+      "google2fa": "Autenticador de Google",
+      "google2fa_description": "Habilitar Google Authenticator para autenticación de dos factores.",
       "appearance": "Apariencia"
     },
     "purchase": {

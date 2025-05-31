@@ -27,6 +27,7 @@ export function UserModal({ type, row, isOpen, close }) {
   const saveRef = useRef(null);
 
   const [show, { toggle }] = useDisclosure();
+  const [confirmshow, { toggle: toggleConfirm }] = useDisclosure();
 
   const roleSelect = [
     { value: "admin", label: t("nav.user.admin") },
@@ -390,7 +391,7 @@ export function UserModal({ type, row, isOpen, close }) {
 
                   <Input
                     label={t("nav.user.confirm")}
-                    type={show ? "text" : "password"}
+                    type={confirmshow ? "text" : "password"}
                     placeholder={t("nav.user.confirm")}
                     prefix={<LockClosedIcon className="size-4.5" />}
                     value={data.confirm}
@@ -401,9 +402,9 @@ export function UserModal({ type, row, isOpen, close }) {
                       <Button
                         variant="flat"
                         className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
-                        onClick={toggle}
+                        onClick={toggleConfirm}
                       >
-                        {show ? (
+                        {confirmshow ? (
                           <EyeSlashIcon className="dark:text-dark-200 size-4.5 text-gray-500" />
                         ) : (
                           <EyeIcon className="dark:text-dark-200 size-4.5 text-gray-500" />
