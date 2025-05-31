@@ -113,14 +113,14 @@ export default function Home() {
     return () => abortController.abort();
   }, [companyId, startDate, endDate, fetchData]);
 
+  if (error) return;
+
   return (
     <Page title="Homepage">
       {loading ? (
         <div className="flex h-full w-full items-center justify-center">
           <Spinner color="info" isElastic className="size-15" />
         </div>
-      ) : error ? (
-        <div className="p-4 text-red-500">Error: {error}</div>
       ) : (
         <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
           <div className="flex min-w-0 flex-col gap-8">

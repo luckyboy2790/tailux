@@ -156,7 +156,7 @@ const OverviewChart = ({
         series={series}
         type="area"
         height="350"
-        className="!w-full"
+        className="!w-full !max-w-[1552px]"
         options={chartOptions}
       />
     </div>

@@ -9,12 +9,14 @@ import {
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
-import { TbCoins, TbUser } from "react-icons/tb";
+import { TbUser } from "react-icons/tb";
 import { Link } from "react-router";
 
 // Local Imports
 import { Avatar, AvatarDot, Button } from "components/ui";
 import { useAuthContext } from "app/contexts/auth/context";
+
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -26,14 +28,6 @@ const links = [
     to: "/settings/general",
     Icon: TbUser,
     color: "warning",
-  },
-  {
-    id: "4",
-    title: "Billing",
-    description: "Your billing information",
-    to: "/settings/billing",
-    Icon: TbCoins,
-    color: "error",
   },
   {
     id: "5",
@@ -54,7 +48,13 @@ export function Profile() {
         as={Avatar}
         size={12}
         role="button"
-        src="/images/100x100.png"
+        src={`${IMG_URL}/users/${user?.username}.png`}
+        imgProps={{
+          onError: (e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/images/100x100.png";
+          },
+        }}
         alt="Profile"
         indicator={
           <AvatarDot color="success" className="ltr:right-0 rtl:left-0" />
@@ -78,7 +78,17 @@ export function Profile() {
           {({ close }) => (
             <>
               <div className="dark:bg-dark-800 flex items-center gap-4 rounded-t-lg bg-gray-100 px-4 py-5">
-                <Avatar size={14} src="/images/100x100.png" alt="Profile" />
+                <Avatar
+                  size={14}
+                  src={`${IMG_URL}/users/${user?.username}.png`}
+                  alt="Profile"
+                  imgProps={{
+                    onError: (e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/images/100x100.png";
+                    },
+                  }}
+                />
                 <div>
                   <Link
                     className="hover:text-primary-600 focus:text-primary-600 dark:text-dark-100 dark:hover:text-primary-400 dark:focus:text-primary-400 text-base font-medium text-gray-700"
@@ -87,8 +97,8 @@ export function Profile() {
                     {`${user?.first_name} ${user?.last_name}`}
                   </Link>
 
-                  <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400">
-                    Product Designer
+                  <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400 capitalize">
+                    {user?.role}
                   </p>
                 </div>
               </div>
