@@ -7,14 +7,8 @@ const ROOT_PEOPLE = "/people";
 
 const path = (root, item) => `${root}${item}`;
 
-export const people = {
-  id: "people",
-  type: NAV_TYPE_ROOT,
-  path: "/people",
-  title: "People",
-  transKey: "nav.people.people",
-  Icon: PeopleIcon,
-  childs: [
+export const getPeopleNav = (role) => {
+  const childs = [
     {
       id: "people.customer",
       path: path(ROOT_PEOPLE, "/customer"),
@@ -31,13 +25,26 @@ export const people = {
       transKey: "nav.people.supplier",
       Icon: SupplierIcon,
     },
-    {
+  ];
+
+  if (role === "admin") {
+    childs.push({
       id: "people.user",
       path: path(ROOT_PEOPLE, "/user"),
       type: NAV_TYPE_ITEM,
       title: "User",
       transKey: "nav.people.user",
       Icon: UsersIcon,
-    },
-  ],
+    });
+  }
+
+  return {
+    id: "people",
+    type: NAV_TYPE_ROOT,
+    path: "/people",
+    title: "People",
+    transKey: "nav.people.people",
+    Icon: PeopleIcon,
+    childs,
+  };
 };

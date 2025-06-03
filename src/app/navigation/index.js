@@ -4,7 +4,7 @@ import { dashboards } from "./dashboards";
 import { concurrent_payments } from "./payment";
 import { pendingPayment } from "./pendingPayment";
 import { pendingPurchase } from "./pendingPurchase";
-import { people } from "./people";
+import { getPeopleNav } from "./people";
 import { product } from "./product";
 import { purchase } from "./purchase";
 import { purchaseOrder } from "./purchaseOrder";
@@ -18,7 +18,7 @@ export const useNavigation = () => {
 
   const role = user?.role;
 
-  return [
+  const returnData = [
     dashboards,
     purchase,
     getSaleNav(role),
@@ -28,11 +28,16 @@ export const useNavigation = () => {
     purchaseOrder,
     received,
     report,
-    people,
+    getPeopleNav(role),
     setting,
     concurrent_payments,
-    advanced_delete,
   ];
+
+  if (role === "admin") {
+    returnData.push(advanced_delete);
+  }
+
+  return returnData;
 };
 
 export { baseNavigation } from "./baseNavigation";

@@ -21,7 +21,7 @@ export const getSaleNav = (role) => {
     },
   ];
 
-  if (role === "user") {
+  if (role === "user" || role === "secretary") {
     childs.push({
       id: "sale.add",
       path: path(ROOT_SALE, "/add"),
