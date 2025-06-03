@@ -70,6 +70,10 @@ body.is-monochrome::before {
   }
 }
 
+.ant-select-selection-wrap {
+  height: 100% !important;
+}
+
 /* Demo inline space */
 .inline-space > :not([hidden]) {
   @apply mr-2.5 mb-2.5;
