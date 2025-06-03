@@ -58,9 +58,7 @@ const PurchaseList = () => {
 
   const handleSubmit = async () => {
     if (step === 1) {
-      const supplierIDs = selectedSuppliers.length
-        ? selectedSuppliers
-        : suppliers.map((s) => s.value);
+      const supplierIDs = selectedSuppliers.length ? selectedSuppliers : [];
 
       const payload = {
         email: user?.email,
