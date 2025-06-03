@@ -10,6 +10,7 @@ import { useThemeContext } from "app/contexts/theme/context";
 import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "app/contexts/auth/context";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -73,7 +74,6 @@ const PurchaseList = () => {
         alert(result.message || "Failed to send verification code.");
       }
     } else if (step === 2) {
-      // fallback: all supplier IDs
       const supplierIDs = selectedSuppliers.length
         ? selectedSuppliers
         : suppliers.map((s) => s.value);
@@ -86,21 +86,23 @@ const PurchaseList = () => {
         suppliers: supplierIDs,
       };
 
-      const res = await fetch(`${API_URL}/api/advanced_delete/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `${API_URL}/api/advanced_delete/purchase/submit`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
 
       const result = await res.json();
 
       if (!result.success) {
-        alert(result.message || "Verification failed");
+        toast.error(result.message || "Verification failed");
         return;
       }
 
-      alert("Deletion completed successfully!");
-      // Reset state after success
+      toast.success("Deletion completed successfully!");
       setStep(1);
       setCodeSent(false);
       setVerifyCode("");
