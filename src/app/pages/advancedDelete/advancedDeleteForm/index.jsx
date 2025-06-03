@@ -2,7 +2,7 @@ import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import CompanyIcon from "assets/dualicons/company.svg?react";
 import { useTranslation } from "react-i18next";
-import { Box, Button, Input } from "components/ui";
+import { Box, Button, Input, Spinner } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { FaFileInvoice } from "react-icons/fa";
 import { Select } from "antd";
@@ -28,6 +28,8 @@ const PurchaseList = () => {
   const [step, setStep] = useState(1);
   const [codeSent, setCodeSent] = useState(false);
   const [verifyCode, setVerifyCode] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   const { t } = useTranslation();
 
@@ -57,7 +59,9 @@ const PurchaseList = () => {
   }, []);
 
   const handleSubmit = async () => {
+    if (loading) return;
     if (step === 1) {
+      setLoading(true);
       const supplierIDs = selectedSuppliers.length ? selectedSuppliers : [];
 
       const payload = {
@@ -83,7 +87,10 @@ const PurchaseList = () => {
       } else {
         toast.error(t("nav.advanced_delete.send_verify_code_failed"));
       }
+
+      setLoading(false);
     } else if (step === 2) {
+      setLoading(true);
       const supplierIDs = selectedSuppliers.length
         ? selectedSuppliers
         : suppliers.map((s) => s.value);
@@ -117,8 +124,8 @@ const PurchaseList = () => {
       setCodeSent(false);
       setVerifyCode("");
       setSelectedSuppliers([]);
-      setStartDate(null);
-      setEndDate(null);
+
+      setLoading(false);
     }
   };
 
@@ -203,11 +210,18 @@ const PurchaseList = () => {
                   color="primary"
                   className="flex items-center gap-2"
                   onClick={handleSubmit}
+                  disabled={loading}
                 >
-                  <FaFileInvoice />
-                  {step === 1
-                    ? t("nav.advanced_delete.submit")
-                    : t("nav.advanced_delete.verify_submit")}
+                  {loading ? (
+                    <Spinner className="size-4 border-2" />
+                  ) : (
+                    <>
+                      <FaFileInvoice />
+                      {step === 1
+                        ? t("nav.advanced_delete.submit")
+                        : t("nav.advanced_delete.verify_submit")}
+                    </>
+                  )}
                 </Button>
               </div>
             </Box>
