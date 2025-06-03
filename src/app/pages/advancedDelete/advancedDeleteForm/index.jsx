@@ -11,6 +11,7 @@ import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "app/contexts/auth/context";
 import { toast } from "sonner";
+import { clsx } from "clsx";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -71,7 +72,7 @@ const PurchaseList = () => {
         setStep(2);
         setCodeSent(true);
       } else {
-        alert(result.message || "Failed to send verification code.");
+        toast.error(t("nav.advanced_delete.send_verify_code_failed"));
       }
     } else if (step === 2) {
       const supplierIDs = selectedSuppliers.length
@@ -98,11 +99,11 @@ const PurchaseList = () => {
       const result = await res.json();
 
       if (!result.success) {
-        toast.error(result.message || "Verification failed");
+        toast.error(t("nav.advanced_delete.verify_failed"));
         return;
       }
 
-      toast.success("Deletion completed successfully!");
+      toast.success(t("nav.advanced_delete.delete_complete"));
       setStep(1);
       setCodeSent(false);
       setVerifyCode("");
@@ -150,32 +151,41 @@ const PurchaseList = () => {
                 }}
               />
 
-              <Select
-                mode="multiple"
-                size="middle"
-                showSearch
-                placeholder={t("nav.select_supplier")}
-                style={{
-                  height: "38px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                options={suppliers}
-                value={selectedSuppliers}
-                onChange={(values) => setSelectedSuppliers(values)}
-                filterOption={(input, option) =>
-                  (option?.label ?? "")
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
-              />
+              <div className={clsx("input-root")}>
+                <label htmlFor="supplier" className={clsx("input-label")}>
+                  <span className={clsx("input-label")}>
+                    {t("nav.supplier")}
+                  </span>
+                </label>
+                <Select
+                  id="supplier"
+                  mode="multiple"
+                  size="middle"
+                  showSearch
+                  placeholder={t("nav.select_supplier")}
+                  style={{
+                    height: "38px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  options={suppliers}
+                  value={selectedSuppliers}
+                  onChange={(values) => setSelectedSuppliers(values)}
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                />
+              </div>
 
               {codeSent && step === 2 && (
                 <Input
                   type="text"
+                  label={t("nav.advanced_delete.verify_code")}
                   value={verifyCode}
                   onChange={(e) => setVerifyCode(e.target.value)}
-                  placeholder="Enter verification code"
+                  placeholder={t("nav.advanced_delete.enter_verify_code")}
                 />
               )}
 

@@ -408,7 +408,13 @@
     },
     "advanced_delete": {
       "advanced_delete": "Eliminación avanzada",
-      "submit": "Entregar"
+      "submit": "Entregar",
+      "verify_submit": "Verificar Entrega",
+      "enter_verify_code": "Introduce el código de verificación",
+      "verify_code": "Código de verificación",
+      "delete_complete": "Eliminación completada correctamente.",
+      "verify_failed": "Verificación fallida",
+      "send_verify_code_failed": "No se pudo enviar el código de verificación."
     },
     "company": "Empresa",
     "company_fields": {

@@ -409,7 +409,13 @@
     },
     "advanced_delete": {
       "advanced_delete": "Advanced Delete",
-      "submit": "Submit"
+      "submit": "Submit",
+      "verify_submit": "Verify Submit",
+      "enter_verify_code": "Enter verification code",
+      "verify_code": "Verify Code",
+      "delete_complete": "Deletion completed successfully!",
+      "verify_failed": "Verification failed",
+      "send_verify_code_failed": "Failed to send verification code."
     },
     "company": "Company",
     "company_fields": {
