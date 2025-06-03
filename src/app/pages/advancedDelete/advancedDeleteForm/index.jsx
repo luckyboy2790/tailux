@@ -58,12 +58,23 @@ const PurchaseList = () => {
 
   const handleSubmit = async () => {
     if (step === 1) {
+      const supplierIDs = selectedSuppliers.length
+        ? selectedSuppliers
+        : suppliers.map((s) => s.value);
+
+      const payload = {
+        email: user?.email,
+        startDate,
+        endDate,
+        suppliers: supplierIDs,
+      };
+
       const res = await fetch(
         `${API_URL}/api/advanced_delete/verify/send-code`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: user?.email }),
+          body: JSON.stringify(payload),
         },
       );
 
