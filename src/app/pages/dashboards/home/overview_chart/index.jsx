@@ -157,7 +157,7 @@ const OverviewChart = ({
         type="area"
         width="100%"
         height="350"
-        className="!w-full"
+        className="!w-full !overflow-hidden"
         options={chartOptions}
       />
     </div>
