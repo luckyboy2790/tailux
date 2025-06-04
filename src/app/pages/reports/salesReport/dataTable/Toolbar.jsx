@@ -10,6 +10,7 @@ import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -117,6 +118,8 @@ function Filters({
 
   const [customer, setCustomer] = useState([]);
 
+  const { user } = useAuthContext();
+
   useEffect(() => {
     const fetchData = async () => {
       const companyResponse = await fetch(
@@ -191,14 +194,16 @@ function Filters({
         />
       )}
 
-      <Select
-        value={companyId || ""}
-        data={company}
-        onChange={(e) => {
-          setCompanyId(e.target.value);
-        }}
-        className="h-8 min-w-30 py-1 text-xs"
-      />
+      {user.role === "admin" && (
+        <Select
+          value={companyId || ""}
+          data={company}
+          onChange={(e) => {
+            setCompanyId(e.target.value);
+          }}
+          className="h-8 min-w-30 py-1 text-xs"
+        />
+      )}
 
       <Select
         value={customerId || ""}

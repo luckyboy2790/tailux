@@ -334,6 +334,8 @@ function Filters({
 
   const { t } = useTranslation();
 
+  const { user } = useAuthContext();
+
   useEffect(() => {
     const fetchData = async () => {
       const companyResponse = await fetch(
@@ -408,14 +410,16 @@ function Filters({
         />
       )}
 
-      <Select
-        value={companyId || ""}
-        data={company}
-        onChange={(e) => {
-          setCompanyId(e.target.value);
-        }}
-        className="h-8 min-w-30 py-1 text-xs"
-      />
+      {user.role === "admin" && (
+        <Select
+          value={companyId || ""}
+          data={company}
+          onChange={(e) => {
+            setCompanyId(e.target.value);
+          }}
+          className="h-8 min-w-30 py-1 text-xs"
+        />
+      )}
 
       <Combobox
         data={customer}

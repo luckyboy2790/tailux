@@ -28,6 +28,7 @@ import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -332,6 +333,8 @@ function Filters({
 
   const [supplier, setSupplier] = useState([]);
 
+  const { user } = useAuthContext();
+
   useEffect(() => {
     const fetchData = async () => {
       const companyResponse = await fetch(
@@ -406,15 +409,17 @@ function Filters({
         />
       )}
 
-      <Select
-        value={companyId || ""}
-        data={company}
-        onChange={(e) => {
-          setCompanyId(e.target.value);
-        }}
-        placeholder={t("nav.all_companies")}
-        className="h-8 min-w-30 py-1 text-xs"
-      />
+      {user.role === "admin" && (
+        <Select
+          value={companyId || ""}
+          data={company}
+          onChange={(e) => {
+            setCompanyId(e.target.value);
+          }}
+          placeholder={t("nav.all_companies")}
+          className="h-8 min-w-30 py-1 text-xs"
+        />
+      )}
 
       <Combobox
         data={supplier}
