@@ -40,8 +40,6 @@ export function StoreModal({ type, row, isOpen, close }) {
     if (type === "edit") {
       const rowData = row.original;
 
-      console.log(rowData);
-
       setData({
         name: rowData?.name,
         company: rowData?.company,

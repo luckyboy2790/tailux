@@ -11,7 +11,7 @@ import { purchaseOrder } from "./purchaseOrder";
 import { received } from "./receivedOrder";
 import { report } from "./report";
 import { getSaleNav } from "./sale";
-import { setting } from "./setting";
+import { getSettingNav } from "./setting";
 
 export const useNavigation = () => {
   const { user } = useAuthContext();
@@ -29,7 +29,7 @@ export const useNavigation = () => {
     received,
     report,
     getPeopleNav(role),
-    setting,
+    getSettingNav(role),
     concurrent_payments,
   ];
 

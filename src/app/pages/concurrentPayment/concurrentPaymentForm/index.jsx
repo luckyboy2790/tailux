@@ -76,6 +76,11 @@ const ConcurrentPage = () => {
       if (supplierId !== "") {
         const response = await fetch(
           `${API_URL}/api/supplier/get_purchases?supplier_id=${supplierId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
         const result = await response.json();
         setTableData(result?.data?.data);
@@ -83,7 +88,7 @@ const ConcurrentPage = () => {
     };
 
     fetchData();
-  }, [supplierId]);
+  }, [supplierId, token]);
 
   const handleSubmit = async () => {
     const purchases = Object.entries(checkedRows)

@@ -8,14 +8,8 @@ const ROOT_PEOPLE = "/setting";
 
 const path = (root, item) => `${root}${item}`;
 
-export const setting = {
-  id: "setting",
-  type: NAV_TYPE_ROOT,
-  path: "/setting",
-  title: "Setting",
-  transKey: "nav.setting.setting",
-  Icon: SettingIcon,
-  childs: [
+export const getSettingNav = (role) => {
+  const childs = [
     {
       id: "setting.company",
       path: path(ROOT_PEOPLE, "/company"),
@@ -32,13 +26,26 @@ export const setting = {
       transKey: "nav.setting.store",
       Icon: StoreIcon,
     },
-    {
+  ];
+
+  if (role === "admin" || role === "user") {
+    childs.push({
       id: "setting.site_status",
       path: path(ROOT_PEOPLE, "/site_status"),
       type: NAV_TYPE_ITEM,
       title: "User",
       transKey: "nav.setting.site_status",
       Icon: SiteSutatusIcon,
-    },
-  ],
+    });
+  }
+
+  return {
+    id: "setting",
+    type: NAV_TYPE_ROOT,
+    path: "/setting",
+    title: "Setting",
+    transKey: "nav.setting.setting",
+    Icon: SettingIcon,
+    childs,
+  };
 };

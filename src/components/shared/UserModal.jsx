@@ -67,8 +67,6 @@ export function UserModal({ type, row, isOpen, close }) {
     if (type === "edit") {
       const rowData = row.original;
 
-      console.log(rowData);
-
       setData({
         username: rowData?.username,
         first_name: rowData?.first_name,

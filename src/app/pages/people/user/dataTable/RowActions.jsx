@@ -72,8 +72,6 @@ export function RowActions({ row, table }) {
     const rowData = row.original;
     if (!rowData) return;
 
-    console.log(rowData);
-
     // Only include specific fields
     const data = [
       {

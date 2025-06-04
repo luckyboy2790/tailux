@@ -41,8 +41,6 @@ export function PreturnModal({ type, row, isOpen, close }) {
     if (type === "edit") {
       const rowData = row.original;
 
-      console.log(rowData);
-
       setData({
         date: dayjs(rowData?.timestamp).format("YYYY-MM-DD"),
         amount: Number(rowData?.amount),
