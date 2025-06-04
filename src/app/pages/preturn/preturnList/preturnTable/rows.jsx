@@ -18,6 +18,7 @@ import { Badge, Tag } from "components/ui";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
 import { orderStatusOptions } from "./data";
+import clsx from "clsx";
 
 // ----------------------------------------------------------------------
 
@@ -29,15 +30,29 @@ export function OrderIdCell({ getValue }) {
   );
 }
 
-export function DateCell({ getValue }) {
+export function DateCell({ getValue, row }) {
   const { locale } = useLocaleContext();
   const timestapms = getValue();
   const date = dayjs(timestapms).locale(locale).format("DD MMM YYYY");
   const time = dayjs(timestapms).locale(locale).format("hh:mm A");
   return (
     <>
-      <p className="font-medium">{date}</p>
-      <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400">{time}</p>
+      <p
+        className={clsx(
+          "font-medium",
+          row.original?.status === 0 && "text-red-700",
+        )}
+      >
+        {date}
+      </p>
+      <p
+        className={clsx(
+          "mt-0.5 text-xs text-gray-400",
+          row.original?.status === 0 ? "text-red-700" : "dark:text-dark-300",
+        )}
+      >
+        {time}
+      </p>
     </>
   );
 }
@@ -92,11 +107,16 @@ export function TypeCell({ row, column, table }) {
   );
 }
 
-export function TotalCell({ getValue }) {
+export function TotalCell({ getValue, row }) {
   const value = Number(getValue());
 
   return (
-    <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+    <p
+      className={clsx(
+        "text-sm-plus",
+        row.original?.status === 0 ? "text-red-600" : "dark:text-dark-100",
+      )}
+    >
       ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
     </p>
   );
@@ -210,10 +230,12 @@ OrderIdCell.propTypes = {
 
 DateCell.propTypes = {
   getValue: PropTypes.func,
+  row: PropTypes.object,
 };
 
 TotalCell.propTypes = {
   getValue: PropTypes.func,
+  row: PropTypes.object,
 };
 
 ProfitCell.propTypes = {
