@@ -5,6 +5,7 @@ import { Avatar, Card } from "components/ui";
 // import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -13,6 +14,10 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
   const [companies, setCompanies] = useState([]);
 
   const [isShowed, setIsShowed] = useState(false);
+
+  const { user } = useAuthContext();
+
+  const role = user?.role;
 
   const handleShow = () => {
     setIsShowed((prev) => !prev);
@@ -56,19 +61,21 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
             </SwapOff>
           </Swap>
         </div>
-        <div className="flex items-center justify-end gap-2">
-          <h2 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
-            {t("nav.setting.company")} :
-          </h2>
-          <Select
-            value={companyId || ""}
-            onChange={(e) => {
-              setCompanyId(e.target.value);
-            }}
-            data={companies}
-            className="w-32"
-          />
-        </div>
+        {role && role === "admin" && (
+          <div className="flex items-center justify-end gap-2">
+            <h2 className="dark:text-dark-50 truncate text-sm font-medium tracking-wide text-gray-800">
+              {t("nav.setting.company")} :
+            </h2>
+            <Select
+              value={companyId || ""}
+              onChange={(e) => {
+                setCompanyId(e.target.value);
+              }}
+              data={companies}
+              className="w-32"
+            />
+          </div>
+        )}
       </div>
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
         <Card className="flex justify-between p-5">
