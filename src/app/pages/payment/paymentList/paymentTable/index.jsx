@@ -26,6 +26,7 @@ import FileNotFound from "assets/emptyIcon";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -38,9 +39,13 @@ export default function PaymentTable() {
 
   const [cookies] = useCookies(["authToken"]);
 
+  const { user } = useAuthContext();
+
+  const role = user.role;
+
   const token = cookies.authToken;
 
-  const columns = getColumns(t);
+  const columns = getColumns(t, role);
 
   const [orders, setOrders] = useState([]);
 
