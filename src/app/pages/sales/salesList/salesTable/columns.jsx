@@ -16,6 +16,7 @@ import {
   ProfitCell,
   TotalCell,
 } from "./rows";
+import clsx from "clsx";
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +45,14 @@ export const useColumns = (t) => {
       header: t("nav.table_fields.reference_no"),
       cell: (props) => {
         return (
-          <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          <p
+            className={clsx(
+              "text-sm-plus font-medium",
+              props.row.original?.status === 1
+                ? "dark:text-dark-100 text-gray-800"
+                : "text-red-500",
+            )}
+          >
             {props.row.original?.reference_no}
           </p>
         );
@@ -80,7 +88,12 @@ export const useColumns = (t) => {
       header: t("nav.table_fields.balance"),
       cell: (props) => (
         <p
-          className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
+          className={clsx(
+            "text-sm-plus font-medium",
+            props.row.original?.status === 0
+              ? "text-red-500"
+              : "dark:text-dark-100 text-gray-800",
+          )}
         >
           {(() => {
             const diff =
