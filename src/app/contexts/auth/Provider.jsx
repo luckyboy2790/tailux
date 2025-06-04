@@ -279,6 +279,16 @@ export function AuthProvider({ children }) {
     }
   };
 
+  useEffect(() => {
+    if (state.errorMessage) {
+      const timer = setTimeout(() => {
+        dispatch({ type: "LOGIN_ERROR", payload: { errorMessage: null } });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [state.errorMessage]);
+
   if (!children) {
     return null;
   }

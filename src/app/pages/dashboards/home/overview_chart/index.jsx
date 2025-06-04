@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useThemeContext } from "app/contexts/theme/context";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { format, parseISO } from "date-fns";
+import dayjs from "dayjs";
 
 const options = {
   chart: {
@@ -112,7 +113,7 @@ const OverviewChart = ({
 
           const date = new Date(`${currentYear}-${month}-${day}`);
 
-          return date.toISOString().split("T")[0] + "T01:00:00";
+          return dayjs(date).format("YYYY-MM-DD") + "T01:00:00";
         }) || [],
     },
     colors: [primaryColorScheme[500], "#ffba1a"],
