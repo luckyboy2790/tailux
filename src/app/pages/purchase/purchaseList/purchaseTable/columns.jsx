@@ -1,6 +1,8 @@
 // Import Dependencies
 import { createColumnHelper } from "@tanstack/react-table";
 
+import clsx from "clsx";
+
 // Local Imports
 import { RowActions } from "./RowActions";
 import {
@@ -40,7 +42,14 @@ export const getColumns = (t) => [
     label: t("nav.table_fields.reference_no"),
     header: t("nav.table_fields.reference_no"),
     cell: (props) => (
-      <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+      <p
+        className={clsx(
+          "text-sm-plus",
+          props.row.original?.status === 0
+            ? "text-red-600"
+            : "dark:text-dark-100 font-medium text-gray-800",
+        )}
+      >
         {props.row.original?.reference_no}
       </p>
     ),
@@ -83,9 +92,24 @@ export const getColumns = (t) => [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       });
+      // return (
+      //   <p
+      //     className={clsx(
+      //       "text-sm-plus",
+      //       balance < 0 ? "text-red-600" : "dark:text-dark-100 font-medium text-gray-800",
+      //     )}
+      //   >
+      //     {`${balance < 0 ? "-" : ""}$${formatted}`}
+      //   </p>
+      // );
       return (
         <p
-          className={`text-sm-plus ${balance < 0 ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
+          className={clsx(
+            "text-sm-plus",
+            props.row.original?.status === 0
+              ? "text-red-600"
+              : "dark:text-dark-100 font-medium text-gray-800",
+          )}
         >
           {`${balance < 0 ? "-" : ""}$${formatted}`}
         </p>

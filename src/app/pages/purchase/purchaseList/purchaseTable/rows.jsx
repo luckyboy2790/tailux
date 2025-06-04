@@ -19,6 +19,8 @@ import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
 import { getOrderStatusOptions } from "./data";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
+import { ClockIcon } from "@heroicons/react/24/outline";
 
 // ----------------------------------------------------------------------
 
@@ -30,20 +32,34 @@ export function OrderIdCell({ getValue }) {
   );
 }
 
-export function DateCell({ getValue }) {
+export function DateCell({ getValue, row }) {
   const { locale } = useLocaleContext();
   const timestapms = getValue();
   const date = dayjs(timestapms).locale(locale).format("DD MMM YYYY");
   const time = dayjs(timestapms).locale(locale).format("hh:mm A");
   return (
     <>
-      <p className="font-medium">{date}</p>
-      <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400">{time}</p>
+      <p
+        className={clsx(
+          "font-medium",
+          row.original?.status === 0 && "text-red-700",
+        )}
+      >
+        {date}
+      </p>
+      <p
+        className={clsx(
+          "mt-0.5 text-xs text-gray-400",
+          row.original?.status === 0 ? "text-red-700" : "dark:text-dark-300",
+        )}
+      >
+        {time}
+      </p>
     </>
   );
 }
 
-export function CustomerCell({ getValue, column, table }) {
+export function CustomerCell({ getValue, column, table, row }) {
   const globalQuery = ensureString(table.getState().globalFilter);
   const columnQuery = ensureString(column.getFilterValue());
 
@@ -51,18 +67,28 @@ export function CustomerCell({ getValue, column, table }) {
 
   return (
     <div className="flex items-center space-x-4">
-      <span className="dark:text-dark-100 font-medium text-gray-800">
+      <span
+        className={clsx(
+          "font-medium text-gray-800",
+          row.original?.status === 0 ? "text-red-600" : "dark:text-dark-100",
+        )}
+      >
         <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
       </span>
     </div>
   );
 }
 
-export function TotalCell({ getValue }) {
+export function TotalCell({ getValue, row }) {
   const value = Number(getValue());
 
   return (
-    <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+    <p
+      className={clsx(
+        "text-sm-plus",
+        row.original?.status === 0 ? "text-red-600" : "dark:text-dark-100",
+      )}
+    >
       {`${value < 0 ? "-" : ""}$${Math.abs(Number(value)).toLocaleString()}`}
     </p>
   );
@@ -73,7 +99,12 @@ export function ProfitCell({ getValue, row }) {
 
   return (
     <div className="flex items-center space-x-2">
-      <p className="dark:text-dark-100 text-gray-800">
+      <p
+        className={clsx(
+          "text-gray-800",
+          row.original?.status === 0 ? "text-red-600" : "dark:text-dark-100",
+        )}
+      >
         ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
@@ -89,6 +120,8 @@ export function ProfitCell({ getValue, row }) {
 }
 
 export function OrderStatusCell({ getValue, row, column, table }) {
+  console.log(row.original);
+
   const val = getValue();
 
   const { t } = useTranslation();
@@ -114,52 +147,50 @@ export function OrderStatusCell({ getValue, row, column, table }) {
   };
 
   return (
-    <Listbox onChange={handleChangeStatus} value={val}>
-      <ListboxButton
-        as={Tag}
-        component="button"
-        color={option.color}
-        className="cursor-pointer gap-1.5"
-      >
-        {option.icon && <option.icon className="h-4 w-4" />}
+    <div className="flex flex-col gap-1">
+      <Listbox onChange={handleChangeStatus} value={val}>
+        <ListboxButton
+          as={Tag}
+          component="button"
+          color={option.color}
+          className="cursor-pointer gap-1.5"
+        >
+          {option.icon && <option.icon className="h-4 w-4" />}
 
-        <span>{option.label}</span>
-      </ListboxButton>
-      {/* <Transition
-        as={ListboxOptions}
-        enter="transition ease-out"
-        enterFrom="opacity-0 translate-y-2"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-2"
-        anchor={{ to: "bottom start", gap: "8px" }}
-        className="text-xs-plus shadow-soft dark:border-dark-500 dark:bg-dark-750 z-100 max-h-60 w-40 overflow-auto rounded-lg border border-gray-300 bg-white py-1 capitalize outline-hidden focus-visible:outline-hidden dark:shadow-none"
-      >
-        {orderStatusOptions.map((item) => (
-          <ListboxOption
-            key={item.value}
-            value={item.value}
-            className={({ focus }) =>
-              clsx(
-                "dark:text-dark-100 relative flex cursor-pointer items-center justify-between space-x-2 px-3 py-2 text-gray-800 outline-hidden transition-colors select-none",
-                focus && "dark:bg-dark-600 bg-gray-100",
-              )
-            }
+          <span>{option.label}</span>
+        </ListboxButton>
+      </Listbox>
+
+      {row.original?.payments.filter((i) => i.status === 0).length > 0 && (
+        <Listbox onChange={handleChangeStatus} value={val}>
+          <ListboxButton
+            as={Tag}
+            component="button"
+            color="warning"
+            className="cursor-pointer gap-1.5"
           >
-            {({ selected }) => (
-              <div className="flex w-full items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
-                  {item.icon && <item.icon className="size-4.5 stroke-1" />}
-                  <span className="block truncate">{item.label}</span>
-                </div>
-                {selected && <CheckIcon className="-mr-1 size-4.5 stroke-1" />}
-              </div>
-            )}
-          </ListboxOption>
-        ))}
-      </Transition> */}
-    </Listbox>
+            <ClockIcon className="h-4 w-4" />
+
+            <span>{t("nav.purchase.p_payment")}</span>
+          </ListboxButton>
+        </Listbox>
+      )}
+
+      {row.original?.preturns.filter((i) => i.status === 0).length > 0 && (
+        <Listbox onChange={handleChangeStatus} value={val}>
+          <ListboxButton
+            as={Tag}
+            component="button"
+            color="warning"
+            className="cursor-pointer gap-1.5"
+          >
+            <ClockIcon className="h-4 w-4" />
+
+            <span>{t("nav.purchase.p_return")}</span>
+          </ListboxButton>
+        </Listbox>
+      )}
+    </div>
   );
 }
 
@@ -177,14 +208,17 @@ export function AddressCell({ getValue, column, table }) {
 
 OrderIdCell.propTypes = {
   getValue: PropTypes.func,
+  row: PropTypes.object,
 };
 
 DateCell.propTypes = {
   getValue: PropTypes.func,
+  row: PropTypes.object,
 };
 
 TotalCell.propTypes = {
   getValue: PropTypes.func,
+  row: PropTypes.object,
 };
 
 ProfitCell.propTypes = {

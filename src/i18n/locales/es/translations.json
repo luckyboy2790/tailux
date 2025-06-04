@@ -70,6 +70,8 @@
       "list": "Lista",
       "received_order": "Pedidos recibidos",
       "purchase_date_range": "Rango de fechas de compra",
+      "p_payment": "P-Pendiente",
+      "p_return": "D-Pendiente",
       "confirmDelete": {
         "pending": {
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
