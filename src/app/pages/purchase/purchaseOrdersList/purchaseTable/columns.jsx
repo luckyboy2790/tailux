@@ -60,35 +60,30 @@ export const columns = [
   columnHelper.accessor((row) => row?.grand_total, {
     id: "total",
     label: "Total",
-    header: "Grand Total",
+    header: "Total Amount",
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.paid_amount, {
-    id: "paid",
-    label: "Paid",
-    header: "Paid",
+  columnHelper.accessor((row) => row?.received_amount, {
+    id: "received",
+    label: "Received",
+    header: "Received Amount",
     cell: ProfitCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
+  columnHelper.accessor((row) => row?.grand_total - row?.received_amount, {
     id: "balance",
     label: "Balance",
     header: "Balance",
     cell: (props) => (
       <p
-        className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
+        className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.received_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
       >
         $
-        {(
-          (props.row.original?.grand_total || 0) -
-          (props.row.original?.paid_amount || 0)
-        ).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
+        {(props.row.original?.grand_total || 0) -
+          (props.row.original?.received_amount || 0)}
       </p>
     ),
     filterFn: "inNumberRange",

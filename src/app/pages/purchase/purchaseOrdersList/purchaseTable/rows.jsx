@@ -51,7 +51,7 @@ export function CustomerCell({ getValue, column, table }) {
   return (
     <div className="flex items-center space-x-4">
       <span className="dark:text-dark-100 font-medium text-gray-800">
-        <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
+        <Highlight query={[globalQuery, columnQuery]}>{name || ""}</Highlight>
       </span>
     </div>
   );
@@ -76,9 +76,11 @@ export function ProfitCell({ getValue, row }) {
         ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {(Number(row.original?.paid_amount) /
-          Number(row.original?.grand_total)) *
-          100}
+        {Math.round(
+          (Number(row.original?.received_amount) /
+            Number(row.original?.grand_total)) *
+            100,
+        )}
         %
       </Badge>
     </div>
@@ -90,12 +92,10 @@ export function OrderStatusCell({ getValue, row, column, table }) {
 
   let purchaseStatus;
 
-  if (val?.paid_amount < val?.grand_total) {
+  if (val?.received_amount === 0) {
     purchaseStatus = "pending";
-  } else if (val?.paid_amount === 0) {
-    purchaseStatus = "partial";
   } else {
-    purchaseStatus = "paid";
+    purchaseStatus = "partial";
   }
 
   const option = orderStatusOptions.find(
