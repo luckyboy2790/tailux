@@ -12,6 +12,7 @@ import { received } from "./receivedOrder";
 import { report } from "./report";
 import { getSaleNav } from "./sale";
 import { getSettingNav } from "./setting";
+import { category } from "./category";
 
 export const useNavigation = () => {
   const { user } = useAuthContext();
@@ -27,6 +28,7 @@ export const useNavigation = () => {
     product,
     purchaseOrder,
     received,
+    category,
     report,
     getPeopleNav(role),
     getSettingNav(role),

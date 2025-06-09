@@ -303,6 +303,29 @@
       "balance": "Balance",
       "action": "Accion"
     },
+    "category": {
+      "category": "Categoria",
+      "category_name": "Nombre",
+      "ordered_quantity": "Cantidad Ordenada",
+      "received_quantity": "Cantidad Recibida",
+      "percentage": "Porcentaje",
+      "add_category": "Agregar Categoria",
+      "edit_category": "Editar Categoria",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "La eliminación de la categoria falló"
+        },
+        "success": {
+          "title": "Categoria Eliminada"
+        }
+      }
+    },
     "report": {
       "report": "Reporte",
       "overview_chart": "Resumen",

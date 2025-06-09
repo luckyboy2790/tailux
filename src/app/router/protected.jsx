@@ -201,6 +201,23 @@ const protectedRoutes = {
           ],
         },
         {
+          path: "category",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/category/list" />,
+            },
+            {
+              path: "list",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/category/categoryList")
+                ).default,
+              }),
+            },
+          ],
+        },
+        {
           path: "report",
           children: [
             {

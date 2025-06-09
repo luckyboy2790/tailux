@@ -303,6 +303,29 @@
       "balance": "Balance",
       "action": "Action"
     },
+    "category": {
+      "category": "Category",
+      "category_name": "Name",
+      "ordered_quantity": "Ordered Quantity",
+      "received_quantity": "Received Quantity",
+      "percentage": "Percentage",
+      "add_category": "Add Category",
+      "edit_category": "Edit Category",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Category Delete Failed"
+        },
+        "success": {
+          "title": "Category Deleted"
+        }
+      }
+    },
     "report": {
       "report": "Report",
       "overview_chart": "Overview Chart",

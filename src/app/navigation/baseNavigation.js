@@ -12,6 +12,7 @@ import PeopleIcon from "assets/dualicons/people.svg?react";
 import SettingIcon from "assets/dualicons/setting_data.svg?react";
 import PaymentIcon from "assets/dualicons/payments.svg?react";
 import AdvancedDeleteIcon from "assets/dualicons/delete.svg?react";
+import { LiaSitemapSolid } from "react-icons/lia";
 
 export const baseNavigation = [
   {
@@ -77,6 +78,14 @@ export const baseNavigation = [
     title: "Received Order",
     transKey: "nav.order.received",
     Icon: ReceiveIcon,
+  },
+  {
+    id: "category",
+    type: NAV_TYPE_ITEM,
+    path: "/category",
+    title: "Category",
+    transKey: "nav.category.category",
+    Icon: LiaSitemapSolid,
   },
   {
     id: "report",
