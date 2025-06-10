@@ -343,15 +343,21 @@ export function OrderItemsTable({ orders, setOrders }) {
     autoResetPageIndex,
   });
 
+  const handleAddRow = () => {
+    if (watch("supplier_id") !== "") {
+      setData((old) => [...old, ...initialData]);
+    } else {
+      toast.error(t("nav.purchase.select_supplier_message"));
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-end">
         <Button
           color="primary"
           className="rounded-full"
-          onClick={() => {
-            setData((old) => [...old, ...initialData]);
-          }}
+          onClick={handleAddRow}
         >
           <PlusIcon className="size-4.5" />
         </Button>

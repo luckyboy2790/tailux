@@ -14,7 +14,7 @@ import {
   // TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 
 // Local Imports
@@ -23,18 +23,13 @@ import { Button } from "components/ui";
 import { OrdersDrawer } from "./OrdersDrawer";
 import { useDisclosure } from "hooks";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
+import { useCookies } from "react-cookie";
+import { toast } from "sonner";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
-
-const confirmMessages = {
-  pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
-  },
-  success: {
-    title: "Order Deleted",
-  },
-};
 
 export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -43,6 +38,23 @@ export function RowActions({ row, table }) {
   const [deleteError, setDeleteError] = useState(false);
 
   const navigate = useNavigate();
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
+  const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t(
+        "nav.purchase.confirmPurchaseOrderDelete.pending.description",
+      ),
+    },
+    success: {
+      title: t("nav.purchase.confirmPurchaseOrderDelete.success.title"),
+    },
+  };
 
   const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
     useDisclosure(false);
@@ -57,15 +69,41 @@ export function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(() => {
+  const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    setTimeout(() => {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+    const response = await fetch(
+      `${API_URL}/api/purchase_order/delete/${row.original?.id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
+
       setConfirmDeleteLoading(false);
-    }, 1000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+
+      closeModal();
+
+      throw new Error("Something went wrong");
+    }
+
+    toast.success(t("nav.purchase.confirmPurchaseOrderDelete.success.title"));
+
+    setDeleteSuccess(true);
+    setConfirmDeleteLoading(false);
+
+    closeModal();
+
+    if (typeof table.options.meta?.refetch === "function") {
+      await table.options.meta.refetch();
+    } else {
+      console.warn("Refetch function not available in table meta.");
+    }
+  };
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 

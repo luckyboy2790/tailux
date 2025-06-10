@@ -7,7 +7,7 @@ import { pendingPurchase } from "./pendingPurchase";
 import { getPeopleNav } from "./people";
 import { product } from "./product";
 import { purchase } from "./purchase";
-import { purchaseOrder } from "./purchaseOrder";
+import { getPurchaseOrder } from "./purchaseOrder";
 import { received } from "./receivedOrder";
 import { report } from "./report";
 import { getSaleNav } from "./sale";
@@ -26,7 +26,7 @@ export const useNavigation = () => {
     pendingPurchase,
     pendingPayment,
     product,
-    purchaseOrder,
+    getPurchaseOrder(role),
     received,
     category,
     report,

@@ -72,6 +72,7 @@
       "purchase_date_range": "Purchase Date Range",
       "p_payment": "P-Payment",
       "p_return": "P-Return",
+      "select_supplier_message": "Please select a supplier",
       "confirmDelete": {
         "pending": {
           "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
