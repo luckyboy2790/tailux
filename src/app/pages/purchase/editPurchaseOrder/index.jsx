@@ -214,7 +214,7 @@ const AddPurchaseOrder = () => {
 
       if (!res.ok) throw new Error(result.message || "Something went wrong");
 
-      navigate("/purchase-order/list");
+      navigate("/purchase-order/list"); 
     } catch (error) {
       console.error("Error submitting form:", error.message);
     } finally {
