@@ -193,10 +193,54 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     <Td>{tr?.image}</Td>
                     <Td>{tr?.category?.name}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                      {Number(tr?.cost * tr?.quantity - tr?.discount)}
+                      {tr?.discount_string.includes("%")
+                        ? Number(
+                            (
+                              (tr?.cost -
+                                tr?.cost *
+                                  (Number(
+                                    tr?.discount_string.replace("%", ""),
+                                  ) /
+                                    100)) *
+                              Number(tr?.quantity)
+                            ).toFixed(1),
+                          )
+                        : Number(
+                            (
+                              (tr?.cost - Number(tr?.discount_string)) *
+                              Number(tr?.quantity)
+                            ).toFixed(1),
+                          )}
                     </Td>
                   </Tr>
                 ))}
+                <Tr>
+                  <Td colSpan={4} className="text-end">
+                    <p className="font-semibold">Total:</p>
+                  </Td>
+
+                  <Td colSpan={3}>
+                    {row.original?.orders.reduce(
+                      (sum, tr) => sum + tr?.quantity,
+                      0,
+                    )}
+                  </Td>
+
+                  <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
+                    {row.original?.orders
+                      .reduce((sum, tr) => {
+                        const discountValue = tr?.discount_string.includes("%")
+                          ? tr?.cost *
+                            (Number(tr?.discount_string.replace("%", "")) / 100)
+                          : Number(tr?.discount_string);
+
+                        const subtotal =
+                          (tr?.cost - discountValue) * tr?.quantity;
+                        return sum + subtotal;
+                      }, 0)
+                      .toFixed(1)}
+                  </Td>
+                </Tr>
               </TBody>
             </Table>
           </div>
