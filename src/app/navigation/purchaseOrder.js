@@ -21,5 +21,13 @@ export const purchaseOrder = {
       transKey: "nav.purchase.order",
       Icon: PurchaseOrderIcon,
     },
+    {
+      id: "purchase.order.add",
+      path: path(ROOT_DASHBOARDS, "/add"),
+      type: NAV_TYPE_ITEM,
+      title: "Add Order Purchase",
+      transKey: "nav.purchase.add_purchase_order",
+      Icon: PurchaseOrderIcon,
+    },
   ],
 };

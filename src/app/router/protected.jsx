@@ -181,6 +181,13 @@ const protectedRoutes = {
                 ).default,
               }),
             },
+            {
+              path: "add",
+              lazy: async () => ({
+                Component: (await import("app/pages/purchase/addPurchaseOrder"))
+                  .default,
+              }),
+            },
           ],
         },
         {
@@ -210,9 +217,8 @@ const protectedRoutes = {
             {
               path: "list",
               lazy: async () => ({
-                Component: (
-                  await import("app/pages/category/categoryList")
-                ).default,
+                Component: (await import("app/pages/category/categoryList"))
+                  .default,
               }),
             },
           ],

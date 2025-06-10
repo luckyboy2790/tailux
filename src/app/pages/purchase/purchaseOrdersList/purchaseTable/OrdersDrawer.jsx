@@ -27,6 +27,8 @@ import { orderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { Image } from "antd";
 
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
+
 // ----------------------------------------------------------------------
 
 const cols = [
@@ -47,7 +49,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
   const val = row.original;
 
-  if (val?.received_amount === 0) {
+  if (Number(val?.received_amount) === 0) {
     orderStatus = "pending";
   } else {
     orderStatus = "partial";
@@ -142,11 +144,12 @@ export function OrdersDrawer({ isOpen, close, row }) {
             <div className="flex flex-col">
               <div className="mb-1.5 font-semibold">Attachments:</div>
 
-              <div>
-                {row.original?.images &&
-                  row.original?.images.map((item, key) => (
-                    <Image key={key} width={100} height={100} src={item.path} />
-                  ))}
+              <div className="flex w-full gap-4 overflow-x-auto">
+                {row.original?.attachments?.map((item, key) => (
+                  <div className="w-25" key={key}>
+                    <Image width={100} height={100} src={`${IMG_URL}${item}`} />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -190,7 +193,19 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     <Td>{tr?.cost}</Td>
                     <Td>{tr?.discount_string}</Td>
                     <Td>{tr?.quantity}</Td>
-                    <Td>{tr?.image}</Td>
+                    <Td>
+                      <div className="gap-2">
+                        {tr?.images.length &&
+                          tr?.images.map((item, key) => (
+                            <Image
+                              key={key}
+                              width={30}
+                              height={30}
+                              src={`${IMG_URL}${item}`}
+                            />
+                          ))}
+                      </div>
+                    </Td>
                     <Td>{tr?.category?.name}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                       {tr?.discount_string.includes("%")

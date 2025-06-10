@@ -92,7 +92,7 @@ export function OrderStatusCell({ getValue, row, column, table }) {
 
   let purchaseStatus;
 
-  if (val?.received_amount === 0) {
+  if (Number(val?.received_amount) === 0) {
     purchaseStatus = "pending";
   } else {
     purchaseStatus = "partial";

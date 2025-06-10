@@ -94,6 +94,32 @@
         "success": {
           "title": "Compra Aprobada"
         }
+      },
+      "add_purchase_order": "Agregar Orden de Compra",
+      "image": "Imagen",
+      "category": "Categoria",
+      "confirmPurchaseOrderDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "Orden de Compra Eliminada"
+        },
+        "success": {
+          "title": "Orden de Compra Eliminada"
+        }
+      },
+      "confirmPurchaseOrderApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "Orden de Compra Aprobada"
+        },
+        "success": {
+          "title": "Orden de Compra Aprobada"
+        }
       }
     },
     "user": {
@@ -594,7 +620,8 @@
       "select_customer": "Seleccionar Cliente",
       "select_product": "Seleccionar Producto",
       "select_company": "Seleccionar Empresa",
-      "select_time": "Seleccionar Tiempo"
+      "select_time": "Seleccionar Tiempo",
+      "select_category": "Seleccionar Categoria"
     },
     "confirm_message": {
       "sure": "¿Estás seguro?",
