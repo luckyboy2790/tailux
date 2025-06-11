@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { Combobox } from "components/shared/form/Combobox";
 import { CoverImageUpload } from "./CoverImageUpload";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -194,7 +195,7 @@ const EditableDatePicker = ({
   );
 };
 
-export function OrderItemsTable({ orders, setOrders }) {
+export function OrderItemsTable({ orders, setOrders, watch }) {
   const { t } = useTranslation();
 
   const defaultColumns = useMemo(
@@ -354,11 +355,7 @@ export function OrderItemsTable({ orders, setOrders }) {
   return (
     <div>
       <div className="flex items-center justify-end">
-        <Button
-          color="primary"
-          className="rounded-full"
-          onClick={handleAddRow}
-        >
+        <Button color="primary" className="rounded-full" onClick={handleAddRow}>
           <PlusIcon className="size-4.5" />
         </Button>
       </div>
