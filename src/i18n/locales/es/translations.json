@@ -125,6 +125,29 @@
         "success": {
           "title": "Orden de Compra Aprobada"
         }
+      },
+      "confirmReceivedPurchaseOrderDelete": {
+        "pending": {
+          "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
+        },
+        "failed": {
+          "title": "Orden de Compra Eliminada"
+        },
+        "success": {
+          "title": "Orden de Compra Eliminada"
+        }
+      },
+      "confirmReceivedPurchaseOrderApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Aprobar"
+        },
+        "failed": {
+          "title": "Orden de Compra Aprobada"
+        },
+        "success": {
+          "title": "Orden de Compra Aprobada"
+        }
       }
     },
     "user": {

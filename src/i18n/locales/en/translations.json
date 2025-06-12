@@ -125,6 +125,29 @@
         "success": {
           "title": "Purchase Order Approved"
         }
+      },
+      "confirmReceivedPurchaseOrderDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
+        },
+        "failed": {
+          "title": "Purchase Order Delete Failed"
+        },
+        "success": {
+          "title": "Purchase Order Deleted"
+        }
+      },
+      "confirmReceivedPurchaseOrderApprove": {
+        "pending": {
+          "description": "",
+          "actionText": "Approve"
+        },
+        "failed": {
+          "title": "Purchase Order Approve Failed"
+        },
+        "success": {
+          "title": "Purchase Order Approved"
+        }
       }
     },
     "user": {
