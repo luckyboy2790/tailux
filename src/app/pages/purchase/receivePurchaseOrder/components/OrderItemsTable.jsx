@@ -272,11 +272,13 @@ export function OrderItemsTable({ orders, setOrders }) {
             }
           }
 
-          const subTotal = (cost - discountAmount) * qty;
+          const subTotal = (cost - discountAmount).toFixed() * qty;
+
+          console.log(subTotal);
 
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{subTotal.toFixed(1)}</span>
+              <span>{subTotal}</span>
             </div>
           );
         },

@@ -8,12 +8,10 @@ import {
   SelectHeader,
 } from "components/shared/table/SelectCheckbox";
 import {
-  //   AddressCell,
   CustomerCell,
+  //   AddressCell,
   DateCell,
   //   OrderIdCell,
-  OrderStatusCell,
-  ProfitCell,
   TotalCell,
 } from "./rows";
 
@@ -29,7 +27,7 @@ export const columns = [
     cell: SelectCell,
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.timestamp, {
+  columnHelper.accessor((row) => row?.purchased_at, {
     id: "timestamp",
     label: "Order Date",
     header: "Date",
@@ -50,6 +48,19 @@ export const columns = [
     },
     enableSorting: false,
   }),
+  columnHelper.accessor((row) => row?.po_reference_no, {
+    id: "po_reference_no",
+    label: "Purchase Order",
+    header: "Purchase Order",
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.po_reference_no}
+        </p>
+      );
+    },
+    enableSorting: false,
+  }),
   columnHelper.accessor((row) => row?.supplier.name, {
     id: "supplier",
     label: "Supplier",
@@ -57,60 +68,27 @@ export const columns = [
     cell: CustomerCell,
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.grand_total, {
-    id: "total",
-    label: "Total",
+  columnHelper.accessor((row) => row?.shipping_carrier, {
+    id: "shipping_carrier",
+    label: "Shipping Carrier",
+    header: "Shipping Carrier",
+    cell: (props) => {
+      return (
+        <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
+          {props.row.original?.shipping_carrier}
+        </p>
+      );
+    },
+    enableSorting: false,
+  }),
+  columnHelper.accessor((row) => row?.total_amount, {
+    id: "total_amount",
+    label: "Grand Total",
     header: "Grand Total",
     cell: TotalCell,
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.paid_amount, {
-    id: "paid",
-    label: "Paid",
-    header: "Paid",
-    cell: ProfitCell,
-    filterFn: "inNumberRange",
-    enableSorting: false,
-  }),
-  columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
-    id: "balance",
-    label: "Balance",
-    header: "Balance",
-    cell: (props) => (
-      <p
-        className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
-      >
-        $
-        {(
-          (props.row.original?.grand_total || 0) -
-          (props.row.original?.paid_amount || 0)
-        ).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
-      </p>
-    ),
-    filterFn: "inNumberRange",
-    enableSorting: false,
-  }),
-  columnHelper.accessor((row) => row, {
-    id: "order_status",
-    label: "Order Status",
-    header: "Order Status",
-    cell: OrderStatusCell,
-    filterFn: "arrIncludesSome",
-    enableSorting: false,
-  }),
-  //   columnHelper.accessor(
-  //     (row) => `${row.shipping_address?.street}, ${row.shipping_address?.line}`,
-  //     {
-  //       id: "address",
-  //       label: "Address",
-  //       header: "Address",
-  //       cell: AddressCell,
-  //     },
-  //   ),
   columnHelper.display({
     id: "actions",
     label: "Row Actions",

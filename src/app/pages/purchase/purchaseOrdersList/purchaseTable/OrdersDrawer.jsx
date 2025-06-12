@@ -211,20 +211,15 @@ export function OrdersDrawer({ isOpen, close, row }) {
                       {tr?.discount_string.includes("%")
                         ? Number(
                             (
-                              (tr?.cost -
-                                tr?.cost *
-                                  (Number(
-                                    tr?.discount_string.replace("%", ""),
-                                  ) /
-                                    100)) *
-                              Number(tr?.quantity)
-                            ).toFixed(1),
+                              tr?.cost -
+                              tr?.cost *
+                                (Number(tr?.discount_string.replace("%", "")) /
+                                  100)
+                            ).toFixed() * Number(tr?.quantity),
                           )
                         : Number(
-                            (
-                              (tr?.cost - Number(tr?.discount_string)) *
-                              Number(tr?.quantity)
-                            ).toFixed(1),
+                            (tr?.cost - Number(tr?.discount_string)).toFixed() *
+                              Number(tr?.quantity),
                           )}
                     </Td>
                   </Tr>
@@ -242,18 +237,16 @@ export function OrdersDrawer({ isOpen, close, row }) {
                   </Td>
 
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.orders
-                      .reduce((sum, tr) => {
-                        const discountValue = tr?.discount_string.includes("%")
-                          ? tr?.cost *
-                            (Number(tr?.discount_string.replace("%", "")) / 100)
-                          : Number(tr?.discount_string);
+                    {row.original?.orders.reduce((sum, tr) => {
+                      const discountValue = tr?.discount_string.includes("%")
+                        ? tr?.cost *
+                          (Number(tr?.discount_string.replace("%", "")) / 100)
+                        : Number(tr?.discount_string);
 
-                        const subtotal =
-                          (tr?.cost - discountValue) * tr?.quantity;
-                        return sum + subtotal;
-                      }, 0)
-                      .toFixed(1)}
+                      const subtotal =
+                        (tr?.cost - discountValue).toFixed() * tr?.quantity;
+                      return sum + subtotal;
+                    }, 0)}
                   </Td>
                 </Tr>
               </TBody>

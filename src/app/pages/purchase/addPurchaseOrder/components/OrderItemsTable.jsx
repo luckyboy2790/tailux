@@ -280,7 +280,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
 
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{subTotal.toFixed(1)}</span>
+              <span>{subTotal.toFixed()}</span>
             </div>
           );
         },

@@ -140,25 +140,23 @@ const AddPurchaseOrder = () => {
             category: o.category,
           })),
       ),
-      total_amount: orders
-        .reduce((sum, o) => {
-          const cost = Number(o.product_cost) || 0;
-          const qty = Number(o.receive) || 0;
-          const discount = o.discount || 0;
+      total_amount: orders.reduce((sum, o) => {
+        const cost = Number(o.product_cost) || 0;
+        const qty = Number(o.receive) || 0;
+        const discount = o.discount || 0;
 
-          let discountAmount = 0;
-          if (typeof discount === "string" && discount.trim().endsWith("%")) {
-            const percent = parseFloat(discount.trim().replace("%", ""));
-            if (!isNaN(percent)) discountAmount = (cost * percent) / 100;
-          } else {
-            const flat = Number(discount);
-            if (!isNaN(flat)) discountAmount = flat;
-          }
-          const subtotal = (cost - discountAmount) * qty;
+        let discountAmount = 0;
+        if (typeof discount === "string" && discount.trim().endsWith("%")) {
+          const percent = parseFloat(discount.trim().replace("%", ""));
+          if (!isNaN(percent)) discountAmount = (cost * percent) / 100;
+        } else {
+          const flat = Number(discount);
+          if (!isNaN(flat)) discountAmount = flat;
+        }
+        const subtotal = (cost - discountAmount).toFixed() * qty;
 
-          return sum + subtotal;
-        }, 0)
-        .toFixed(1),
+        return sum + subtotal;
+      }, 0),
       note: formData.note || "",
       status: 1,
     };
@@ -203,7 +201,7 @@ const AddPurchaseOrder = () => {
 
       if (!res.ok) throw new Error(result.message || "Something went wrong");
 
-      navigate("/purchase-order/list");
+      navigate("/received-order/list");
     } catch (error) {
       console.error("Error submitting form:", error.message);
     } finally {
