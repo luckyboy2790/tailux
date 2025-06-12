@@ -196,6 +196,14 @@ const protectedRoutes = {
                 ).default,
               }),
             },
+            {
+              path: "receive/:id",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/purchase/receivePurchaseOrder")
+                ).default,
+              }),
+            },
           ],
         },
         {

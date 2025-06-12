@@ -106,7 +106,18 @@ export default function PurchaseTable() {
 
       const result = await response.json();
 
-      setOrders(result.data.data);
+      if (
+        result?.data?.data?.some((entry) =>
+          entry.orders?.some(
+            (item) => Number(item?.quantity) > Number(item?.received_quantity),
+          ),
+        )
+      ) {
+        setOrders(result.data.data);
+      } else {
+        setOrders([]);
+      }
+
       setTotalCount(result.data.total);
 
       setIsLoading(false);

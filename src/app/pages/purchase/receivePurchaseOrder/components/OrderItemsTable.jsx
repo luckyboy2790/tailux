@@ -1,5 +1,3 @@
-import { PlusIcon } from "@heroicons/react/24/outline";
-import { FaTimes } from "react-icons/fa";
 import { rankItem } from "@tanstack/match-sorter-utils";
 import {
   flexRender,
@@ -12,7 +10,6 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useSkipper } from "utils/react-table/useSkipper";
 import {
-  Button,
   Card,
   Input,
   Table,
@@ -21,26 +18,14 @@ import {
   Th,
   Tr,
   Td,
+  Checkbox,
 } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { Combobox } from "components/shared/form/Combobox";
-import { CoverImageUpload } from "./CoverImageUpload";
-import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-
-const initialData = [
-  {
-    product_name: "",
-    product_cost: 0,
-    quantity: 0,
-    discount: "",
-    image: [],
-    category: "",
-  },
-];
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -53,6 +38,7 @@ const EditableNumberInput = ({
   row: { index },
   column: { id },
   table,
+  row,
 }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -69,6 +55,8 @@ const EditableNumberInput = ({
     <Input
       value={value}
       onChange={(e) => setValue(e.target.value)}
+      max={row?.original?.balance || 0}
+      min={0}
       onBlur={onBlur}
       type="number"
     />
@@ -161,7 +149,6 @@ const EditableSelect = ({
       displayField="label"
       searchFields={["label"]}
       error={value?.value === ""}
-      required
       className="min-w-[180px]"
     />
   );
@@ -196,59 +183,68 @@ const EditableDatePicker = ({
   );
 };
 
-export function OrderItemsTable({ orders, setOrders, watch }) {
+export function OrderItemsTable({ orders, setOrders }) {
   const { t } = useTranslation();
 
   const defaultColumns = useMemo(
     () => [
       {
+        accessorKey: "checked",
+        id: "checked",
+        header: "#",
+        cell: ({ row, table }) => (
+          <Checkbox
+            checked={row.original.checked || false}
+            onChange={(e) =>
+              table.options.meta?.updateData(
+                row.index,
+                "checked",
+                e.target.checked,
+              )
+            }
+          />
+        ),
+      },
+      {
         accessorKey: "product_name",
         id: "product_name",
         header: t("nav.purchase.product_name"),
-        cell: EditableInput,
       },
       {
         accessorKey: "product_cost",
         id: "product_cost",
         header: t("nav.purchase.product_cost"),
-        cell: EditableNumberInput,
-      },
-      {
-        accessorKey: "quantity",
-        id: "quantity",
-        header: t("nav.purchase.quantity"),
-        cell: EditableNumberInput,
       },
       {
         accessorKey: "discount",
         id: "discount",
         header: t("nav.purchase.discount"),
-        cell: EditableInput,
       },
       {
-        accessorKey: "image",
-        id: "image",
-        header: t("nav.purchase.image"),
-        cell: ({ row, column, table }) => {
-          const value = row.getValue(column.id) || [];
-          const handleChange = (newFiles) => {
-            table.options.meta?.updateData(row.index, column.id, newFiles);
-          };
-
-          return (
-            <CoverImageUpload
-              value={value}
-              onChange={handleChange}
-              className="max-w-xs"
-            />
-          );
-        },
+        accessorKey: "quantity",
+        id: "quantity",
+        header: t("nav.purchase.quantity"),
+      },
+      {
+        accessorKey: "receive_quantity",
+        id: "receive_quantity",
+        header: t("nav.purchase.receive_quantity"),
+      },
+      {
+        accessorKey: "balance",
+        id: "balance",
+        header: t("nav.purchase.balance"),
+      },
+      {
+        accessorKey: "receive",
+        id: "receive",
+        header: t("nav.purchase.receive"),
+        cell: EditableNumberInput,
       },
       {
         accessorKey: "category",
         id: "category",
         header: t("nav.purchase.category"),
-        cell: EditableSelect,
       },
       {
         accessorKey: "sub_total",
@@ -256,7 +252,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
         header: t("nav.purchase.sub_total"),
         cell: ({ row }) => {
           const cost = Number(row.getValue("product_cost")) || 0;
-          const qty = Number(row.getValue("quantity")) || 0;
+          const qty = Number(row.getValue("receive")) || 0;
           const rawDiscount = row.getValue("discount");
 
           let discountAmount = 0;
@@ -284,23 +280,6 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
             </div>
           );
         },
-      },
-      {
-        accessorKey: "action",
-        id: "action",
-        header: "",
-        cell: ({ row, table }) => (
-          <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-            <Button
-              variant="flat"
-              onClick={() => {
-                table.options.meta?.removeRow(row.index);
-              }}
-            >
-              <FaTimes className="size-4.5" />
-            </Button>
-          </div>
-        ),
       },
     ],
     [t],
@@ -345,21 +324,8 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
     autoResetPageIndex,
   });
 
-  const handleAddRow = () => {
-    if (watch("supplier_id") !== "") {
-      setData((old) => [...old, ...initialData]);
-    } else {
-      toast.error(t("nav.purchase.select_supplier_message"));
-    }
-  };
-
   return (
     <div>
-      <div className="flex items-center justify-end">
-        <Button color="primary" className="rounded-full" onClick={handleAddRow}>
-          <PlusIcon className="size-4.5" />
-        </Button>
-      </div>
       <Card className="mt-3">
         <div className="min-w-full overflow-x-auto">
           <Table hoverable className="w-full text-left rtl:text-right">

@@ -89,8 +89,6 @@ const AddPurchaseOrder = () => {
   const onSubmit = async (formData) => {
     setIsLoading(true);
 
-    console.log(orders);
-
     const payload = {
       id: "",
       date: formData.purchase_date,
@@ -137,8 +135,6 @@ const AddPurchaseOrder = () => {
       note: formData.note || "",
       status: 1,
     };
-
-    console.log(payload);
 
     try {
       if (isLoading) return;

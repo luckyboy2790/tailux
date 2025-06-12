@@ -161,6 +161,7 @@ const EditableSelect = ({
       displayField="label"
       searchFields={["label"]}
       error={value?.value === ""}
+      required
       className="min-w-[180px]"
     />
   );
@@ -279,7 +280,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
 
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{subTotal}</span>
+              <span>{subTotal.toFixed(1)}</span>
             </div>
           );
         },
