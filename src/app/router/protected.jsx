@@ -221,6 +221,14 @@ const protectedRoutes = {
                 ).default,
               }),
             },
+            {
+              path: "edit/:id",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/purchase/editReceivedPurchaseOrder")
+                ).default,
+              }),
+            },
           ],
         },
         {
