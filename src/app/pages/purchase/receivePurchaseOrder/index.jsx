@@ -103,7 +103,7 @@ const AddPurchaseOrder = () => {
     setIsLoading(true);
 
     if (orders.filter((item) => item.checked === true).length <= 0) {
-      toast.error("Please select order items.");
+      toast.error(t("nav.purchase.select_order_item_message"));
 
       setIsLoading(false);
 
@@ -161,8 +161,6 @@ const AddPurchaseOrder = () => {
       status: 1,
     };
 
-    console.log(payload);
-
     try {
       if (isLoading) return;
 
@@ -216,7 +214,7 @@ const AddPurchaseOrder = () => {
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="size-6" />
             <h2 className="dark:text-dark-50 text-xl font-medium text-gray-700">
-              {t("nav.purchase.add_purchase")}
+              {t("nav.purchase.receive_purchase_order")}
             </h2>
           </div>
           <Button

@@ -103,6 +103,8 @@
       },
       "add_purchase_order": "Agregar Orden de Compra",
       "update_purchase_order": "Actualizar Orden de Compra",
+      "receive_purchase_order": "Recibir Orden de Compra",
+      "select_order_item_message": "Seleccione un proveedor",
       "image": "Imagen",
       "category": "Categoria",
       "confirmPurchaseOrderDelete": {

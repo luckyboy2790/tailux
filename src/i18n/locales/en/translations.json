@@ -103,6 +103,8 @@
       },
       "add_purchase_order": "Add Purchase Order",
       "update_purchase_order": "Update Purchase Order",
+      "receive_purchase_order": "Receive Purchase Order",
+      "select_order_item_message": "Please select order items.",
       "image": "Image",
       "category": "Category",
       "confirmPurchaseOrderDelete": {
