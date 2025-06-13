@@ -73,6 +73,7 @@
       "receive_quantity": "Cantidad Recibida",
       "balance": "Balance",
       "receive": "Recibir",
+      "received": "Recibido",
       "shipping_carrier": "Transportista",
       "p_payment": "P-Pendiente",
       "p_return": "D-Pendiente",

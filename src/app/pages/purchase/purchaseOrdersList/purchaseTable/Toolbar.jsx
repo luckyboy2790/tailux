@@ -10,6 +10,7 @@ import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "app/contexts/auth/context";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -85,6 +86,8 @@ export function Toolbar({
 }
 
 function SearchInput({ table }) {
+  const { t } = useTranslation();
+
   return (
     <Input
       value={table.getState().globalFilter}
@@ -94,7 +97,7 @@ function SearchInput({ table }) {
         input: "ring-primary-500/50 h-8 text-xs focus:ring-3",
         root: "shrink-0",
       }}
-      placeholder="Search ID, Customer..."
+      placeholder={t("nav.search_placeholder")}
     />
   );
 }
@@ -115,6 +118,8 @@ function Filters({
 
   const { user } = useAuthContext();
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     const fetchData = async () => {
       const companyResponse = await fetch(
@@ -127,7 +132,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: "All Companies",
+          label: t("nav.all_companies"),
           disabled: false,
         },
         ...(Array.isArray(companyResult?.data) ? companyResult.data : []).map(
@@ -158,7 +163,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: "All Suppliers",
+          label: t("nav.all_suppliers"),
           disabled: false,
         },
         ...(Array.isArray(supplierResult?.data) ? supplierResult.data : []).map(
@@ -182,7 +187,7 @@ function Filters({
       {table.getColumn("timestamp") && (
         <DateFilter
           onChange={onDateRangeChange}
-          title="Purchase Date Range"
+          title={t("nav.purchase.purchase_date_range")}
           config={{
             mode: "range",
           }}

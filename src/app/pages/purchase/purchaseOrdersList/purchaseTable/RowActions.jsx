@@ -24,10 +24,10 @@ import { OrdersDrawer } from "./OrdersDrawer";
 import { useDisclosure } from "hooks";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { toast } from "sonner";
 
-// const API_URL = import.meta.env.VITE_API_BASE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -39,9 +39,9 @@ export function RowActions({ row, table }) {
 
   const navigate = useNavigate();
 
-  // const [cookies] = useCookies(["authToken"]);
+  const [cookies] = useCookies(["authToken"]);
 
-  // const token = cookies.authToken;
+  const token = cookies.authToken;
 
   const { t } = useTranslation();
 
@@ -86,25 +86,25 @@ export function RowActions({ row, table }) {
       return;
     }
 
-    // const response = await fetch(
-    //   `${API_URL}/api/purchase_order/delete/${row.original?.id}`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   },
-    // );
+    const response = await fetch(
+      `${API_URL}/api/purchase_order/delete/${row.original?.id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
 
-    // if (!response.ok) {
-    //   toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
+    if (!response.ok) {
+      toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
 
-    //   setConfirmDeleteLoading(false);
+      setConfirmDeleteLoading(false);
 
-    //   closeModal();
+      closeModal();
 
-    //   throw new Error("Something went wrong");
-    // }
+      throw new Error("Something went wrong");
+    }
 
     toast.success(t("nav.purchase.confirmPurchaseOrderDelete.success.title"));
 
@@ -162,7 +162,7 @@ export function RowActions({ row, table }) {
                       navigate(`/purchase-order/receive/${row.original?.id}`);
                     }}
                   >
-                    <span>Receive</span>
+                    <span>{t("nav.purchase.receive")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -178,7 +178,7 @@ export function RowActions({ row, table }) {
                       navigate(`/purchase-order/edit/${row.original?.id}`);
                     }}
                   >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -191,7 +191,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>

@@ -73,6 +73,7 @@
       "receive_quantity": "Receive Quantity",
       "balance": "Balance",
       "receive": "Receive",
+      "received": "Received",
       "shipping_carrier": "Shipping Carrier",
       "p_payment": "P-Payment",
       "p_return": "P-Return",
