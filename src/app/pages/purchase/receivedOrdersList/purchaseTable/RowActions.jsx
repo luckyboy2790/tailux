@@ -150,7 +150,7 @@ export function RowActions({ row, table }) {
                       navigate(`/received-order/edit/${row.original.id}`)
                     }
                   >
-                    <span>Edit</span>
+                    <span>{t("nav.table_fields.edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -163,7 +163,7 @@ export function RowActions({ row, table }) {
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>Delete</span>
+                    <span>{t("nav.table_fields.delete")}</span>
                   </button>
                 )}
               </MenuItem>

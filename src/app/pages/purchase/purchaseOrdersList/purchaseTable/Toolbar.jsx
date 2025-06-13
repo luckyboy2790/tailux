@@ -149,7 +149,7 @@ function Filters({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -180,7 +180,7 @@ function Filters({
     };
 
     fetchData();
-  }, []);
+  }, [t]);
 
   return (
     <>
