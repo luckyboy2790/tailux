@@ -1,20 +1,7 @@
 // Import Dependencies
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
-import {
-  ArrowUpTrayIcon,
-  PrinterIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import clsx from "clsx";
+import { Transition } from "@headlessui/react";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { Fragment, useState } from "react";
-import { CiViewTable } from "react-icons/ci";
 import PropTypes from "prop-types";
 
 // Local Imports
@@ -42,17 +29,31 @@ export function SelectedRowsActions({ table }) {
     if (selectedRows.length > 0) {
       setDeleteLoading(true);
       await Promise.all(
-        selectedRows.map((row) =>
-          fetch(`${API_URL}/api/purchase_order/delete/${row.original?.id}`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-        ),
+        selectedRows.map((row) => {
+          if (Number(row.original?.received_amount) > 0) {
+            toast.error(
+              `${t(
+                "nav.purchase.confirmPurchaseOrderDelete.failed.impossible_delete",
+              )} ${row.original?.reference_no}`,
+            );
+
+            setDeleteLoading(false);
+          } else {
+            fetch(`${API_URL}/api/purchase_order/delete/${row.original?.id}`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            toast.success(
+              `${t(
+                "nav.purchase.confirmPurchaseOrderDelete.success.title",
+              )} ${row.original?.reference_no}`,
+            );
+          }
+        }),
       );
 
-      toast.success(t("nav.purchase.confirmPurchaseOrderDelete.success.title"));
       setDeleteLoading(false);
 
       if (typeof table.options.meta?.refetch === "function") {
@@ -103,73 +104,6 @@ export function SelectedRowsActions({ table }) {
                 )}
                 <span className="max-sm:hidden">Delete</span>
               </Button>
-              <Button className="text-xs-plus w-7 space-x-1.5 rounded-full px-3 py-1.5 sm:w-auto sm:rounded-sm">
-                <PrinterIcon className="size-4 shrink-0" />
-                <span className="max-sm:hidden">Print</span>
-              </Button>
-              <Menu as="div" className="relative inline-block text-left">
-                <MenuButton
-                  as={Button}
-                  className="text-xs-plus w-7 gap-1.5 rounded-full px-3 py-1.5 sm:w-auto sm:rounded-sm"
-                >
-                  <EllipsisHorizontalIcon className="size-4 shrink-0" />
-                  <span className="max-sm:hidden"> More</span>{" "}
-                </MenuButton>
-                <Transition
-                  as={MenuItems}
-                  enter="transition ease-out"
-                  enterFrom="opacity-0 translate-y-2"
-                  enterTo="opacity-100 translate-y-0"
-                  leave="transition ease-in"
-                  leaveFrom="opacity-100 translate-y-0"
-                  leaveTo="opacity-0 translate-y-2"
-                  className="text-xs-plus shadow-soft dark:border-dark-500 dark:bg-dark-750 dark:text-dark-200 absolute z-100 min-w-[10rem] rounded-lg border border-gray-300 bg-white py-1 text-gray-600 outline-hidden focus-visible:outline-hidden dark:shadow-none"
-                  anchor={{ to: "top end", gap: 6 }}
-                >
-                  <MenuItem>
-                    {({ focus }) => (
-                      <button
-                        className={clsx(
-                          "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                          focus &&
-                            "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                        )}
-                      >
-                        <ArrowUpTrayIcon className="size-4.5" />
-                        <span>Export CVS</span>
-                      </button>
-                    )}
-                  </MenuItem>
-                  <MenuItem>
-                    {({ focus }) => (
-                      <button
-                        className={clsx(
-                          "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                          focus &&
-                            "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                        )}
-                      >
-                        <ArrowUpTrayIcon className="size-4.5" />
-                        <span>Export PDF</span>
-                      </button>
-                    )}
-                  </MenuItem>
-                  <MenuItem>
-                    {({ focus }) => (
-                      <button
-                        className={clsx(
-                          "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                          focus &&
-                            "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                        )}
-                      >
-                        <CiViewTable className="size-4.5" />
-                        <span>Save as view</span>
-                      </button>
-                    )}
-                  </MenuItem>
-                </Transition>
-              </Menu>
             </div>
           </div>
         </div>

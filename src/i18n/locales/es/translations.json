@@ -108,7 +108,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "Orden de Compra Eliminada"
+          "title": "Orden de Compra Eliminada",
+          "impossible_delete": "Orden de Compra cannot be deleted"
         },
         "success": {
           "title": "Orden de Compra Eliminada"
@@ -131,7 +132,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "Orden de Compra Eliminada"
+          "title": "Orden de Compra Eliminada",
+          "impossible_delete": "Orden de Compra cannot be deleted"
         },
         "success": {
           "title": "Orden de Compra Eliminada"
@@ -177,7 +179,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación del usuario falló"
+          "title": "La eliminación del usuario falló",
+          "impossible_delete": "Usuario cannot be deleted"
         },
         "success": {
           "title": "Usuario Eliminado"
@@ -215,7 +218,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación de la devolución falló"
+          "title": "La eliminación de la devolución falló",
+          "impossible_delete": "Devolución cannot be deleted"
         },
         "success": {
           "title": "Devolucion Eliminada"
@@ -251,7 +255,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación de la venta falló"
+          "title": "La eliminación de la venta falló",
+          "impossible_delete": "Venta cannot be deleted"
         },
         "success": {
           "title": "Venta Eliminada"
@@ -295,7 +300,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación del pago falló"
+          "title": "La eliminación del pago falló",
+          "impossible_delete": "Pago cannot be deleted"
         },
         "success": {
           "title": "Pago Eliminado"
@@ -336,7 +342,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación del producto falló"
+          "title": "La eliminación del producto falló",
+          "impossible_delete": "Producto cannot be deleted"
         },
         "success": {
           "title": "Producto Eliminado"
@@ -373,7 +380,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación de la categoria falló"
+          "title": "La eliminación de la categoria falló",
+          "impossible_delete": "Categoria cannot be deleted"
         },
         "success": {
           "title": "Categoria Eliminada"
@@ -422,7 +430,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación del cliente falló"
+          "title": "La eliminación del cliente falló",
+          "impossible_delete": "Cliente cannot be deleted"
         },
         "success": {
           "title": "Cliente Eliminado"
@@ -460,7 +469,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación del proveedor falló"
+          "title": "La eliminación del proveedor falló",
+          "impossible_delete": "Proveedor cannot be deleted"
         },
         "success": {
           "title": "Proveedor Eliminado"
@@ -511,7 +521,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación de la empresa falló"
+          "title": "La eliminación de la empresa falló",
+          "impossible_delete": "Empresa cannot be deleted"
         },
         "success": {
           "title": "Empresa Eliminada"
@@ -532,7 +543,8 @@
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
         },
         "failed": {
-          "title": "La eliminación de la tienda falló"
+          "title": "La eliminación de la tienda falló",
+          "impossible_delete": "Tienda cannot be deleted"
         },
         "success": {
           "title": "Tienda Eliminada"

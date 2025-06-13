@@ -24,10 +24,10 @@ import { OrdersDrawer } from "./OrdersDrawer";
 import { useDisclosure } from "hooks";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import { useCookies } from "react-cookie";
+// import { useCookies } from "react-cookie";
 import { toast } from "sonner";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -39,9 +39,9 @@ export function RowActions({ row, table }) {
 
   const navigate = useNavigate();
 
-  const [cookies] = useCookies(["authToken"]);
+  // const [cookies] = useCookies(["authToken"]);
 
-  const token = cookies.authToken;
+  // const token = cookies.authToken;
 
   const { t } = useTranslation();
 
@@ -71,25 +71,40 @@ export function RowActions({ row, table }) {
 
   const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    const response = await fetch(
-      `${API_URL}/api/purchase_order/delete/${row.original?.id}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    console.log(row.original);
 
-    if (!response.ok) {
-      toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
+    if (Number(row.original?.received_amount) > 0) {
+      toast.error(
+        t("nav.purchase.confirmPurchaseOrderDelete.failed.impossible_delete"),
+      );
 
+      setDeleteSuccess(true);
       setConfirmDeleteLoading(false);
 
       closeModal();
 
-      throw new Error("Something went wrong");
+      return;
     }
+
+    // const response = await fetch(
+    //   `${API_URL}/api/purchase_order/delete/${row.original?.id}`,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   },
+    // );
+
+    // if (!response.ok) {
+    //   toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
+
+    //   setConfirmDeleteLoading(false);
+
+    //   closeModal();
+
+    //   throw new Error("Something went wrong");
+    // }
 
     toast.success(t("nav.purchase.confirmPurchaseOrderDelete.success.title"));
 
