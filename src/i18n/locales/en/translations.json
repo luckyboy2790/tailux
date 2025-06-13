@@ -105,6 +105,7 @@
       "update_purchase_order": "Update Purchase Order",
       "receive_purchase_order": "Receive Purchase Order",
       "select_order_item_message": "Please select order items.",
+      "update_received_purchase_order": "Update Received Purchase",
       "image": "Image",
       "category": "Category",
       "confirmPurchaseOrderDelete": {

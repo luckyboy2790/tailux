@@ -245,7 +245,7 @@ const AddPurchaseOrder = () => {
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="size-6" />
             <h2 className="dark:text-dark-50 text-xl font-medium text-gray-700">
-              {t("nav.purchase.add_purchase")}
+              {t("nav.purchase.update_received_purchase_order")}
             </h2>
           </div>
           <Button
