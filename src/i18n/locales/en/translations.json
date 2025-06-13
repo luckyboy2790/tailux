@@ -102,6 +102,7 @@
         }
       },
       "add_purchase_order": "Add Purchase Order",
+      "update_purchase_order": "Update Purchase Order",
       "image": "Image",
       "category": "Category",
       "confirmPurchaseOrderDelete": {
