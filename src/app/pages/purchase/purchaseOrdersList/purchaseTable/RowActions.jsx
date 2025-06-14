@@ -26,6 +26,7 @@ import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
 import { toast } from "sonner";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -40,6 +41,10 @@ export function RowActions({ row, table }) {
   const navigate = useNavigate();
 
   const [cookies] = useCookies(["authToken"]);
+
+  const { user } = useAuthContext();
+
+  const role = user?.role;
 
   const token = cookies.authToken;
 
@@ -166,22 +171,25 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                    onClick={() => {
-                      navigate(`/purchase-order/edit/${row.original?.id}`);
-                    }}
-                  >
-                    <span>{t("nav.table_fields.edit")}</span>
-                  </button>
-                )}
-              </MenuItem>
+
+              {(role === "user" || role === "secretary") && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                        focus &&
+                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                      )}
+                      onClick={() => {
+                        navigate(`/purchase-order/edit/${row.original?.id}`);
+                      }}
+                    >
+                      <span>{t("nav.table_fields.edit")}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               <MenuItem>
                 {({ focus }) => (
                   <button
