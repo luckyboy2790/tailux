@@ -24,6 +24,7 @@ import { useNavigation } from "app/navigation";
 import { settings } from "app/navigation/settings";
 import { NAV_TYPE_COLLAPSE } from "constants/app.constant";
 import { Highlight } from "components/shared/Highlight";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -80,10 +81,16 @@ export function SearchDialog({ close }) {
 
   const data = flattenNav([...navigation, settings]);
 
+  const { t, i18n } = useTranslation();
+
+  const currentLanguage = i18n.language;
+
+  console.log(currentLanguage);
+
   const { isDark } = useThemeContext();
   const searchRef = useRef(null);
   const { result, query, setQuery } = useFuse(data, {
-    keys: ["title"],
+    keys: ["title", "title_translate"],
     threshold: 0.2,
     matchAllOnEmptyQuery: false,
   });
@@ -99,7 +106,7 @@ export function SearchDialog({ close }) {
         <div className="flex items-center justify-between pr-4 pl-2 rtl:pr-2 rtl:pl-4">
           <Input
             ref={searchRef}
-            placeholder="Search here..."
+            placeholder={t("nav.search_here_placeholder")}
             value={query}
             data-search-item
             onChange={(event) => setQuery(event.target.value)}
@@ -126,7 +133,7 @@ export function SearchDialog({ close }) {
       {result.length === 0 && query !== "" && (
         <div className="flex flex-col overflow-y-auto py-4">
           <h3 className="dark:text-dark-50 px-4 text-gray-800 sm:px-5">
-            No Result Found
+            {t("nav.no_data.title")}
           </h3>
         </div>
       )}
@@ -134,7 +141,7 @@ export function SearchDialog({ close }) {
       {result.length > 0 && (
         <div className="flex flex-col overflow-y-auto py-4">
           <h3 className="dark:text-dark-50 px-4 text-gray-800 sm:px-5">
-            Search Result
+            {t("nav.search.search_result")}
           </h3>
           <div className="space-y-3 px-4 pt-3">
             {result.map(({ item, refIndex }) => (
@@ -154,7 +161,11 @@ export function SearchDialog({ close }) {
               >
                 <div className="min-w-0">
                   <span className="truncate">
-                    <Highlight query={query}>{item.title}</Highlight>
+                    <Highlight query={query}>
+                      {currentLanguage === "es"
+                        ? item.title_translate
+                        : item.title}
+                    </Highlight>
                   </span>
                 </div>
 

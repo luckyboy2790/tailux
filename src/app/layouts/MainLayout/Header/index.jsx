@@ -11,6 +11,7 @@ import { Notifications } from "components/template/Notifications";
 import { LanguageSelector } from "components/template/LaguageSelector";
 import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,8 @@ function SlashIcon(props) {
 export function Header() {
   const { cardSkin } = useThemeContext();
 
+  const { t } = useTranslation();
+
   return (
     <header
       className={clsx(
@@ -60,7 +63,7 @@ export function Header() {
                 <div className="flex items-center gap-2">
                   <MagnifyingGlassIcon className="size-4" />
                   <span className="dark:text-dark-300 text-gray-400">
-                    Search here...
+                    {t("nav.search_here_placeholder")}
                   </span>
                 </div>
                 <SlashIcon />

@@ -594,6 +594,7 @@
     "all_customers": "Todos los clientes",
     "all_products": "Todos los productos",
     "search_placeholder": "Buscar ID, Cliente...",
+    "search_here_placeholder": "Buscar aquí...",
     "table_fields": {
       "row_selection": "Selección de fila",
       "date": "Fecha",
@@ -673,6 +674,11 @@
       "success": "Exito!",
       "delete": "Eliminar",
       "cancel": "Cancelar"
+    },
+    "search": {
+      "search": "Buscar",
+      "search_here_placeholder": "Buscar aquí...",
+      "search_result": "Resultado de la búsqueda"
     },
     "no_data": {
       "title": "No se encontraron resultados",

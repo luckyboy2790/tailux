@@ -10,7 +10,7 @@ export const pendingPurchase = {
   id: "pendingPurchase",
   type: NAV_TYPE_ROOT,
   path: "/pending-data",
-  title: "Pending Purchase",
+  title: "",
   transKey: "nav.purchase.pending",
   Icon: DashboardsIcon,
   childs: [
@@ -19,6 +19,7 @@ export const pendingPurchase = {
       path: path(ROOT_DASHBOARDS, "/purchase"),
       type: NAV_TYPE_ITEM,
       title: "Pending Purchase",
+      title_translate: "Compra pendiente",
       transKey: "nav.purchase.pending",
       Icon: ClockIcon,
     },

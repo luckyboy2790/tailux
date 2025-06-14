@@ -9,7 +9,7 @@ export const category = {
   id: "category",
   type: NAV_TYPE_ROOT,
   path: "/category",
-  title: "Category",
+  title: "",
   transKey: "nav.category.category",
   Icon: LiaSitemapSolid,
   childs: [
@@ -18,6 +18,7 @@ export const category = {
       path: path(ROOT_DASHBOARDS, "/list"),
       type: NAV_TYPE_ITEM,
       title: "Category",
+      title_translate: "Categoria",
       transKey: "nav.category.category",
       Icon: LiaSitemapSolid,
     },

@@ -595,6 +595,7 @@
     "all_customers": "All Customers",
     "all_products": "All Products",
     "search_placeholder": "Search ID, Customer...",
+    "search_here_placeholder": "Search here...",
     "table_fields": {
       "row_selection": "Row Selection",
       "date": "Date",
@@ -674,6 +675,11 @@
       "success": "Success!",
       "delete": "Delete",
       "cancel": "Cancel"
+    },
+    "search": {
+      "search": "Search",
+      "search_here_placeholder": "Search here...",
+      "search_result": "Search Result"
     },
     "no_data": {
       "title": "No results found",

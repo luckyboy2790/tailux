@@ -9,7 +9,7 @@ export const received = {
   id: "order",
   type: NAV_TYPE_ROOT,
   path: "/received-order",
-  title: "Received Order",
+  title: "",
   transKey: "nav.order.received",
   Icon: ReceiveIcon,
   childs: [
@@ -18,6 +18,7 @@ export const received = {
       path: path(ROOT_RECEIVED, "/list"),
       type: NAV_TYPE_ITEM,
       title: "Received Order",
+      title_translate: "Orden recibida",
       transKey: "nav.order.received",
       Icon: ReceiveIcon,
     },

@@ -10,7 +10,7 @@ export const pendingPayment = {
   id: "pendingPayment",
   type: NAV_TYPE_ROOT,
   path: "/payment",
-  title: "Pending Payment",
+  title: "",
   transKey: "nav.payment.pending",
   Icon: DashboardsIcon,
   childs: [
@@ -19,6 +19,7 @@ export const pendingPayment = {
       path: path(ROOT_DASHBOARDS, "/pending"),
       type: NAV_TYPE_ITEM,
       title: "Pending Payment",
+      title_translate: "Pago pendiente",
       transKey: "nav.payment.pending",
       Icon: ClockIcon,
     },

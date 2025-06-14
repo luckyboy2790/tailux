@@ -13,12 +13,15 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { Profile } from "../Profile";
 import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export function Header() {
   const { smAndUp } = useBreakpointsContext();
   const { cardSkin } = useThemeContext();
+
+  const { t } = useTranslation();
 
   return (
     <header
@@ -43,7 +46,7 @@ export function Header() {
                   >
                     <div className="flex items-center gap-2">
                       <MagnifyingGlassIcon className="size-5" />
-                      <span>Search here...</span>
+                      <span>{t("nav.search_here_placeholder")}</span>
                     </div>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

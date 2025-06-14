@@ -9,7 +9,7 @@ export const advanced_delete = {
   id: "advanced_delete",
   type: NAV_TYPE_ROOT,
   path: "/advanced_delete",
-  title: "Advanced Delete",
+  title: "",
   transKey: "nav.advanced_delete.advanced_delete",
   Icon: PaymentIcon,
   childs: [
@@ -17,7 +17,8 @@ export const advanced_delete = {
       id: "advanced_delete.advanced_delete",
       path: path(ROOT_ADVANCED_DELETE, ""),
       type: NAV_TYPE_ITEM,
-      title: "Payment",
+      title: "Advanced Delete",
+      title_translate: "Eliminación avanzada",
       transKey: "nav.advanced_delete.advanced_delete",
       Icon: PaymentIcon,
     },

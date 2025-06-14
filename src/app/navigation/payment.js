@@ -9,7 +9,7 @@ export const concurrent_payments = {
   id: "payments",
   type: NAV_TYPE_ROOT,
   path: "/concurrent_payments",
-  title: "Payments",
+  title: "",
   transKey: "nav.payment.concurrent_payments",
   Icon: PaymentIcon,
   childs: [
@@ -17,7 +17,8 @@ export const concurrent_payments = {
       id: "payments.concurrent_payments",
       path: path(ROOT_PAYMENTS, "/form"),
       type: NAV_TYPE_ITEM,
-      title: "Payment",
+      title: "Concurrent Payment",
+      title_translate: "Pago concurrente",
       transKey: "nav.payment.concurrent_payments",
       Icon: PaymentIcon,
     },

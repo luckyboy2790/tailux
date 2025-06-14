@@ -10,7 +10,7 @@ export const product = {
   id: "product",
   type: NAV_TYPE_ROOT,
   path: "/product",
-  title: "Product",
+  title: "",
   transKey: "nav.product.product",
   Icon: ProductIcon,
   childs: [
@@ -19,6 +19,7 @@ export const product = {
       path: path(ROOT_PRODUCTS, "/list"),
       type: NAV_TYPE_ITEM,
       title: "Product",
+      title_translate: "Producto",
       transKey: "nav.product.product",
       Icon: ProductIcon,
     },

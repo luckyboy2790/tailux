@@ -10,7 +10,7 @@ export const dashboards = {
   id: "dashboards",
   type: NAV_TYPE_ROOT,
   path: "/dashboards/home",
-  title: "Dashboards",
+  title: "",
   transKey: "nav.dashboards.dashboards",
   Icon: DashboardsIcon,
   childs: [
@@ -19,6 +19,7 @@ export const dashboards = {
       path: path(ROOT_DASHBOARDS, "/home"),
       type: NAV_TYPE_ITEM,
       title: "Dashboard",
+      title_translate: "Tablero",
       transKey: "nav.dashboards.dashboards",
       Icon: HomeIcon,
     },
