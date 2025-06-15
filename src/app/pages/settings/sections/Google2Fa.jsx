@@ -38,7 +38,7 @@ export default function General() {
         setQrUrl(result.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        toast.error("Error fetching user data");
+        toast.error(t("nav.settings.google2fa.failed_updating"));
       }
     };
 
@@ -67,17 +67,17 @@ export default function General() {
       dispatch({ type: "UPDATE_USER", payload: { user: result.user } });
     } catch (error) {
       console.error("Error fetching user data:", error);
-      toast.error("Error fetching user data");
+      toast.error(t("nav.settings.google2fa.failed_updating"));
     }
   };
 
   return (
     <div className="w-full max-w-3xl 2xl:max-w-5xl">
       <h5 className="dark:text-dark-50 text-lg font-medium text-gray-800">
-        {t("nav.settings.password")}
+        {t("nav.settings.google2fa.google2fa")}
       </h5>
       <p className="dark:text-dark-200 mt-0.5 text-sm text-balance text-gray-500">
-        {t("nav.settings.password_description")}
+        {t("nav.settings.google2fa.google2fa_description")}
       </p>
       <div className="dark:bg-dark-500 my-5 h-px bg-gray-200" />
       <div className="mt-5 grid grid-cols-1 gap-4 [&_.prefix]:pointer-events-none">
@@ -89,7 +89,7 @@ export default function General() {
               color="primary"
               onClick={handleGenerate}
             >
-              Re-Generate QR Code
+              {t("nav.settings.google2fa.re_generate_qr_code")}
             </Button>
           </>
         ) : (
@@ -98,7 +98,7 @@ export default function General() {
             color="primary"
             onClick={handleGenerate}
           >
-            Enable Google 2FA
+            {t("nav.settings.google2fa.enable_google2fa")}
           </Button>
         )}
       </div>

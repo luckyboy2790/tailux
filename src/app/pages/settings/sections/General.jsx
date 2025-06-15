@@ -10,6 +10,7 @@ import { Avatar, Button, Input, Spinner, Upload } from "components/ui";
 import { useAuthContext } from "app/contexts/auth/context";
 import { useCookies } from "react-cookie";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,6 +34,8 @@ export default function General() {
   const [cookies] = useCookies(["authToken"]);
 
   const token = cookies.authToken;
+
+  const { t } = useTranslation();
 
   const handleSave = async () => {
     if (loading) return;
@@ -74,15 +77,15 @@ export default function General() {
   return (
     <div className="w-full max-w-3xl 2xl:max-w-5xl">
       <h5 className="dark:text-dark-50 text-lg font-medium text-gray-800">
-        General
+        {t("nav.settings.general.general")}
       </h5>
       <p className="dark:text-dark-200 mt-0.5 text-sm text-balance text-gray-500">
-        Update your account settings.
+        {t("nav.settings.general.update_acc_setting")}
       </p>
       <div className="dark:bg-dark-500 my-5 h-px bg-gray-200" />
       <div className="mt-4 flex flex-col space-y-1.5">
         <span className="dark:text-dark-100 text-base font-medium text-gray-800">
-          Avatar
+          {t("nav.settings.general.avatar")}
         </span>
         <Avatar
           size={20}
@@ -124,40 +127,40 @@ export default function General() {
       </div>
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 [&_.prefix]:pointer-events-none">
         <Input
-          placeholder="Username"
-          label="Username"
+          placeholder={t("nav.settings.general.username")}
+          label={t("nav.settings.general.username")}
           className="rounded-xl"
           prefix={<UserIcon className="size-4.5" />}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <Input
-          placeholder="First Name"
-          label="First name"
+          placeholder={t("nav.settings.general.first_name")}
+          label={t("nav.settings.general.first_name")}
           className="rounded-xl"
           prefix={<UserIcon className="size-4.5" />}
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
         <Input
-          placeholder="Last Name"
-          label="Last name"
+          placeholder={t("nav.settings.general.last_name")}
+          label={t("nav.settings.general.last_name")}
           className="rounded-xl"
           prefix={<UserIcon className="size-4.5" />}
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
         <Input
-          placeholder="Enter Email"
-          label="Email"
+          placeholder={t("nav.settings.general.email")}
+          label={t("nav.settings.general.email")}
           className="rounded-xl"
           prefix={<EnvelopeIcon className="size-4.5" />}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
-          placeholder="Phone Number"
-          label="Phone Number"
+          placeholder={t("nav.settings.general.phone_number")}
+          label={t("nav.settings.general.phone_number")}
           className="rounded-xl"
           prefix={<PhoneIcon className="size-4.5" />}
           value={phone}
@@ -166,7 +169,7 @@ export default function General() {
       </div>
       <div className="mt-8 flex justify-end space-x-3">
         <Button className="min-w-[7rem]" onClick={() => window.history.back()}>
-          Cancel
+          {t("nav.settings.general.cancel")}
         </Button>
         <Button
           className="min-w-[7rem]"
@@ -174,7 +177,7 @@ export default function General() {
           onClick={handleSave}
           disabled={loading}
         >
-          {loading ? <Spinner color="primary" className="size-4" /> : "Save"}
+          {loading ? <Spinner color="primary" className="size-4" /> : t("nav.settings.general.save")}
         </Button>
       </div>
     </div>

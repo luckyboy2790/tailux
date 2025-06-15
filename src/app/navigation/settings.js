@@ -25,7 +25,7 @@ export const settings = {
       path: "/settings/general",
       title: "General Setting",
       title_translate: "Configuración General",
-      transKey: "nav.settings.general",
+      transKey: "nav.settings.general.general",
       Icon: UserIcon,
     },
     {
@@ -34,7 +34,7 @@ export const settings = {
       path: "/settings/password",
       title: "Password Setting",
       title_translate: "Configuración de Contraseña",
-      transKey: "nav.settings.password",
+      transKey: "nav.settings.password.password",
       Icon: BsFillShieldLockFill,
     },
     {
@@ -43,7 +43,7 @@ export const settings = {
       path: "/settings/google2fa",
       title: "Google2FA Setting",
       title_translate: "Configuración de Google2FA",
-      transKey: "nav.settings.google2fa",
+      transKey: "nav.settings.google2fa.google2fa",
       Icon: FaGooglePlusSquare,
     },
     {
@@ -52,7 +52,7 @@ export const settings = {
       path: "/settings/appearance",
       title: "Appearance Setting",
       title_translate: "Configuración de Apariencia",
-      transKey: "nav.settings.appearance",
+      transKey: "nav.settings.appearance.appearance",
       Icon: TbPalette,
     },
   ],

@@ -39,15 +39,13 @@ export default function General() {
     if (loading) return;
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
+      toast.error(t("nav.settings.password.password_match_alert"));
       return;
     }
 
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$/;
     if (!passwordPattern.test(password)) {
-      toast.error(
-        "Password must include uppercase, lowercase, and special character.",
-      );
+      toast.error(t("nav.settings.password.password_include_alert"));
       return;
     }
 
@@ -70,10 +68,10 @@ export default function General() {
       const result = await res.json();
 
       dispatch({ type: "LOGIN_SUCCESS", payload: { user: result.data } });
-      toast.success("Password updated successfully");
+      toast.success(t("nav.settings.password.success_updating"));
     } catch (error) {
       console.error("Error updating password:", error);
-      toast.error("Error updating password");
+      toast.error(t("nav.settings.password.failed_updating"));
     } finally {
       setLoading(false);
     }
@@ -82,17 +80,17 @@ export default function General() {
   return (
     <div className="w-full max-w-3xl 2xl:max-w-5xl">
       <h5 className="dark:text-dark-50 text-lg font-medium text-gray-800">
-        {t("nav.settings.password")}
+        {t("nav.settings.password.password")}
       </h5>
       <p className="dark:text-dark-200 mt-0.5 text-sm text-balance text-gray-500">
-        {t("nav.settings.password_description")}
+        {t("nav.settings.password.password_description")}
       </p>
       <div className="dark:bg-dark-500 my-5 h-px bg-gray-200" />
       <div className="mt-5 grid grid-cols-1 gap-4 [&_.prefix]:pointer-events-none">
         <Input
-          label={t("nav.user.password")}
+          label={t("nav.settings.password.password")}
           type={show ? "text" : "password"}
-          placeholder={t("nav.user.password")}
+          placeholder={t("nav.settings.password.password")}
           prefix={<LockClosedIcon className="size-4.5" />}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -112,9 +110,9 @@ export default function General() {
         />
 
         <Input
-          label={t("nav.user.confirm")}
+          label={t("nav.settings.password.confirm_password")}
           type={confirmshow ? "text" : "password"}
-          placeholder={t("nav.user.confirm")}
+          placeholder={t("nav.settings.password.confirm_password")}
           prefix={<LockClosedIcon className="size-4.5" />}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
@@ -135,7 +133,7 @@ export default function General() {
       </div>
       <div className="mt-8 flex justify-end space-x-3">
         <Button className="min-w-[7rem]" onClick={() => window.history.back()}>
-          Cancel
+          {t("nav.settings.password.cancel")}
         </Button>
         <Button
           className="min-w-[7rem]"
@@ -143,7 +141,11 @@ export default function General() {
           onClick={handleSave}
           disabled={loading}
         >
-          {loading ? <Spinner color="primary" className="size-4" /> : "Save"}
+          {loading ? (
+            <Spinner color="primary" className="size-4" />
+          ) : (
+            t("nav.settings.password.save")
+          )}
         </Button>
       </div>
     </div>
