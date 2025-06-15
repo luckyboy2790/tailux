@@ -20,23 +20,13 @@ import { colors } from "constants/colors.constant";
 import { range } from "utils/range";
 import { Button, ScrollShadow } from "components/ui";
 import { Listbox } from "components/shared/form/Listbox";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 const lightColors = ["slate", "gray", "neutral"];
 const darkColors = ["mint", "navy", "mirage", "cinder", "black"];
 const primaryColors = ["indigo", "blue", "green", "amber", "purple", "rose"];
-
-const cardSkins = [
-  {
-    value: "shadow-sm",
-    label: "Shadow",
-  },
-  {
-    value: "bordered",
-    label: "Bordered",
-  },
-];
 
 export default function Customizer() {
   const [isOpen, { open, close }] = useDisclosure();
@@ -76,7 +66,7 @@ export default function Customizer() {
             leave="ease-in transform-gpu transition-transform duration-200"
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
-            className="fixed inset-y-0 right-0 z-61 flex w-screen transform-gpu flex-col bg-white transition-transform duration-200 dark:bg-dark-750/80 backdrop-blur-sm sm:inset-y-2 sm:mx-2 sm:w-80 sm:rounded-xl"
+            className="dark:bg-dark-750/80 fixed inset-y-0 right-0 z-61 flex w-screen transform-gpu flex-col bg-white backdrop-blur-sm transition-transform duration-200 sm:inset-y-2 sm:mx-2 sm:w-80 sm:rounded-xl"
           >
             <CustomizerContent close={close} />
           </TransitionChild>
@@ -89,12 +79,25 @@ export default function Customizer() {
 function CustomizerContent({ close }) {
   const theme = useThemeContext();
 
+  const { t } = useTranslation();
+
+  const cardSkins = [
+    {
+      value: "shadow-sm",
+      label: t("nav.theme_customizer.shadow"),
+    },
+    {
+      value: "bordered",
+      label: t("nav.theme_customizer.bordered"),
+    },
+  ];
+
   return (
     <>
       <div className="flex items-center justify-between px-3 py-2">
         <div className="flex shrink-0 items-center gap-1.5">
           <SettingIcon className="size-5" />
-          <span>Theme Customizer</span>
+          <span>{t("nav.theme_customizer.theme_customizer")}</span>
         </div>
         <Button
           onClick={close}
@@ -114,8 +117,8 @@ function CustomizerContent({ close }) {
           onChange={theme.setThemeMode}
           className="mt-1"
         >
-          <Label className="font-medium text-gray-800 dark:text-dark-100">
-            Theme Mode
+          <Label className="dark:text-dark-100 font-medium text-gray-800">
+            {t("nav.theme_customizer.theme_mode")}
           </Label>
           <div className="mt-2.5 grid grid-cols-3 gap-2.5">
             <Radio value="system" className="cursor-pointer outline-hidden">
@@ -123,9 +126,9 @@ function CustomizerContent({ close }) {
                 <>
                   <div
                     className={clsx(
-                      "relative overflow-hidden rounded-lg border-2 bg-dark-900 dark:border-transparent",
+                      "bg-dark-900 relative overflow-hidden rounded-lg border-2 dark:border-transparent",
                       checked &&
-                        "ring-2 ring-primary-600 ring-offset-2 ring-offset-white transition-all dark:ring-primary-500 dark:ring-offset-dark-700",
+                        "ring-primary-600 dark:ring-primary-500 dark:ring-offset-dark-700 ring-2 ring-offset-2 ring-offset-white transition-all",
                     )}
                   >
                     <div
@@ -133,7 +136,7 @@ function CustomizerContent({ close }) {
                         clipPath: "polygon(50% 50%, 100% 0, 0 0, 0% 100%)",
                         backgroundColor: theme.lightColorScheme[200],
                       }}
-                      className="w-full space-y-2 p-1 "
+                      className="w-full space-y-2 p-1"
                     >
                       <div
                         className="w-full space-y-2 rounded-sm p-1 shadow-xs"
@@ -155,7 +158,7 @@ function CustomizerContent({ close }) {
                         ></div>
                       </div>
                       <div
-                        className="flex items-center space-x-1.5 rounded-sm p-1 shadow-xs "
+                        className="flex items-center space-x-1.5 rounded-sm p-1 shadow-xs"
                         style={{
                           backgroundColor: "#fff",
                         }}
@@ -181,7 +184,7 @@ function CustomizerContent({ close }) {
                           "polygon(50% 50%, 100% 0, 100% 100%, 0% 100%)",
                         backgroundColor: theme.darkColorScheme[900],
                       }}
-                      className="absolute inset-0 w-full space-y-2 p-1 "
+                      className="absolute inset-0 w-full space-y-2 p-1"
                     >
                       <div
                         className="w-full space-y-2 rounded-sm p-1 shadow-xs"
@@ -203,7 +206,7 @@ function CustomizerContent({ close }) {
                         ></div>
                       </div>
                       <div
-                        className="flex items-center space-x-1.5 rounded-sm p-1 shadow-xs "
+                        className="flex items-center space-x-1.5 rounded-sm p-1 shadow-xs"
                         style={{
                           backgroundColor: theme.darkColorScheme[700],
                         }}
@@ -224,7 +227,9 @@ function CustomizerContent({ close }) {
                     </div>
                   </div>
 
-                  <p className="mt-1.5 text-center text-xs-plus">System</p>
+                  <p className="text-xs-plus mt-1.5 text-center">
+                    {t("nav.theme_customizer.system")}
+                  </p>
                 </>
               )}
             </Radio>
@@ -237,7 +242,9 @@ function CustomizerContent({ close }) {
                     card="#fff"
                     content={theme.lightColorScheme[400]}
                   />
-                  <p className="mt-1.5 text-center">Light</p>
+                  <p className="mt-1.5 text-center">
+                    {t("nav.theme_customizer.light")}
+                  </p>
                 </>
               )}
             </Radio>
@@ -250,7 +257,9 @@ function CustomizerContent({ close }) {
                     card={theme.darkColorScheme[700]}
                     content={theme.darkColorScheme[400]}
                   />
-                  <p className="mt-1.5 text-center text-xs-plus">Dark</p>
+                  <p className="text-xs-plus mt-1.5 text-center">
+                    {t("nav.theme_customizer.dark")}
+                  </p>
                 </>
               )}
             </Radio>
@@ -262,52 +271,57 @@ function CustomizerContent({ close }) {
           onChange={theme.setThemeLayout}
           className="mt-5"
         >
-          <Label className="font-medium text-gray-800 dark:text-dark-100">
-            Theme Layout
+          <Label className="dark:text-dark-100 font-medium text-gray-800">
+            {t("nav.theme_customizer.theme_layout")}
           </Label>
 
           <div className="mt-2.5 grid grid-cols-2 gap-3">
-            <Radio value="main-layout" className="cursor-pointer outline-hidden">
+            <Radio
+              value="main-layout"
+              className="cursor-pointer outline-hidden"
+            >
               {({ checked }) => (
                 <>
                   <div
                     className={clsx(
-                      "flex overflow-hidden rounded-sm bg-gray-100 dark:bg-dark-900",
+                      "dark:bg-dark-900 flex overflow-hidden rounded-sm bg-gray-100",
                       checked &&
-                        "ring-2 ring-primary-600 ring-offset-2 ring-offset-white transition-all dark:ring-primary-500 dark:ring-offset-dark-700",
+                        "ring-primary-600 dark:ring-primary-500 dark:ring-offset-dark-700 ring-2 ring-offset-2 ring-offset-white transition-all",
                     )}
                   >
-                    <div className="flex h-24 w-1/12 flex-col items-center justify-between border-r border-gray-300 bg-gray-200 py-1.5 dark:border-dark-600 dark:bg-dark-700">
+                    <div className="dark:border-dark-600 dark:bg-dark-700 flex h-24 w-1/12 flex-col items-center justify-between border-r border-gray-300 bg-gray-200 py-1.5">
                       <div className="flex flex-col space-y-1.5">
                         {range(1, 4).map((i) => (
                           <div
                             key={i}
-                            className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400"
+                            className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400"
                           />
                         ))}
                       </div>
-                      <div className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400" />
+                      <div className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400" />
                     </div>
-                    <div className="flex h-24 w-3/12 flex-col justify-between bg-gray-200 px-1 py-1.5 dark:bg-dark-700">
+                    <div className="dark:bg-dark-700 flex h-24 w-3/12 flex-col justify-between bg-gray-200 px-1 py-1.5">
                       <div className="space-y-1">
                         {range(1, 5).map((i) => (
                           <div
                             key={i}
-                            className="h-0.5 rounded-full bg-gray-400 dark:bg-dark-400"
+                            className="dark:bg-dark-400 h-0.5 rounded-full bg-gray-400"
                           />
                         ))}
                       </div>
-                      <div className="h-1 rounded-full bg-gray-400 dark:bg-dark-400" />
+                      <div className="dark:bg-dark-400 h-1 rounded-full bg-gray-400" />
                     </div>
                     <div className="flex-1">
-                      <div className="flex h-3 w-full items-center justify-end gap-1 border-l border-gray-300 bg-gray-200 px-1.5 dark:border-dark-600 dark:bg-dark-700">
-                        <div className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400" />
-                        <div className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400" />
+                      <div className="dark:border-dark-600 dark:bg-dark-700 flex h-3 w-full items-center justify-end gap-1 border-l border-gray-300 bg-gray-200 px-1.5">
+                        <div className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400" />
+                        <div className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400" />
                       </div>
                     </div>
                   </div>
 
-                  <p className="mt-1.5 text-center text-xs-plus">Main Layout</p>
+                  <p className="text-xs-plus mt-1.5 text-center">
+                    {t("nav.theme_customizer.main_layout")}
+                  </p>
                 </>
               )}
             </Radio>
@@ -317,35 +331,37 @@ function CustomizerContent({ close }) {
                 <>
                   <div
                     className={clsx(
-                      "flex overflow-hidden rounded-sm bg-gray-100 dark:bg-dark-900",
+                      "dark:bg-dark-900 flex overflow-hidden rounded-sm bg-gray-100",
                       checked &&
-                        "ring-2 ring-primary-600 ring-offset-2 ring-offset-white transition-all dark:ring-primary-500 dark:ring-offset-dark-700",
+                        "ring-primary-600 dark:ring-primary-500 dark:ring-offset-dark-700 ring-2 ring-offset-2 ring-offset-white transition-all",
                     )}
                   >
-                    <div className="flex bg-gray-200 h-24 w-[30%] flex-col justify-between px-1 py-1.5 dark:bg-dark-700">
+                    <div className="dark:bg-dark-700 flex h-24 w-[30%] flex-col justify-between bg-gray-200 px-1 py-1.5">
                       <div className="space-y-2">
-                        <div className="h-1 rounded-full bg-gray-400 dark:bg-dark-400" />
+                        <div className="dark:bg-dark-400 h-1 rounded-full bg-gray-400" />
                         <div className="space-y-1">
                           {range(1, 5).map((i) => (
                             <div
                               key={i}
-                              className="h-0.5 rounded-full bg-gray-400 dark:bg-dark-400"
+                              className="dark:bg-dark-400 h-0.5 rounded-full bg-gray-400"
                             />
                           ))}
                         </div>
                       </div>
-                      <div className="h-1 rounded-full bg-gray-400 dark:bg-dark-400" />
+                      <div className="dark:bg-dark-400 h-1 rounded-full bg-gray-400" />
                     </div>
                     <div className="flex-1">
-                      <div className="flex bg-gray-200 h-3 w-full border-gray-300 items-center justify-end gap-1 border-l px-1.5 dark:border-dark-600 dark:bg-dark-700">
-                        <div className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400" />
-                        <div className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400" />
-                        <div className="size-1.5 rounded-full bg-gray-400 dark:bg-dark-400" />
+                      <div className="dark:border-dark-600 dark:bg-dark-700 flex h-3 w-full items-center justify-end gap-1 border-l border-gray-300 bg-gray-200 px-1.5">
+                        <div className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400" />
+                        <div className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400" />
+                        <div className="dark:bg-dark-400 size-1.5 rounded-full bg-gray-400" />
                       </div>
                     </div>
                   </div>
 
-                  <p className="mt-1.5 text-center text-xs-plus">Sideblock</p>
+                  <p className="text-xs-plus mt-1.5 text-center">
+                    {t("nav.theme_customizer.sideblock")}
+                  </p>
                 </>
               )}
             </Radio>
@@ -357,8 +373,8 @@ function CustomizerContent({ close }) {
           onChange={theme.setPrimaryColorScheme}
           className="mt-5"
         >
-          <Label className="font-medium text-gray-800 dark:text-dark-100">
-            Primary Colors
+          <Label className="dark:text-dark-100 font-medium text-gray-800">
+            {t("nav.theme_customizer.primary_colors")}
           </Label>
           <div className="mt-2 flex w-fit flex-wrap gap-3">
             {primaryColors.map((color) => (
@@ -370,7 +386,7 @@ function CustomizerContent({ close }) {
                     "flex h-14 w-16 cursor-pointer items-center justify-center rounded-lg border outline-hidden",
                     checked
                       ? "border-primary-500"
-                      : "border-gray-200 dark:border-dark-500",
+                      : "dark:border-dark-500 border-gray-200",
                   )
                 }
               >
@@ -378,7 +394,7 @@ function CustomizerContent({ close }) {
                   <div
                     className={clsx(
                       "mask is-diamond size-6 transition-all",
-                      checked && "rotate-45 scale-110",
+                      checked && "scale-110 rotate-45",
                     )}
                     style={{
                       backgroundColor: colors[color][500],
@@ -391,7 +407,7 @@ function CustomizerContent({ close }) {
         </RadioGroup>
 
         <Listbox
-          label="Card Skin:"
+          label={`${t("nav.theme_customizer.card_skin")}:`}
           classNames={{
             root: "mt-5",
           }}
@@ -405,8 +421,8 @@ function CustomizerContent({ close }) {
           onChange={theme.setLightColorScheme}
           className="mt-5"
         >
-          <Label className="font-medium text-gray-800 dark:text-dark-100">
-            Light Colors
+          <Label className="dark:text-dark-100 font-medium text-gray-800">
+            {t("nav.theme_customizer.light_colors")}
           </Label>
           <div className="mt-2.5 grid grid-cols-3 gap-2.5">
             {lightColors.map((color) => (
@@ -423,8 +439,8 @@ function CustomizerContent({ close }) {
                       card="#fff"
                       content={colors[color][400]}
                     />
-                    <p className="mt-1.5 text-center text-xs-plus capitalize">
-                      {color}
+                    <p className="text-xs-plus mt-1.5 text-center capitalize">
+                      {t(`nav.theme_customizer.${color}`)}
                     </p>
                   </>
                 )}
@@ -432,14 +448,14 @@ function CustomizerContent({ close }) {
             ))}
           </div>
         </RadioGroup>
-        
+
         <RadioGroup
           value={theme.darkColorScheme.name}
           onChange={theme.setDarkColorScheme}
           className="mt-5"
         >
-          <Label className="font-medium text-gray-800 dark:text-dark-100">
-            Dark Colors
+          <Label className="dark:text-dark-100 font-medium text-gray-800">
+            {t("nav.theme_customizer.dark_colors")}
           </Label>
           <div className="mt-2.5 grid grid-cols-3 gap-2.5">
             {darkColors.map((color) => (
@@ -456,8 +472,8 @@ function CustomizerContent({ close }) {
                       content={colors[color][400]}
                       checked={checked}
                     />
-                    <p className="mt-1.5 text-center text-xs-plus capitalize">
-                      {color}
+                    <p className="text-xs-plus mt-1.5 text-center capitalize">
+                      {t(`nav.theme_customizer.${color}`)}
                     </p>
                   </>
                 )}
@@ -476,13 +492,10 @@ function Placeholder({ bg, card, content, checked }) {
       className={clsx(
         "relative overflow-hidden rounded-lg border-2 dark:border-transparent",
         checked &&
-          "ring-2 ring-primary-600 ring-offset-2 ring-offset-white transition-all dark:ring-primary-500 dark:ring-offset-dark-700",
+          "ring-primary-600 dark:ring-primary-500 dark:ring-offset-dark-700 ring-2 ring-offset-2 ring-offset-white transition-all",
       )}
     >
-      <div
-        className="w-full space-y-2 p-1 "
-        style={{ backgroundColor: bg }}
-      >
+      <div className="w-full space-y-2 p-1" style={{ backgroundColor: bg }}>
         <div
           className="w-full space-y-2 rounded-sm p-1 shadow-xs"
           style={{
@@ -503,7 +516,7 @@ function Placeholder({ bg, card, content, checked }) {
           ></div>
         </div>
         <div
-          className="flex items-center space-x-1.5 rounded-sm p-1 shadow-xs "
+          className="flex items-center space-x-1.5 rounded-sm p-1 shadow-xs"
           style={{
             backgroundColor: card,
           }}
