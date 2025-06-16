@@ -87,17 +87,17 @@ const OverviewChart = ({
 
   const series = [
     {
-      name: "Purchase",
+      name: t("nav.dashboards.purchase"),
       data: data?.purchase_array || [],
       color: "#3B82F6",
     },
     {
-      name: "Sale",
+      name: t("nav.dashboards.sale"),
       data: data?.sale_array || [],
       color: "#FFBA1A",
     },
     {
-      name: "Payment",
+      name: t("nav.dashboards.payment"),
       data: data?.payment_array || [],
       color: "#10B981",
     },

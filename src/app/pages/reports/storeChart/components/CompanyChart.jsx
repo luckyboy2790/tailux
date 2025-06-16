@@ -104,11 +104,11 @@ export function CompanyChart() {
 
       setSerise([
         {
-          name: "Purchase",
+          name: t("nav.report.purchase"),
           data: storeCartData.data.store_purchases_array,
         },
         {
-          name: "Sale",
+          name: t("nav.report.sale"),
           data: storeCartData.data.store_sales_array,
         },
       ]);
@@ -170,7 +170,7 @@ export function CompanyChart() {
     };
 
     fetchData();
-  }, [startDate, endDate, token]);
+  }, [startDate, endDate, token, t]);
 
   const handleDateChange = (dates) => {
     if (!dates || dates.length !== 2) return;

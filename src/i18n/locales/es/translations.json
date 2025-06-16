@@ -11,7 +11,10 @@
       "today_sale": "Ventas de Hoy",
       "week_sales": "Ventas de la Semana",
       "expiries_in_5days_purchases": "Vencimiento en 5 días",
-      "expired_purchase": "Facturas Vencidas"
+      "expired_purchase": "Facturas Vencidas",
+      "purchase": "Compra",
+      "sale": "Venta",
+      "payment": "Pago"
     },
     "settings": {
       "settings": "Configuración",
@@ -505,7 +508,9 @@
       "customers_report": "Reporte de Clientes",
       "suppliers_report": "Reporte de Proveedores",
       "users_report": "Reportes de Usuarios",
-      "view_report": "Ver Reporte"
+      "view_report": "Ver Reporte",
+      "purchase": "Compra",
+      "sale": "Venta"
     },
     "people": {
       "people": "Personas",
@@ -664,6 +669,17 @@
       "save": "Guardar",
       "cancel": "Cancelar",
       "done": "Listo"
+    },
+    "profile": {
+      "profile": "Perfil",
+      "profile_description": "Tu perfil",
+      "settings": "Configuración",
+      "settings_description": "Configuración de la aplicación",
+      "logout": "Cerrar Sesión",
+      "admin": "Administrador",
+      "secretary": "Secretaria",
+      "user": "Usuario",
+      "buyer": "Comprador"
     },
     "date": "Fecha",
     "supplier": "Proveedores",

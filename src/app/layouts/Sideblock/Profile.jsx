@@ -15,32 +15,35 @@ import { Link } from "react-router";
 // Local Imports
 import { Avatar, AvatarDot, Button } from "components/ui";
 import { useAuthContext } from "app/contexts/auth/context";
+import { useTranslation } from "react-i18next";
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 // ----------------------------------------------------------------------
 
-const links = [
-  {
-    id: "1",
-    title: "Profile",
-    description: "Your profile Setting",
-    to: "/settings/general",
-    Icon: TbUser,
-    color: "warning",
-  },
-  {
-    id: "3",
-    title: "Settings",
-    description: "Webapp settings",
-    to: "/settings/appearance",
-    Icon: Cog6ToothIcon,
-    color: "success",
-  },
-];
-
 export function Profile() {
   const { logout, user } = useAuthContext();
+
+  const { t } = useTranslation();
+
+  const links = [
+    {
+      id: "1",
+      title: t("nav.profile.profile"),
+      description: t("nav.profile.profile_description"),
+      to: "/settings/general",
+      Icon: TbUser,
+      color: "warning",
+    },
+    {
+      id: "3",
+      title: t("nav.profile.settings"),
+      description: t("nav.profile.settings_description"),
+      to: "/settings/appearance",
+      Icon: Cog6ToothIcon,
+      color: "success",
+    },
+  ];
 
   return (
     <Popover className="relative flex">
@@ -100,7 +103,7 @@ export function Profile() {
                   </Link>
 
                   <p className="dark:text-dark-300 mt-0.5 text-xs text-gray-400 capitalize">
-                    {user?.role}
+                    {t(`nav.profile.${user?.role}`)}
                   </p>
                 </div>
               </div>
@@ -132,7 +135,7 @@ export function Profile() {
                 <div className="px-4 pt-4">
                   <Button className="w-full gap-2" onClick={logout}>
                     <ArrowLeftStartOnRectangleIcon className="size-4.5" />
-                    <span>Logout</span>
+                    <span>{t("nav.profile.logout")}</span>
                   </Button>
                 </div>
               </div>

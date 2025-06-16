@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useAuthContext } from "app/contexts/auth/context";
+import { useLocaleContext } from "app/contexts/locale/context";
+import dayjs from "dayjs";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -25,6 +27,8 @@ export function CompanyChart() {
 
   const [config, setConfig] = useState({});
   const [series, setSerise] = useState([]);
+
+  const { locale } = useLocaleContext();
 
   const [companyId, setCompanyId] = useState("1");
 
@@ -58,14 +62,14 @@ export function CompanyChart() {
 
       setSerise([
         {
-          name: "Purchase",
+          name: t("nav.report.purchase"),
           data: [
             overviewData.data.last_month.purchase,
             overviewData.data.this_month.purchase,
           ],
         },
         {
-          name: "Sale",
+          name: t("nav.report.sale"),
           data: [
             overviewData.data.last_month.sale,
             overviewData.data.this_month.sale,
@@ -104,8 +108,12 @@ export function CompanyChart() {
         },
         xaxis: {
           categories: [
-            overviewData.data.last_month.month_name,
-            overviewData.data.this_month.month_name,
+            dayjs(overviewData.data.last_month.month_name, "MMMM YYYY")
+              .locale(locale)
+              .format("MMMM YYYY"),
+            dayjs(overviewData.data.this_month.month_name, "MMMM YYYY")
+              .locale(locale)
+              .format("MMMM YYYY"),
           ],
           position: "top",
           axisBorder: {
@@ -133,7 +141,7 @@ export function CompanyChart() {
     };
 
     fetchData();
-  }, [companyId, token]);
+  }, [companyId, token, t, locale]);
 
   return (
     <Card className="overflow-hidden">
