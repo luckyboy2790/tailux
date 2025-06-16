@@ -7,13 +7,18 @@ import { useForm } from "react-hook-form";
 import Logo from "assets/appLogo.svg?react";
 import { Button, Card, Input, InputErrorMsg } from "components/ui";
 import { useAuthContext } from "app/contexts/auth/context";
-import { schema } from "./schema";
+import { getSchema } from "./schema";
 import { Page } from "components/shared/Page";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export default function SignIn() {
   const { login, errorMessage } = useAuthContext();
+
+  const { t } = useTranslation();
+
+  const schema = getSchema(t);
 
   const {
     register,
@@ -38,10 +43,10 @@ export default function SignIn() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="dark:text-dark-100 text-2xl font-semibold text-gray-600">
-                Welcome Back
+                {t("nav.auth.login.welcome_back")}
               </h2>
               <p className="dark:text-dark-300 text-gray-400">
-                Please sign in to continue
+                {t("nav.auth.login.sign_in_prompt")}
               </p>
             </div>
           </div>
@@ -49,8 +54,8 @@ export default function SignIn() {
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <div className="space-y-4">
                 <Input
-                  label="Username"
-                  placeholder="Enter Username"
+                  label={t("nav.auth.login.username")}
+                  placeholder={t("nav.auth.login.username_placeholder")}
                   prefix={
                     <EnvelopeIcon
                       className="size-5 transition-colors duration-200"
@@ -61,8 +66,8 @@ export default function SignIn() {
                   error={errors?.username?.message}
                 />
                 <Input
-                  label="Password"
-                  placeholder="Enter Password"
+                  label={t("nav.auth.login.password")}
+                  placeholder={t("nav.auth.login.password_placeholder")}
                   type="password"
                   prefix={
                     <LockClosedIcon
@@ -82,14 +87,14 @@ export default function SignIn() {
               </div>
 
               <Button type="submit" className="mt-5 w-full" color="primary">
-                Sign In
+                {t("nav.auth.login.sign_in")}
               </Button>
             </form>
           </Card>
           <div className="dark:text-dark-300 mt-8 flex justify-center text-xs text-gray-400">
-            <a href="##">Privacy Notice</a>
+            <a href="##">{t("nav.auth.login.privacy_notice")}</a>
             <div className="dark:bg-dark-500 mx-2.5 my-0.5 w-px bg-gray-200"></div>
-            <a href="##">Term of service</a>
+            <a href="##">{t("nav.auth.login.terms_of_service")}</a>
           </div>
         </div>
       </main>

@@ -1,5 +1,42 @@
 {
   "nav": {
+    "auth": {
+      "login": {
+        "welcome_back": "Bienvenido",
+        "sign_in_prompt": "Por favor inicie sesión para continuar",
+        "username": "Nombre de Usuario",
+        "username_placeholder": "Ingrese Nombre de Usuario",
+        "password": "Contraseña",
+        "password_placeholder": "Ingrese Contraseña",
+        "sign_in": "Iniciar Sesión",
+        "error": "Nombre de usuario o contraseña inválido",
+        "privacy_notice": "Aviso de Privacidad",
+        "terms_of_service": "Terminos de Servicio",
+        "username_required": "Nombre de usuario es requerido",
+        "password_required": "Contraseña es requerida"
+      },
+      "google2Fa": {
+        "welcome_back": "Bienvenido",
+        "sign_in_prompt": "Por favor inicie sesión para continuar",
+        "one_time_password": "Contraseña de un solo uso",
+        "one_time_password_placeholder": "Ingrese Contraseña de un solo uso",
+        "sign_in": "Iniciar Sesión",
+        "privacy_notice": "Aviso de Privacidad",
+        "terms_of_service": "Terminos de Servicio",
+        "must_6_digits": "Debe ser exactamente 6 dígitos",
+        "digital_number_required": "Número digital es requerido"
+      },
+      "qr_generate": {
+        "setup_google_2fa": "Configurar Google 2FA",
+        "scan_qr_code_description": "Escanea el código QR a continuación en tu aplicación de autenticador",
+        "backup_code": "Código de respaldo",
+        "loading_qr_code": "Cargando QR Code...",
+        "qr_scan": "Escaneo QR",
+        "privacy_notice": "Aviso de Privacidad",
+        "terms_of_service": "Terminos de Servicio",
+        "failed_qr_generate": "No se pudo generar QR code"
+      }
+    },
     "dashboards": {
       "dashboards": "Tablero",
       "home": "Inicio",

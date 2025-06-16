@@ -1,5 +1,42 @@
 {
   "nav": {
+    "auth": {
+      "login": {
+        "welcome_back": "Welcome Back",
+        "sign_in_prompt": "Please sign in to continue",
+        "username": "Username",
+        "username_placeholder": "Enter Username",
+        "password": "Password",
+        "password_placeholder": "Enter Password",
+        "sign_in": "Sign In",
+        "error": "Invalid username or password",
+        "privacy_notice": "Privacy Notice",
+        "terms_of_service": "Terms of Service",
+        "username_required": "Username Required",
+        "password_required": "Password Required"
+      },
+      "google2Fa": {
+        "welcome_back": "Welcome Back",
+        "sign_in_prompt": "Please sign in to continue",
+        "one_time_password": "One-time Password",
+        "one_time_password_placeholder": "Enter One-time Password",
+        "sign_in": "Sign In",
+        "privacy_notice": "Privacy Notice",
+        "terms_of_service": "Terms of Service",
+        "must_6_digits": "Must be exactly 6 digits",
+        "digital_number_required": "Digital number Required"
+      },
+      "qr_generate": {
+        "setup_google_2fa": "Setup Google 2FA",
+        "scan_qr_code_description": "Scan the QR code below in your authenticator app",
+        "backup_code": "Backup code",
+        "loading_qr_code": "Loading QR Code...",
+        "qr_scan": "QR scan",
+        "privacy_notice": "Privacy Notice",
+        "terms_of_service": "Terms of Service",
+        "failed_qr_generate": "Failed to generate QR code"
+      }
+    },
     "dashboards": {
       "dashboards": "Dashboard",
       "home": "Home",

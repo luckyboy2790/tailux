@@ -7,6 +7,7 @@ import Logo from "assets/appLogo.svg?react";
 import { Button, Card } from "components/ui";
 import { Page } from "components/shared/Page";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -16,6 +17,8 @@ export default function QRGenerate() {
   const [qrUrl, setQrUrl] = useState("");
   const [secret, setSecret] = useState("");
   const [error, setError] = useState(null);
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -48,12 +51,12 @@ export default function QRGenerate() {
       } catch (err) {
         console.log(err);
 
-        setError("Failed to generate QR code");
+        setError(t("nav.auth.qr_generate.failed_qr_generate"));
       }
     };
 
     generateQR();
-  }, [navigate]);
+  }, [navigate, t]);
 
   const handleQRScan = () => {
     const queryParams = new URLSearchParams(window.location.search);
@@ -74,10 +77,10 @@ export default function QRGenerate() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="dark:text-dark-100 text-2xl font-semibold text-gray-600">
-                Setup Google 2FA
+                {t("nav.auth.qr_generate.setup_google_2fa")}
               </h2>
               <p className="dark:text-dark-300 text-gray-400">
-                Scan the QR code below in your authenticator app
+                {t("nav.auth.qr_generate.scan_qr_code_description")}
               </p>
             </div>
           </div>
@@ -90,12 +93,13 @@ export default function QRGenerate() {
                 {/* <QRCodeSVG value={qrUrl} size={200} /> */}
                 <img src={qrUrl} alt="QR Code" className="h-48 w-48" />
                 <p className="mt-4 text-sm break-all text-gray-500">
-                  Backup code: <strong>{secret}</strong>
+                  {t("nav.auth.qr_generate.backup_code")}:{" "}
+                  <strong>{secret}</strong>
                 </p>
               </div>
             ) : (
               <div className="text-center text-gray-400">
-                Loading QR Code...
+                {t("nav.auth.qr_generate.loading_qr_code")}
               </div>
             )}
 
@@ -104,14 +108,14 @@ export default function QRGenerate() {
               color="primary"
               onClick={handleQRScan}
             >
-              QR scan
+              {t("nav.auth.qr_generate.qr_scan")}
             </Button>
           </Card>
 
           <div className="dark:text-dark-300 mt-8 flex justify-center text-xs text-gray-400">
-            <a href="#">Privacy Notice</a>
+            <a href="#">{t("nav.auth.qr_generate.privacy_notice")}</a>
             <div className="dark:bg-dark-500 mx-2.5 my-0.5 w-px bg-gray-200"></div>
-            <a href="#">Term of service</a>
+            <a href="#">{t("nav.auth.qr_generate.terms_of_service")}</a>
           </div>
         </div>
       </main>

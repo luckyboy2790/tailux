@@ -6,13 +6,18 @@ import { useForm } from "react-hook-form";
 // Local Imports
 import Logo from "assets/appLogo.svg?react";
 import { Button, Card, Input, InputErrorMsg } from "components/ui";
-import { schema } from "./schema";
+import { getSchema } from "./schema";
 import { Page } from "components/shared/Page";
 import { useAuthContext } from "app/contexts/auth/context";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export default function Google2Fa() {
+  const { t } = useTranslation();
+
+  const schema = getSchema(t);
+
   const {
     register,
     handleSubmit,
@@ -42,10 +47,10 @@ export default function Google2Fa() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="dark:text-dark-100 text-2xl font-semibold text-gray-600">
-                Welcome Back
+                {t("nav.auth.google2Fa.welcome_back")}
               </h2>
               <p className="dark:text-dark-300 text-gray-400">
-                Please sign in to continue
+                {t("nav.auth.google2Fa.sign_in_prompt")}
               </p>
             </div>
           </div>
@@ -53,8 +58,10 @@ export default function Google2Fa() {
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <div className="space-y-4">
                 <Input
-                  label="One-time Password"
-                  placeholder="Enter One-time Password"
+                  label={t("nav.auth.google2Fa.one_time_password")}
+                  placeholder={t(
+                    "nav.auth.google2Fa.one_time_password_placeholder",
+                  )}
                   prefix={
                     <EnvelopeIcon
                       className="size-5 transition-colors duration-200"
@@ -73,14 +80,14 @@ export default function Google2Fa() {
               </div>
 
               <Button type="submit" className="mt-5 w-full" color="primary">
-                Sign In
+                {t("nav.auth.google2Fa.sign_in")}
               </Button>
             </form>
           </Card>
           <div className="dark:text-dark-300 mt-8 flex justify-center text-xs text-gray-400">
-            <a href="##">Privacy Notice</a>
+            <a href="##">{t("nav.auth.google2Fa.privacy_notice")}</a>
             <div className="dark:bg-dark-500 mx-2.5 my-0.5 w-px bg-gray-200"></div>
-            <a href="##">Term of service</a>
+            <a href="##">{t("nav.auth.google2Fa.terms_of_service")}</a>
           </div>
         </div>
       </main>
