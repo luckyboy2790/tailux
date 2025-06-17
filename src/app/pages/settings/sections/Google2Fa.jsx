@@ -45,7 +45,7 @@ export default function General() {
     if (user?.enable_google2fa && user?.google2fa_secret) {
       fetchData();
     }
-  }, [user, token, qrUrl, dispatch]);
+  }, [user, token, qrUrl, dispatch, t]);
 
   const handleGenerate = async () => {
     try {

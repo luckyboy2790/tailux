@@ -13,13 +13,14 @@ import { report } from "./report";
 import { getSaleNav } from "./sale";
 import { getSettingNav } from "./setting";
 import { category } from "./category";
+import { getBaseNavigation } from "./baseNavigation";
 
 export const useNavigation = () => {
   const { user } = useAuthContext();
-
   const role = user?.role;
 
-  const returnData = [
+  // Default navigation data
+  let returnData = [
     dashboards,
     purchase,
     getSaleNav(role),
@@ -35,6 +36,12 @@ export const useNavigation = () => {
     concurrent_payments,
   ];
 
+  // Check if role is 'buyer' and return only specific data
+  if (role === "buyer") {
+    returnData = [getPurchaseOrder(role), received];
+  }
+
+  // If the role is 'admin', add advanced delete option
   if (role === "admin") {
     returnData.push(advanced_delete);
   }
@@ -42,4 +49,4 @@ export const useNavigation = () => {
   return returnData;
 };
 
-export { baseNavigation } from "./baseNavigation";
+export { getBaseNavigation };

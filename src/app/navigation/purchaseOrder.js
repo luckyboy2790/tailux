@@ -18,7 +18,7 @@ export const getPurchaseOrder = (role) => {
     },
   ];
 
-  if (role === "user" || role === "secretary") {
+  if (role === "user" || role === "secretary" || role === "buyer") {
     childs.push({
       id: "purchase.order.add",
       path: path(ROOT_DASHBOARDS, "/add"),
