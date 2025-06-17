@@ -832,6 +832,47 @@
     "no_data": {
       "title": "No se encontraron resultados",
       "description": "Intenta cambiar los filtros o los términos de búsqueda"
+    },
+    "notification": {
+      "notifications": "Notificaciones",
+      "notification_list": "Lista de Notificaciones",
+      "all": "Todo",
+      "purchase": "Compra",
+      "payment": "Pago",
+      "company": "Empresa",
+      "message": "Mensaje",
+      "reference_no": "Referencia No",
+      "supplier": "Proveedor",
+      "amount": "Cantidad",
+      "time": "Tiempo",
+      "purchase_approved": "Una compra ha sido aprobada.",
+      "payment_approved": "Un pago ha sido aprobado.",
+      "purchase_rejected": "Una compra ha sido rechazada.",
+      "payment_rejected": "Un pago ha sido rechazado.",
+      "view_all_notification": "Ver todas las notificaciones",
+      "delete_all": "Eliminar todo",
+      "confirmDelete": {
+        "pending": {
+          "description": "¿Estás seguro de que deseas eliminar esta notificación? Una vez eliminada, no se puede restaurar."
+        },
+        "success": {
+          "title": "Notificación Eliminada"
+        },
+        "failed": {
+          "title": "Error al eliminar notificación"
+        }
+      },
+      "confirmAllDelete": {
+        "pending": {
+          "description": "¿Estás seguro de que deseas eliminar todas las notificaciones? Una vez eliminada, no se puede restaurar."
+        },
+        "success": {
+          "title": "Notificaciones Eliminadas"
+        },
+        "failed": {
+          "title": "Error al eliminar notificaciones"
+        }
+      }
     }
   }
 }

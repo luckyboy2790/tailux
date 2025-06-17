@@ -833,6 +833,47 @@
     "no_data": {
       "title": "No results found",
       "description": "Try changing filters or search terms"
+    },
+    "notification": {
+      "notifications": "Notifications",
+      "notification_list": "Notification List",
+      "all": "All",
+      "purchase": "Purchase",
+      "payment": "Payment",
+      "company": "Company",
+      "message": "Message",
+      "reference_no": "Reference No",
+      "supplier": "Supplier",
+      "amount": "Amount",
+      "time": "Time",
+      "purchase_approved": "A purchase has been approved.",
+      "payment_approved": "A payment has been approved.",
+      "purchase_rejected": "A purchase has been rejected.",
+      "payment_rejected": "A payment has been rejected.",
+      "view_all_notification": "View all notifications",
+      "delete_all": "Delete all",
+      "confirmDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete this notification? Once deleted, it cannot be restored."
+        },
+        "success": {
+          "title": "Notification Deleted"
+        },
+        "failed": {
+          "title": "Error deleting notification"
+        }
+      },
+      "confirmAllDelete": {
+        "pending": {
+          "description": "Are you sure you want to delete all notifications? Once deleted, it cannot be restored."
+        },
+        "success": {
+          "title": "Notifications Deleted"
+        },
+        "failed": {
+          "title": "Error deleting notifications"
+        }
+      }
     }
   }
 }

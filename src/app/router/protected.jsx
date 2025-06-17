@@ -448,6 +448,21 @@ const protectedRoutes = {
             },
           ],
         },
+        {
+          path: "notification",
+          children: [
+            {
+              index: true,
+              element: <Navigate to="/notification/list" />,
+            },
+            {
+              path: "list",
+              lazy: async () => ({
+                Component: (await import("app/pages/notification/notificationList")).default,
+              }),
+            },
+          ],
+        },
       ],
     },
     // The app layout supports only the main layout. Avoid using it for other layouts.

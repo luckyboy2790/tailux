@@ -7,7 +7,7 @@ import {
   Transition,
 } from "@headlessui/react";
 import {
-  ArrowUpRightIcon,
+  // ArrowUpRightIcon,
   EllipsisHorizontalIcon,
   // EyeIcon,
   // PencilIcon,
@@ -20,49 +20,39 @@ import PropTypes from "prop-types";
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
-import { OrdersDrawer } from "./OrdersDrawer";
-import { useDisclosure } from "hooks";
-import { useNavigate } from "react-router";
-import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { useAuthContext } from "app/contexts/auth/context";
+// import { OrdersDrawer } from "./OrdersDrawer";
+// import { useDisclosure } from "hooks";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
 export function RowActions({ row, table }) {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
-  const [deleteSuccess, setDeleteSuccess] = useState(false);
-  const [deleteError, setDeleteError] = useState(false);
-
-  const navigate = useNavigate();
-
   const [cookies] = useCookies(["authToken"]);
-
-  const { user } = useAuthContext();
-
-  const role = user?.role;
 
   const token = cookies.authToken;
 
   const { t } = useTranslation();
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
+
+  // const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
+  //   useDisclosure(false);
+
   const confirmMessages = {
     pending: {
-      description: t(
-        "nav.purchase.confirmPurchaseOrderDelete.pending.description",
-      ),
+      description: t("nav.notification.confirmDelete.pending.description"),
     },
     success: {
-      title: t("nav.purchase.confirmPurchaseOrderDelete.success.title"),
+      title: t("nav.notification.confirmDelete.success.title"),
     },
   };
-
-  const [isDrawerOpen, { close: closeDrawer, open: openDrawer }] =
-    useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -76,21 +66,8 @@ export function RowActions({ row, table }) {
 
   const handleDeleteRows = async () => {
     setConfirmDeleteLoading(true);
-    if (Number(row.original?.received_amount) > 0) {
-      toast.error(
-        t("nav.purchase.confirmPurchaseOrderDelete.failed.impossible_delete"),
-      );
-
-      setDeleteSuccess(true);
-      setConfirmDeleteLoading(false);
-
-      closeModal();
-
-      return;
-    }
-
     const response = await fetch(
-      `${API_URL}/api/purchase_order/delete/${row.original?.id}`,
+      `${API_URL}/api/notification/delete_notification/${row.original?.id}`,
       {
         method: "POST",
         headers: {
@@ -100,7 +77,7 @@ export function RowActions({ row, table }) {
     );
 
     if (!response.ok) {
-      toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
+      toast.error(t("nav.notification.confirmDelete.failed.title"));
 
       setConfirmDeleteLoading(false);
 
@@ -109,7 +86,7 @@ export function RowActions({ row, table }) {
       throw new Error("Something went wrong");
     }
 
-    toast.success(t("nav.purchase.confirmPurchaseOrderDelete.success.title"));
+    toast.success(t("nav.notification.confirmDelete.success.title"));
 
     setDeleteSuccess(true);
     setConfirmDeleteLoading(false);
@@ -128,14 +105,6 @@ export function RowActions({ row, table }) {
   return (
     <>
       <div className="flex justify-center space-x-1.5">
-        <Button
-          isIcon
-          className="size-8 rounded-full"
-          onClick={() => openDrawer()}
-        >
-          <ArrowUpRightIcon className="size-4" />
-        </Button>
-
         <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
             <EllipsisHorizontalIcon className="size-4.5" />
@@ -156,48 +125,13 @@ export function RowActions({ row, table }) {
               <MenuItem>
                 {({ focus }) => (
                   <button
-                    className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                      focus &&
-                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                    )}
-                    onClick={() => {
-                      navigate(`/purchase-order/receive/${row.original?.id}`);
-                    }}
-                  >
-                    <span>{t("nav.purchase.receive")}</span>
-                  </button>
-                )}
-              </MenuItem>
-
-              {(role === "user" || role === "secretary") && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
-                        focus &&
-                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
-                      )}
-                      onClick={() => {
-                        navigate(`/purchase-order/edit/${row.original?.id}`);
-                      }}
-                    >
-                      <span>{t("nav.table_fields.edit")}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              <MenuItem>
-                {({ focus }) => (
-                  <button
                     onClick={openModal}
                     className={clsx(
                       "this:error text-this dark:text-this-light flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <span>{t("nav.table_fields.delete")}</span>
+                    <span>Delete</span>
                   </button>
                 )}
               </MenuItem>
@@ -215,7 +149,7 @@ export function RowActions({ row, table }) {
         state={state}
       />
 
-      <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
+      {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}
     </>
   );
 }

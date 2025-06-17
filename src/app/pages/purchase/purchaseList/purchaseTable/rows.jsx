@@ -120,8 +120,6 @@ export function ProfitCell({ getValue, row }) {
 }
 
 export function OrderStatusCell({ getValue, row, column, table }) {
-  console.log(row.original);
-
   const val = getValue();
 
   const { t } = useTranslation();
