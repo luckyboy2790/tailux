@@ -206,31 +206,43 @@ export function ProductModal({ type, row, isOpen, close }) {
                   <Input
                     placeholder={t("nav.product.product_cost")}
                     label={t("nav.product.product_cost")}
-                    type="number"
-                    value={data.product_cost}
-                    onChange={(e) =>
-                      setData({ ...data, product_cost: e.target.value })
-                    }
+                    type="text"
+                    value={data.product_cost.toLocaleString()}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^0-9.]/g, "");
+                      setData({
+                        ...data,
+                        product_cost: rawValue ? Number(rawValue) : 0,
+                      });
+                    }}
                   />
 
                   <Input
                     placeholder={t("nav.product.product_price")}
                     label={t("nav.product.product_price")}
-                    type="number"
-                    value={data.product_price}
-                    onChange={(e) =>
-                      setData({ ...data, product_price: e.target.value })
-                    }
+                    type="text"
+                    value={data.product_price.toLocaleString()}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^0-9.]/g, "");
+                      setData({
+                        ...data,
+                        product_price: rawValue ? Number(rawValue) : 0,
+                      });
+                    }}
                   />
 
                   <Input
                     placeholder={t("nav.product.alert_quantity")}
                     label={t("nav.product.alert_quantity")}
                     value={data.alert_quantity}
-                    type="number"
-                    onChange={(e) =>
-                      setData({ ...data, alert_quantity: e.target.value })
-                    }
+                    type="text"
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^0-9.]/g, "");
+                      setData({
+                        ...data,
+                        alert_quantity: rawValue ? Number(rawValue) : 0,
+                      });
+                    }}
                   />
 
                   <Upload

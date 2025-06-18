@@ -193,13 +193,17 @@ export function PreturnModal({ type, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder={t("nav.return.amount")}
-                    label={t("nav.return.amount")}
-                    type="number"
-                    value={data.amount}
-                    onChange={(e) =>
-                      setData({ ...data, amount: e.target.value })
-                    }
+                    placeholder={t("nav.payment.amount")}
+                    label={t("nav.payment.amount")}
+                    type="text"
+                    value={data.amount.toLocaleString()}
+                    onChange={(e) => {
+                      const rawValue = e.target.value.replace(/[^0-9.]/g, "");
+                      setData({
+                        ...data,
+                        amount: rawValue ? Number(rawValue) : 0,
+                      });
+                    }}
                   />
 
                   <Upload
