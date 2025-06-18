@@ -105,7 +105,9 @@ export const getColumns = (t) => [
             "text-sm-plus",
             props.row.original?.status === 0
               ? "text-red-600"
-              : "dark:text-dark-100 font-medium text-gray-800",
+              : balance < 0
+                ? "font-medium text-orange-600"
+                : "dark:text-dark-100 font-medium text-gray-800",
           )}
         >
           {`${balance < 0 ? "-" : ""}$${formatted}`}
