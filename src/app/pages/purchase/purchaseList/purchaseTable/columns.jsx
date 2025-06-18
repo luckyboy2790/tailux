@@ -88,10 +88,7 @@ export const getColumns = (t) => [
         (props.row.original?.discount || 0) +
         (props.row.original?.shipping || 0) -
         (props.row.original?.paid_amount || 0);
-      const formatted = Math.abs(balance).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
+      const formatted = Math.abs(balance).toLocaleString();
       // return (
       //   <p
       //     className={clsx(
