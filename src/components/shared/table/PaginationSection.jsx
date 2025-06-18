@@ -30,7 +30,7 @@ export function PaginationSection({
       <div className="text-xs-plus flex items-center space-x-2">
         <span>{t("nav.pagination.show")}</span>
         <Select
-          data={[10, 20, 30, 40, 50, 100]}
+          data={[10, 20, 30, 40, 50, 100, 200, 300, 400, 500]}
           value={pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
