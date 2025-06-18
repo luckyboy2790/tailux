@@ -6,10 +6,11 @@ import { Avatar, Card } from "components/ui";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "app/contexts/auth/context";
+import { Spinner } from "components/ui";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const Overview = ({ data, extraData, companyId, setCompanyId }) => {
+const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
   const { t } = useTranslation();
   const [companies, setCompanies] = useState([]);
 
@@ -82,7 +83,7 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.today_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.today_purchases.total || 0}
+              {data?.today_purchases.total.toFixed().toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -101,7 +102,7 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.week_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.week_purchases.total || 0}
+              {data?.week_purchases.total.toFixed().toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -121,7 +122,7 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
             <div>
               <p>{t("nav.dashboards.month_purchase")}</p>
               <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                {data?.month_purchases.total || 0}
+                {data?.month_purchases.total.toFixed().toLocaleString() || 0}
               </p>
             </div>
             <Avatar
@@ -141,9 +142,13 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
           <Card className="flex justify-between p-5">
             <div>
               <p>{t("nav.dashboards.company_balance")}</p>
-              <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                {extraData?.company_balance || 0}
-              </p>
+              {loading ? (
+                <Spinner color="info" isElastic className="mt-1.5 size-6" />
+              ) : (
+                <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
+                  {extraData?.company_balance.toFixed().toLocaleString() || 0}
+                </p>
+              )}
             </div>
             <Avatar
               size={12}
@@ -162,7 +167,7 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.today_sale")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.today_sales.total || 0}
+              {data?.today_sales.total.toFixed().toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -181,7 +186,7 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.week_sales")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.week_sales.total || 0}
+              {data?.week_sales.total.toFixed().toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -200,7 +205,7 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
           <div>
             <p>{t("nav.dashboards.expiries_in_5days_purchases")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.expired_in_5days_purchases || 0}
+              {data?.expired_in_5days_purchases.toFixed().toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -218,9 +223,13 @@ const Overview = ({ data, extraData, companyId, setCompanyId }) => {
         <Card className="flex justify-between p-5">
           <div>
             <p>{t("nav.dashboards.expired_purchase")}</p>
-            <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {extraData?.expired_purchases || 0}
-            </p>
+            {loading ? (
+              <Spinner color="info" isElastic className="mt-1.5 size-6" />
+            ) : (
+              <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
+                {extraData?.expired_purchases.toFixed().toLocaleString() || 0}
+              </p>
+            )}
           </div>
           <Avatar
             size={12}

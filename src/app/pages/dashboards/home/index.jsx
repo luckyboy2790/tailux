@@ -5,7 +5,6 @@ import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import DashboardIcon from "assets/dualicons/dashboards.svg?react";
 import Overview from "./overview";
 import OverviewChart from "./overview_chart";
-import { Spinner } from "components/ui";
 import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -73,7 +72,6 @@ export default function Home() {
 
     const loadData = async () => {
       try {
-        setLoading(true);
         const dateRange =
           startDate && endDate
             ? { firstDay: startDate, lastDay: endDate }
@@ -89,13 +87,15 @@ export default function Home() {
           abortController.signal,
         );
 
+        setDashboardData(mainData);
+
+        setLoading(true);
+
         const additionalData = await fetchData(
           `${API_URL}/api/dashboard/extra-dashboard-data`,
           { company_id: companyId },
           abortController.signal,
         );
-
-        setDashboardData(mainData);
         setExtraData(additionalData);
 
         setLoading(false);
@@ -117,40 +117,35 @@ export default function Home() {
 
   return (
     <Page title="Homepage">
-      {loading ? (
-        <div className="flex h-full w-full items-center justify-center">
-          <Spinner color="info" isElastic className="size-15" />
-        </div>
-      ) : (
-        <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
-          <div className="flex min-w-0 flex-col gap-8">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <DashboardIcon className="size-6 shrink-0 stroke-[1.5]" />
-                <h2 className="dark:text-dark-50 truncate text-xl font-medium tracking-wide text-gray-800">
-                  {t("nav.dashboards.dashboards")}
-                </h2>
-              </div>
-              <Breadcrumbs items={breadcrumbs} />
+      <div className="transition-content w-full px-(--margin-x) pt-5 lg:pt-6">
+        <div className="flex min-w-0 flex-col gap-8">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <DashboardIcon className="size-6 shrink-0 stroke-[1.5]" />
+              <h2 className="dark:text-dark-50 truncate text-xl font-medium tracking-wide text-gray-800">
+                {t("nav.dashboards.dashboards")}
+              </h2>
             </div>
-
-            <Overview
-              data={dashboardData?.return}
-              extraData={extraData}
-              setCompanyId={setCompanyId}
-              companyId={companyId}
-            />
-
-            <OverviewChart
-              data={dashboardData}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-            />
+            <Breadcrumbs items={breadcrumbs} />
           </div>
+
+          <Overview
+            data={dashboardData?.return}
+            extraData={extraData}
+            setCompanyId={setCompanyId}
+            companyId={companyId}
+            loading={loading}
+          />
+
+          <OverviewChart
+            data={dashboardData}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+          />
         </div>
-      )}
+      </div>
     </Page>
   );
 }
