@@ -378,7 +378,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: t("nav.all_suppliers"),
+          label: "",
           disabled: false,
         },
         ...(Array.isArray(supplierResult?.data) ? supplierResult.data : []).map(

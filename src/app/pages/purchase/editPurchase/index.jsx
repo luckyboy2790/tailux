@@ -85,7 +85,7 @@ const EditPurchase = () => {
       );
       const supplierResult = await supplierRes.json();
       const supplierData = [
-        { key: -1, value: "", label: t("nav.select.select_supplier") },
+        { key: -1, value: "", label: "" },
         ...(supplierResult?.data?.map((item, key) => ({
           key,
           value: item?.id,

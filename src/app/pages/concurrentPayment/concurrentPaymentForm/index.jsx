@@ -52,7 +52,7 @@ const ConcurrentPage = () => {
         {
           key: -1,
           value: "",
-          label: t("nav.select.select_supplier"),
+          label: "",
           disabled: false,
         },
         ...(Array.isArray(supplierResult?.data) ? supplierResult.data : []).map(

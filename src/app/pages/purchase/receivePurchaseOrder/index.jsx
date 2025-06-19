@@ -53,7 +53,7 @@ const AddPurchaseOrder = () => {
       const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
       const storeResult = await storeRes.json();
       const storeData = [
-        { key: -1, value: "", label: t("nav.select.select_store") },
+        { key: -1, value: "", label: "" },
         ...(storeResult?.data?.map((item, key) => ({
           key,
           value: item?.id,

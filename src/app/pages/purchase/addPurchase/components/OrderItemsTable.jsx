@@ -94,7 +94,7 @@ const EditableSelect = ({
         {
           key: -1,
           value: "",
-          label: t("nav.select.select_product"),
+          label: "",
           disabled: false,
         },
         ...(Array.isArray(result?.data) ? result.data : []).map(

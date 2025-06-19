@@ -187,39 +187,42 @@ const CustomCombobox = forwardRef(
                           Nothing found for {query}
                         </div>
                       ) : (
-                        filteredData.map(({ item, refIndex }) => (
-                          <ComboboxOption
-                            key={refIndex}
-                            className={({ selected, active }) =>
-                              clsx(
-                                "relative cursor-pointer px-4 py-2 outline-hidden transition-colors select-none",
-                                active &&
-                                  !selected &&
-                                  "dark:bg-dark-600 bg-gray-100",
-                                selected
-                                  ? "bg-primary-600 dark:bg-primary-500 text-white"
-                                  : "dark:text-dark-100 text-gray-800",
-                              )
-                            }
-                            value={item}
-                          >
-                            {({ selected }) => (
-                              <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
+                        filteredData.map(
+                          ({ item, refIndex }) =>
+                            item.key !== -1 && (
+                              <ComboboxOption
+                                key={refIndex}
+                                className={({ selected, active }) =>
+                                  clsx(
+                                    "relative cursor-pointer px-4 py-2 outline-hidden transition-colors select-none",
+                                    active &&
+                                      !selected &&
+                                      "dark:bg-dark-600 bg-gray-100",
+                                    selected
+                                      ? "bg-primary-600 dark:bg-primary-500 text-white"
+                                      : "dark:text-dark-100 text-gray-800",
+                                  )
+                                }
+                                value={item}
                               >
-                                {highlight ? (
-                                  <Highlight query={query}>
-                                    {item?.[displayField]}
-                                  </Highlight>
-                                ) : (
-                                  item?.[displayField]
+                                {({ selected }) => (
+                                  <span
+                                    className={`block truncate ${
+                                      selected ? "font-medium" : "font-normal"
+                                    }`}
+                                  >
+                                    {highlight ? (
+                                      <Highlight query={query}>
+                                        {item?.[displayField]}
+                                      </Highlight>
+                                    ) : (
+                                      item?.[displayField]
+                                    )}
+                                  </span>
                                 )}
-                              </span>
-                            )}
-                          </ComboboxOption>
-                        ))
+                              </ComboboxOption>
+                            ),
+                        )
                       )}
                     </ComboboxOptions>
                   </Transition>

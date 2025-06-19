@@ -379,7 +379,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: t("nav.all_customers"),
+          label: "",
           disabled: false,
         },
         ...(Array.isArray(customerResult?.data) ? customerResult.data : []).map(
