@@ -21,8 +21,10 @@ import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useCookies } from "react-cookie";
+import { Image } from "antd";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 const initialData = [
   {
@@ -40,6 +42,9 @@ const EditSale = () => {
   const [stores, setStores] = useState([]);
   const [users, setUsers] = useState([]);
   const [customer, setCustomer] = useState([]);
+
+  const [imageEditable, setImageEditable] = useState(false);
+  const [images, setImages] = useState([]);
 
   const [cookie] = useCookies();
 
@@ -132,13 +137,17 @@ const EditSale = () => {
           quantity: item.quantity,
         })) || initialData;
 
+      const imagePaths =
+        data.images?.map((img) => img.path.split("/").pop()) || [];
+      setImages(data.images?.map((img) => img.path)) || [];
+
       reset({
         sale_date: dayjs(data.timestamp).format("YYYY-MM-DD"),
         reference_no: data.reference_no || "",
         store: data.store_id?.toString() || "",
         user_id: data.user_id?.toString() || "",
         customer_id: data.customer_id?.toString() || "",
-        attachment: data.attachment || [],
+        attachment: imagePaths,
         note: data.note || "",
       });
 
@@ -151,10 +160,9 @@ const EditSale = () => {
   const onSubmit = async (formData) => {
     setIsLoading(true);
 
-    console.log(id);
-
     const payload = {
       id,
+      imageEditable: imageEditable,
       date: formData.sale_date,
       reference_no: formData.reference_no,
       store: Number(formData.store),
@@ -181,8 +189,6 @@ const EditSale = () => {
       note: formData.note || "",
       status: 1,
     };
-
-    console.log(payload);
 
     try {
       if (isLoading) return;
@@ -301,17 +307,34 @@ const EditSale = () => {
                       error={errors?.customer_id?.message}
                     />
 
-                    <Controller
-                      name="attachment"
-                      control={control}
-                      render={({ field }) => (
-                        <CoverImageUpload
-                          label={t("nav.purchase.attachment")}
-                          error={errors?.attachment?.message}
-                          {...field}
-                        />
-                      )}
-                    />
+                    <div className="flex flex-col gap-2.5">
+                      <Controller
+                        name="attachment"
+                        control={control}
+                        render={({ field }) => (
+                          <CoverImageUpload
+                            label={t("nav.purchase.attachment")}
+                            error={errors?.attachment?.message}
+                            {...field}
+                            onChange={(files) => {
+                              setImageEditable(true);
+                              field.onChange(files);
+                            }}
+                          />
+                        )}
+                      />
+                      <div className="flex gap-1">
+                        {!imageEditable &&
+                          images.map((item, index) => (
+                            <Image
+                              key={index}
+                              width={45}
+                              height={45}
+                              src={`${IMG_URL}${item}`}
+                            />
+                          ))}
+                      </div>
+                    </div>
                   </div>
 
                   <div className="mt-5 space-y-5">

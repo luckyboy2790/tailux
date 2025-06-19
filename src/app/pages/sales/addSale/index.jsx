@@ -30,7 +30,7 @@ const initialData = [
     product_name: "",
     expiry_date: "",
     product_price: 0,
-    quantity: 0,
+    quantity: 1,
   },
 ];
 

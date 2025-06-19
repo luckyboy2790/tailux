@@ -46,15 +46,18 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
   };
 
   useEffect(() => {
-    setValue(initialValue ?? 0);
+    setValue(initialValue ?? 1);
   }, [initialValue]);
 
   return (
     <Input
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={value.toLocaleString()}
+      onChange={(e) => {
+        const rawValue = e.target.value.replace(/[^0-9]/g, "");
+        setValue(rawValue ? Number(rawValue) : 1);
+      }}
       onBlur={onBlur}
-      type="number"
+      type="text"
     />
   );
 };
@@ -173,7 +176,7 @@ export function OrderItemsTable({ orders, setOrders }) {
           const qty = Number(row.getValue("quantity")) || 0;
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{cost * qty}</span>
+              <span>{(cost * qty).toLocaleString()}</span>
             </div>
           );
         },

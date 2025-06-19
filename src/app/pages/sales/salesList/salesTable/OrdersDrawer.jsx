@@ -248,9 +248,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
                       {index + 1}
                     </Td>
                     <Td>{tr?.product_id}</Td>
-                    <Td>{tr?.product_name}</Td>
-                    <Td>{tr?.cost}</Td>
-                    <Td>{tr?.quantity}</Td>
+                    <Td>{tr?.product?.name}</Td>
+                    <Td>{Number(tr?.price).toLocaleString()}</Td>
+                    <Td>{Number(tr?.quantity).toLocaleString()}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                       {tr.subtotal.toLocaleString()}
                     </Td>
@@ -342,7 +342,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
               </div>
 
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
-                {row.original?.user_username}
+                {row.original?.user?.first_name} {row.original?.user?.last_name}
               </div>
             </div>
             <div className="flex flex-col">
