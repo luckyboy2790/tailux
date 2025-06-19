@@ -15,8 +15,10 @@ import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useNavigate, useParams } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
+import { Image } from "antd";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 const initialState = {
   reference_no: "",
@@ -50,6 +52,9 @@ const AddPurchaseOrder = () => {
   const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [imageEditable, setImageEditable] = useState(false);
+  const [images, setImages] = useState([]);
 
   const navigate = useNavigate();
 
@@ -102,21 +107,31 @@ const AddPurchaseOrder = () => {
       const data = result.data;
 
       const mappedOrders =
-        data.orders.map((item) => ({
-          product_name: item.product,
-          product_cost: item.cost,
-          quantity: item.quantity,
-          discount: item.discount_string,
-          image: [],
-          category: item.category_id,
-        })) || [];
+        data.orders.map((item) => {
+          const imagePaths =
+            item.images?.map((img) => img.split("/").pop()) || [];
+          return {
+            id: item.id,
+            product_name: item.product,
+            product_cost: item.cost,
+            quantity: item.quantity,
+            discount: item.discount_string,
+            image: imagePaths,
+            category: item.category_id,
+            imageEditable: false,
+          };
+        }) || [];
+
+      const imagePaths =
+        data.attachments?.map((img) => img.split("/").pop()) || [];
+      setImages(data.attachments?.map((img) => img)) || [];
 
       reset({
         purchase_date: dayjs(data.timestamp).format("YYYY-MM-DD"),
         reference_no: data.reference_no,
         supplier_id: Number(data.supplier_id) || 0,
         discount: data.discount_string || "",
-        attachment: [],
+        attachment: imagePaths,
         note: data.note || "",
         orders: mappedOrders,
       });
@@ -131,6 +146,7 @@ const AddPurchaseOrder = () => {
 
     const payload = {
       id,
+      imageEditable: imageEditable,
       date: formData.purchase_date,
       reference_no: formData.reference_no,
       supplier: Number(formData.supplier_id),
@@ -142,6 +158,8 @@ const AddPurchaseOrder = () => {
         discount: o.discount,
         image: o.image,
         category: o.category,
+        imageEditable: o.imageEditable || false,
+        original_id: o?.id || "no",
       })),
       items_json: JSON.stringify(
         orders.map((o) => ({
@@ -151,6 +169,8 @@ const AddPurchaseOrder = () => {
           discount: o.discount,
           image: o.image,
           category: o.category,
+          imageEditable: o.imageEditable || false,
+          original_id: o?.id || "no",
         })),
       ),
       discount_string: formData.discount.toString(),
@@ -317,17 +337,34 @@ const AddPurchaseOrder = () => {
                         error={errors?.discount?.message}
                       />
 
-                      <Controller
-                        name="attachment"
-                        control={control}
-                        render={({ field }) => (
-                          <CoverImageUpload
-                            label={t("nav.purchase.attachment")}
-                            error={errors?.attachment?.message}
-                            {...field}
-                          />
-                        )}
-                      />
+                      <div className="flex flex-col gap-2.5">
+                        <Controller
+                          name="attachment"
+                          control={control}
+                          render={({ field }) => (
+                            <CoverImageUpload
+                              label={t("nav.purchase.attachment")}
+                              error={errors?.attachment?.message}
+                              {...field}
+                              onChange={(files) => {
+                                setImageEditable(true);
+                                field.onChange(files);
+                              }}
+                            />
+                          )}
+                        />
+                        <div className="flex gap-1">
+                          {!imageEditable &&
+                            images?.map((item, index) => (
+                              <Image
+                                key={index}
+                                width={45}
+                                height={45}
+                                src={`${IMG_URL}${item}`}
+                              />
+                            ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
 

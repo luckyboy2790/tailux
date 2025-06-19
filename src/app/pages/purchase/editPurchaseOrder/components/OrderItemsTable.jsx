@@ -28,8 +28,10 @@ import dayjs from "dayjs";
 import { Combobox } from "components/shared/form/Combobox";
 import { CoverImageUpload } from "./CoverImageUpload";
 import { toast } from "sonner";
+import { Image } from "antd";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 const initialData = [
   {
@@ -39,6 +41,7 @@ const initialData = [
     discount: "",
     image: [],
     category: "",
+    imageEditable: false,
   },
 ];
 
@@ -67,10 +70,13 @@ const EditableNumberInput = ({
 
   return (
     <Input
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={value.toLocaleString()}
+      onChange={(e) => {
+        const rawValue = e.target.value.replace(/[^0-9]/g, "");
+        setValue(rawValue ? Number(rawValue) : 1);
+      }}
       onBlur={onBlur}
-      type="number"
+      type="text"
     />
   );
 };
@@ -233,14 +239,29 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
           const value = row.getValue(column.id) || [];
           const handleChange = (newFiles) => {
             table.options.meta?.updateData(row.index, column.id, newFiles);
+            table.options.meta?.updateData(row.index, "imageEditable", true);
           };
 
           return (
-            <CoverImageUpload
-              value={value}
-              onChange={handleChange}
-              className="max-w-xs"
-            />
+            <div className="flex gap-3">
+              <CoverImageUpload
+                value={value}
+                onChange={handleChange}
+                className="max-w-xs"
+              />
+              {!row.original.imageEditable && (
+                <div className="flex gap-1">
+                  {value.map((item, index) => (
+                    <Image
+                      key={index}
+                      width={38}
+                      height={38}
+                      src={`${IMG_URL}/pre_order_items/${item}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           );
         },
       },
@@ -280,7 +301,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
 
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{subTotal.toFixed()}</span>
+              <span>{Number(subTotal.toFixed()).toLocaleString()}</span>
             </div>
           );
         },

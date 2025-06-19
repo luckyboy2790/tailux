@@ -35,7 +35,7 @@ const initialData = [
   {
     product_name: "",
     product_cost: 0,
-    quantity: 0,
+    quantity: 1,
     discount: "",
     image: [],
     category: "",
@@ -67,10 +67,13 @@ const EditableNumberInput = ({
 
   return (
     <Input
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={value.toLocaleString()}
+      onChange={(e) => {
+        const rawValue = e.target.value.replace(/[^0-9]/g, "");
+        setValue(rawValue ? Number(rawValue) : 1);
+      }}
       onBlur={onBlur}
-      type="number"
+      type="text"
     />
   );
 };
@@ -280,7 +283,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
 
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{subTotal.toFixed()}</span>
+              <span>{Number(subTotal.toFixed()).toLocaleString()}</span>
             </div>
           );
         },

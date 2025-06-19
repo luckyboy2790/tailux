@@ -12,16 +12,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
 // Local Imports
-import {
-  Badge,
-  Button,
-  Table,
-  THead,
-  TBody,
-  Th,
-  Tr,
-  Td,
-} from "components/ui";
+import { Badge, Button, Table, THead, TBody, Th, Tr, Td } from "components/ui";
 import { orderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { Image } from "antd";
@@ -33,9 +24,14 @@ export function OrdersDrawer({ isOpen, close, row }) {
   const { locale } = useLocaleContext();
 
   const val = row.original;
-  const orderStatus = Number(val?.received_amount) === 0 ? "pending" : "partial";
-  const statusOption = orderStatusOptions.find((item) => item.value === orderStatus);
-  const date = dayjs(row.original.timestamp).locale(locale).format("DD MMM YYYY");
+  const orderStatus =
+    Number(val?.received_amount) === 0 ? "pending" : "partial";
+  const statusOption = orderStatusOptions.find(
+    (item) => item.value === orderStatus,
+  );
+  const date = dayjs(row.original.timestamp)
+    .locale(locale)
+    .format("DD MMM YYYY");
 
   const cols = [
     "#",
@@ -74,7 +70,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
-              <div className="font-semibold">{t("nav.detail.reference_no")}:</div>
+              <div className="font-semibold">
+                {t("nav.detail.reference_no")}:
+              </div>
               <div className="text-primary-600 dark:text-primary-400 text-xl font-medium">
                 {val.reference_no} &nbsp;
                 <Badge className="align-text-bottom" color={statusOption.color}>
@@ -95,7 +93,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.supplier")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.supplier")}:
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {val.supplier.name}
               </div>
@@ -108,7 +108,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.company")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.company")}:
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {val.supplier.company_name}
               </div>
@@ -119,7 +121,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.attachments")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.attachments")}:
+              </div>
               <div className="flex w-full gap-4 overflow-x-auto">
                 {val?.attachments?.map((item, key) => (
                   <div className="w-25" key={key}>
@@ -159,11 +163,13 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     key={tr.id}
                     className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200"
                   >
-                    <Td className="px-0 font-medium ltr:rounded-l-lg rtl:rounded-r-lg">{index + 1}</Td>
+                    <Td className="px-0 font-medium ltr:rounded-l-lg rtl:rounded-r-lg">
+                      {index + 1}
+                    </Td>
                     <Td>{tr?.product}</Td>
-                    <Td>{tr?.cost}</Td>
+                    <Td>{Number(tr?.cost).toLocaleString()}</Td>
                     <Td>{tr?.discount_string}</Td>
-                    <Td>{tr?.quantity}</Td>
+                    <Td>{Number(tr?.quantity).toLocaleString()}</Td>
                     <Td>
                       <div className="gap-2">
                         {tr?.images.length &&
@@ -184,13 +190,14 @@ export function OrdersDrawer({ isOpen, close, row }) {
                             (
                               tr?.cost -
                               tr?.cost *
-                                (Number(tr?.discount_string.replace("%", "")) / 100)
-                            ).toFixed() * Number(tr?.quantity)
-                          )
+                                (Number(tr?.discount_string.replace("%", "")) /
+                                  100)
+                            ).toFixed() * Number(tr?.quantity),
+                          ).toLocaleString()
                         : Number(
                             (tr?.cost - Number(tr?.discount_string)).toFixed() *
-                              Number(tr?.quantity)
-                          )}
+                              Number(tr?.quantity),
+                          ).toLocaleString()}
                     </Td>
                   </Tr>
                 ))}
@@ -199,17 +206,23 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.total_amount")}:
                   </Td>
                   <Td colSpan={3}>
-                    {val.orders.reduce((sum, tr) => sum + tr?.quantity, 0)}
+                    {val.orders
+                      .reduce((sum, tr) => sum + Number(tr?.quantity), 0)
+                      .toLocaleString()}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {val.orders.reduce((sum, tr) => {
-                      const discountValue = tr?.discount_string.includes("%")
-                        ? tr?.cost * (Number(tr?.discount_string.replace("%", "")) / 100)
-                        : Number(tr?.discount_string);
-                      return (
-                        sum + (tr?.cost - discountValue).toFixed() * tr?.quantity
-                      );
-                    }, 0)}
+                    {val.orders
+                      .reduce((sum, tr) => {
+                        const discountValue = tr?.discount_string.includes("%")
+                          ? tr?.cost *
+                            (Number(tr?.discount_string.replace("%", "")) / 100)
+                          : Number(tr?.discount_string);
+                        return (
+                          sum +
+                          (tr?.cost - discountValue).toFixed() * tr?.quantity
+                        );
+                      }, 0)
+                      .toLocaleString()}
                   </Td>
                 </Tr>
               </TBody>
@@ -220,7 +233,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-end px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 text-end font-semibold">{t("nav.detail.created_at")}</div>
+              <div className="mb-1.5 text-end font-semibold">
+                {t("nav.detail.created_at")}
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
                 {dayjs(val?.created_at).locale(locale).format("DD MMM YYYY")}
               </div>

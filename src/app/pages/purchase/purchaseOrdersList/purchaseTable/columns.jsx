@@ -82,8 +82,10 @@ export const getColumns = (t) => [
         className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.received_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
       >
         $
-        {(props.row.original?.grand_total || 0) -
-          (props.row.original?.received_amount || 0)}
+        {(
+          (props.row.original?.grand_total || 0) -
+          (props.row.original?.received_amount || 0)
+        ).toLocaleString()}
       </p>
     ),
     filterFn: "inNumberRange",
