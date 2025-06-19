@@ -23,8 +23,10 @@ import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
+import { Image } from "antd";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 const initialData = [
   {
@@ -47,6 +49,9 @@ const EditPurchase = () => {
   const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [imageEditable, setImageEditable] = useState(false);
+  const [images, setImages] = useState([]);
 
   const methods = useForm({
     resolver: yupResolver(useValidationSchema()),
@@ -111,6 +116,10 @@ const EditPurchase = () => {
           quantity: item.quantity,
         })) || initialData;
 
+      const imagePaths =
+        data.images?.map((img) => img.path.split("/").pop()) || [];
+      setImages(data.images?.map((img) => img.path)) || [];
+
       reset({
         title: data.title || "",
         caption: data.caption || "",
@@ -125,9 +134,9 @@ const EditPurchase = () => {
         store: data.store_id?.toString() || "",
         supplier_id: data.supplier_id?.toString() || "",
         day_of_credit: Number(data.credit_days) || 0,
-        attachment: data.attachment || [],
+        attachment: imagePaths,
         discount: Number(data.discount) || 0,
-        shipping: Number(data.shipping) || 0,
+        shipping: Number(data.shipping_string) || 0,
         returns: Number(data.returns) || 0,
         note: data.note || "",
       });
@@ -143,6 +152,7 @@ const EditPurchase = () => {
 
     const payload = {
       id,
+      imageEditable: imageEditable,
       date: formData.purchase_date,
       reference_no: formData.reference_no,
       store: Number(formData.store),
@@ -305,17 +315,34 @@ const EditPurchase = () => {
                       {...register("day_of_credit")}
                       error={errors?.day_of_credit?.message}
                     />
-                    <Controller
-                      name="attachment"
-                      control={control}
-                      render={({ field }) => (
-                        <CoverImageUpload
-                          label={t("nav.purchase.attachment")}
-                          error={errors?.attachment?.message}
-                          {...field}
-                        />
-                      )}
-                    />
+                    <div className="flex flex-col gap-2.5">
+                      <Controller
+                        name="attachment"
+                        control={control}
+                        render={({ field }) => (
+                          <CoverImageUpload
+                            label={t("nav.purchase.attachment")}
+                            error={errors?.attachment?.message}
+                            {...field}
+                            onChange={(files) => {
+                              setImageEditable(true);
+                              field.onChange(files);
+                            }}
+                          />
+                        )}
+                      />
+                      <div className="flex gap-1">
+                        {!imageEditable &&
+                          images.map((item, index) => (
+                            <Image
+                              key={index}
+                              width={45}
+                              height={45}
+                              src={`${IMG_URL}${item}`}
+                            />
+                          ))}
+                      </div>
+                    </div>
                   </div>
 
                   <div className="mt-5 space-y-5">
@@ -327,23 +354,64 @@ const EditPurchase = () => {
                   </div>
 
                   <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                    <Input
-                      label={t("nav.purchase.discount")}
-                      type="number"
-                      {...register("discount")}
-                      error={errors?.discount?.message}
+                    <Controller
+                      name="discount"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          label={t("nav.purchase.discount")}
+                          type="text"
+                          value={(field.value || 0).toLocaleString()}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            field.onChange(rawValue ? Number(rawValue) : 0);
+                          }}
+                          error={errors?.discount?.message}
+                        />
+                      )}
                     />
-                    <Input
-                      label={t("nav.purchase.shipping")}
-                      type="number"
-                      {...register("shipping")}
-                      error={errors?.shipping?.message}
+
+                    <Controller
+                      name="shipping"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          label={t("nav.purchase.shipping")}
+                          type="text"
+                          value={(field.value || 0).toLocaleString()}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            field.onChange(rawValue ? Number(rawValue) : 0);
+                          }}
+                          error={errors?.shipping?.message}
+                        />
+                      )}
                     />
-                    <Input
-                      label={t("nav.purchase.return")}
-                      type="number"
-                      {...register("returns")}
-                      error={errors?.returns?.message}
+
+                    <Controller
+                      name="returns"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          label={t("nav.purchase.return")}
+                          type="text"
+                          value={(field.value || 0).toLocaleString()}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            field.onChange(rawValue ? Number(rawValue) : 0);
+                          }}
+                          error={errors?.returns?.message}
+                        />
+                      )}
                     />
                   </div>
 

@@ -51,7 +51,7 @@ const initialData = [
     product_name: "",
     expiry_date: "",
     product_cost: 0,
-    quantity: 0,
+    quantity: 1,
   },
 ];
 
@@ -316,27 +316,66 @@ const AddPurchase = () => {
                     />
                   </div>
 
-                  <div className="mt-5 space-y-5">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                      <Input
-                        label={t("nav.purchase.discount")}
-                        type="number"
-                        {...register("discount")}
-                        error={errors?.discount?.message}
-                      />
-                      <Input
-                        label={t("nav.purchase.shipping")}
-                        type="number"
-                        {...register("shipping")}
-                        error={errors?.shipping?.message}
-                      />
-                      <Input
-                        label={t("nav.purchase.return")}
-                        type="number"
-                        {...register("returns")}
-                        error={errors?.returns?.message}
-                      />
-                    </div>
+                  <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+                    <Controller
+                      name="discount"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          label={t("nav.purchase.discount")}
+                          type="text"
+                          value={(field.value || 0).toLocaleString()}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            field.onChange(rawValue ? Number(rawValue) : 0);
+                          }}
+                          error={errors?.discount?.message}
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      name="shipping"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          label={t("nav.purchase.shipping")}
+                          type="text"
+                          value={(field.value || 0).toLocaleString()}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            field.onChange(rawValue ? Number(rawValue) : 0);
+                          }}
+                          error={errors?.shipping?.message}
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      name="returns"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          label={t("nav.purchase.return")}
+                          type="text"
+                          value={(field.value || 0).toLocaleString()}
+                          onChange={(e) => {
+                            const rawValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              "",
+                            );
+                            field.onChange(rawValue ? Number(rawValue) : 0);
+                          }}
+                          error={errors?.returns?.message}
+                        />
+                      )}
+                    />
                   </div>
 
                   <div className="mt-5 space-y-5">

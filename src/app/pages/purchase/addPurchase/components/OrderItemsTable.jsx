@@ -44,15 +44,18 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
   };
 
   useEffect(() => {
-    setValue(initialValue ?? 0);
+    setValue(initialValue ?? 1);
   }, [initialValue]);
 
   return (
     <Input
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={value.toLocaleString()}
+      onChange={(e) => {
+        const rawValue = e.target.value.replace(/[^0-9]/g, "");
+        setValue(rawValue ? Number(rawValue) : 1);
+      }}
       onBlur={onBlur}
-      type="number"
+      type="text"
     />
   );
 };
@@ -195,7 +198,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
           const qty = Number(row.getValue("quantity")) || 0;
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{cost * qty}</span>
+              <span>{(cost * qty).toLocaleString()}</span>
             </div>
           );
         },
@@ -260,10 +263,9 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
   });
 
   const subtotal = orders.reduce(
-    (sum, o) => sum + (Number(o.product_cost) || 0) * (Number(o.quantity) || 0),
+    (sum, o) => sum + (Number(o.product_cost) || 0) * (Number(o.quantity) || 1),
     0,
   );
-
   const grandTotal = subtotal - discount - shipping - returns;
 
   return (
@@ -279,7 +281,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
                 product_name: "",
                 expiry_date: "",
                 product_cost: 0,
-                quantity: 0,
+                quantity: 1,
               },
             ]);
           }}
@@ -325,8 +327,10 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
             </TBody>
           </Table>
           <div className="mt-4 mr-4 mb-3 text-right font-medium text-black dark:text-white">
-            {`${t("nav.purchase.purchase")} (${subtotal}) - ${t("nav.purchase.discount")} (${discount}) - ${t("nav.purchase.shipping")} (${shipping}) - ${t("nav.purchase.return")} (${returns}) = `}
-            <span className="text-primary font-bold">{grandTotal}</span>
+            {`Purchase (${subtotal.toLocaleString()}) - Discount (${discount.toLocaleString()}) - Shipping (${shipping.toLocaleString()}) - Returns (${returns.toLocaleString()}) = `}
+            <span className="text-primary font-bold">
+              {grandTotal.toLocaleString()}
+            </span>
           </div>
         </div>
       </Card>
