@@ -66,13 +66,15 @@ export function OrdersDrawer({ isOpen, close, row }) {
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
-              <div className="font-semibold">{t("nav.detail.reference_no")}:</div>
+              <div className="font-semibold">
+                {t("nav.detail.reference_no")}:
+              </div>
               <div className="text-primary-600 dark:text-primary-400 text-xl font-medium">
                 {row.original.reference_no}
               </div>
               <p className="font-medium">{date}</p>
               <p className="font-medium">
-                {t("nav.purchase.shipping_carrier")}: {" "}
+                {t("nav.purchase.shipping_carrier")}:{" "}
                 <span className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                   {row.original?.shipping_carrier || ""}
                 </span>
@@ -91,7 +93,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.supplier")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.supplier")}:
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original?.supplier?.name || ""}
               </div>
@@ -108,51 +112,76 @@ export function OrdersDrawer({ isOpen, close, row }) {
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.company")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.company")}:
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original?.supplier?.company?.name || ""}
               </div>
             </div>
           </div>
 
-          <hr className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5" role="none" />
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.store")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.store")}:
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original?.store?.name || ""}
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="mb-1.5 text-end font-semibold">{t("nav.detail.company")}:</div>
+              <div className="mb-1.5 text-end font-semibold">
+                {t("nav.detail.company")}:
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
                 {row.original?.store?.company?.name || ""}
               </div>
             </div>
           </div>
 
-          <hr className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5" role="none" />
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
 
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 font-semibold">{t("nav.detail.attachments")}:</div>
+              <div className="mb-1.5 font-semibold">
+                {t("nav.detail.attachments")}:
+              </div>
               <div>
                 {row.original?.images?.map((item, key) => (
-                  <Image key={key} width={100} height={100} src={`${IMG_URL}${item}`} />
+                  <Image
+                    key={key}
+                    width={100}
+                    height={100}
+                    src={`${IMG_URL}${item}`}
+                  />
                 ))}
               </div>
             </div>
           </div>
 
-          <hr className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5" role="none" />
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
 
           <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
             {t("nav.detail.order_item")}
           </p>
 
           <div className="mt-1 h-auto min-h-90 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
-            <Table hoverable className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2">
+            <Table
+              hoverable
+              className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2"
+            >
               <THead>
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
                   {cols.map((title, index) => (
@@ -167,26 +196,43 @@ export function OrdersDrawer({ isOpen, close, row }) {
               </THead>
               <TBody>
                 {row.original.items.map((tr, index) => (
-                  <Tr key={tr.id} className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                    <Td className="px-0 font-medium ltr:rounded-l-lg rtl:rounded-r-lg">{index + 1}</Td>
-                    <Td>{typeof tr?.product === "object" ? tr?.product?.name : tr?.product || ""}</Td>
-                    <Td>{typeof tr?.category === "object" ? tr?.category?.name : tr?.category || ""}</Td>
-                    <Td>{tr?.cost}</Td>
-                    <Td>{tr?.quantity}</Td>
+                  <Tr
+                    key={tr.id}
+                    className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200"
+                  >
+                    <Td className="px-0 font-medium ltr:rounded-l-lg rtl:rounded-r-lg">
+                      {index + 1}
+                    </Td>
+                    <Td>
+                      {typeof tr?.product === "object"
+                        ? tr?.product?.name
+                        : tr?.product || ""}
+                    </Td>
+                    <Td>
+                      {typeof tr?.category === "object"
+                        ? tr?.category?.name
+                        : tr?.category || ""}
+                    </Td>
+                    <Td>{Number(tr?.cost).toLocaleString()}</Td>
+                    <Td>{Number(tr?.quantity).toLocaleString()}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                       {(tr?.amount || 0).toLocaleString()}
                     </Td>
                   </Tr>
                 ))}
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                  <Td colSpan={4} className="text-end">{t("nav.detail.total_cop")}</Td>
+                  <Td colSpan={4} className="text-end">
+                    {t("nav.detail.total_cop")}
+                  </Td>
                   <Td>{(sums?.quantity || 0).toLocaleString()}</Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {(sums?.amount || 0).toLocaleString()}
                   </Td>
                 </Tr>
                 <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
-                  <Td colSpan={5} className="text-end">{t("nav.detail.total_amount")}</Td>
+                  <Td colSpan={5} className="text-end">
+                    {t("nav.detail.total_amount")}
+                  </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                     {(row.original?.total_amount || 0).toLocaleString()}
                   </Td>
@@ -195,13 +241,20 @@ export function OrdersDrawer({ isOpen, close, row }) {
             </Table>
           </div>
 
-          <hr className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5" role="none" />
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
 
           <div className="mt-3 flex w-full justify-end px-4 sm:px-5">
             <div className="flex flex-col">
-              <div className="mb-1.5 text-end font-semibold">{t("nav.detail.created_at")}</div>
+              <div className="mb-1.5 text-end font-semibold">
+                {t("nav.detail.created_at")}
+              </div>
               <div className="dark:text-dark-50 mt-1.5 text-gray-800">
-                {dayjs(row.original?.created_at).locale(locale).format("DD MMM YYYY")}
+                {dayjs(row.original?.created_at)
+                  .locale(locale)
+                  .format("DD MMM YYYY")}
               </div>
             </div>
           </div>

@@ -214,6 +214,11 @@ export function OrderItemsTable({ orders, setOrders }) {
         accessorKey: "product_cost",
         id: "product_cost",
         header: t("nav.purchase.product_cost"),
+        cell: ({ row }) => (
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <span>{Number(row.getValue("product_cost")).toLocaleString()}</span>
+          </div>
+        ),
       },
       {
         accessorKey: "discount",
@@ -224,16 +229,33 @@ export function OrderItemsTable({ orders, setOrders }) {
         accessorKey: "quantity",
         id: "quantity",
         header: t("nav.purchase.quantity"),
+        cell: ({ row }) => (
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <span>{Number(row.getValue("quantity")).toLocaleString()}</span>
+          </div>
+        ),
       },
       {
         accessorKey: "receive_quantity",
         id: "receive_quantity",
         header: t("nav.purchase.receive_quantity"),
+        cell: ({ row }) => (
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <span>
+              {Number(row.getValue("receive_quantity")).toLocaleString()}
+            </span>
+          </div>
+        ),
       },
       {
         accessorKey: "balance",
         id: "balance",
         header: t("nav.purchase.balance"),
+        cell: ({ row }) => (
+          <div className="flex items-center space-x-2 rtl:space-x-reverse">
+            <span>{Number(row.getValue("balance")).toLocaleString()}</span>
+          </div>
+        ),
       },
       {
         accessorKey: "receive",
@@ -274,11 +296,9 @@ export function OrderItemsTable({ orders, setOrders }) {
 
           const subTotal = (cost - discountAmount).toFixed() * qty;
 
-          console.log(subTotal);
-
           return (
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-              <span>{subTotal}</span>
+              <span>{Number(subTotal).toLocaleString()}</span>
             </div>
           );
         },

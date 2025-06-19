@@ -14,13 +14,17 @@ import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import { Image } from "antd";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 const AddPurchaseOrder = () => {
   const { t } = useTranslation();
   const [orders, setOrders] = useState([]);
   const [stores, setStores] = useState([]);
+  const [imageEditable, setImageEditable] = useState(false);
+  const [images, setImages] = useState([]);
 
   const { id } = useParams();
 
@@ -77,8 +81,6 @@ const AddPurchaseOrder = () => {
 
       const data = result.data;
 
-      console.log(data);
-
       const resPurchaseOrders = await fetch(
         `${API_URL}/api/purchase_order/get_detail/${data.purchase_order_id}`,
         {
@@ -113,15 +115,16 @@ const AddPurchaseOrder = () => {
         };
       });
 
+      const imagePaths = data.images?.map((img) => img.split("/").pop()) || [];
+      setImages(data.images?.map((img) => img)) || [];
+
       reset({
         reference_no: data.reference_no,
         store_id: Number(data.store_id),
-        attachment: [],
+        attachment: imagePaths,
         shipping_carrier: data.shipping_carrier,
         note: data.note,
       });
-
-      console.log(mappedOrders);
 
       setOrders(mappedOrders);
     };
@@ -141,6 +144,7 @@ const AddPurchaseOrder = () => {
 
     const payload = {
       id,
+      imageEditable: imageEditable,
       reference_no: formData.reference_no,
       store: Number(formData.store_id),
       shipping_carrier: formData.shipping_carrier,
@@ -189,8 +193,6 @@ const AddPurchaseOrder = () => {
       note: formData.note || "",
       status: 1,
     };
-
-    console.log(payload);
 
     try {
       if (isLoading) return;
@@ -316,17 +318,34 @@ const AddPurchaseOrder = () => {
                         )}
                       />
 
-                      <Controller
-                        name="attachment"
-                        control={control}
-                        render={({ field }) => (
-                          <CoverImageUpload
-                            label={t("nav.purchase.attachment")}
-                            error={errors?.attachment?.message}
-                            {...field}
-                          />
-                        )}
-                      />
+                      <div className="flex flex-col gap-2.5">
+                        <Controller
+                          name="attachment"
+                          control={control}
+                          render={({ field }) => (
+                            <CoverImageUpload
+                              label={t("nav.purchase.attachment")}
+                              error={errors?.attachment?.message}
+                              {...field}
+                              onChange={(files) => {
+                                setImageEditable(true);
+                                field.onChange(files);
+                              }}
+                            />
+                          )}
+                        />
+                        <div className="flex gap-1">
+                          {!imageEditable &&
+                            images.map((item, index) => (
+                              <Image
+                                key={index}
+                                width={45}
+                                height={45}
+                                src={`${IMG_URL}${item}`}
+                              />
+                            ))}
+                        </div>
+                      </div>
 
                       <Input
                         label={t("nav.purchase.shipping_carrier")}
