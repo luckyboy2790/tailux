@@ -85,6 +85,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
       t("nav.detail.reference_no"),
       t("nav.detail.amount"),
       t("nav.detail.note"),
+      "",
     ],
     [t],
   );
@@ -111,7 +112,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           leave="ease-in transform-gpu transition-transform duration-200"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
-          className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-2xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
+          className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-3xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
@@ -348,7 +349,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
             {t("nav.detail.payment_list")}
           </p>
 
-          <div className="mt-1 h-auto min-h-30 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
+          <div className="mt-1 h-auto min-h-50 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
             <Table
               hoverable
               className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2"
@@ -381,7 +382,77 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     </Td>
                     <Td>{tr?.reference_no}</Td>
                     <Td>{tr?.amount.toLocaleString()}</Td>
-                    <Td>{tr?.note || ""}</Td>
+                    <Td>
+                      <div className="flex items-center justify-start gap-2">
+                        {tr?.images?.map((img) => (
+                          <Image
+                            key={img}
+                            src={`${IMG_URL}${img.path}`}
+                            alt={img}
+                            width={35}
+                            height={35}
+                          />
+                        ))}
+                        {tr?.note || ""}
+                      </div>
+                    </Td>
+                  </Tr>
+                ))}
+              </TBody>
+            </Table>
+          </div>
+
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
+
+          <div className="mt-1 h-auto min-h-50 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
+            <Table
+              hoverable
+              className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2"
+            >
+              <THead>
+                <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
+                  {paymentCols.map((title, index) => (
+                    <Th
+                      key={index}
+                      className="dark:text-dark-100 py-2 font-semibold text-gray-800 uppercase first:px-0 last:px-0"
+                    >
+                      {title}
+                    </Th>
+                  ))}
+                </Tr>
+              </THead>
+              <TBody>
+                {row.original.preturns?.map((tr, index) => (
+                  <Tr
+                    key={tr.id}
+                    className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200"
+                  >
+                    <Td className="px-0 font-medium ltr:rounded-l-lg rtl:rounded-r-lg">
+                      {index + 1}
+                    </Td>
+                    <Td>
+                      {dayjs(tr?.timestamp)
+                        .locale(locale)
+                        .format("DD MMM YYYY")}
+                    </Td>
+                    <Td>{tr?.reference_no}</Td>
+                    <Td>{tr?.amount.toLocaleString()}</Td>
+                    <Td>
+                      <div className="flex items-center justify-start gap-2">
+                        {tr?.attachment && (
+                          <Image
+                            src={`${IMG_URL}${tr?.attachment}`}
+                            alt={tr?.attachment}
+                            width={35}
+                            height={35}
+                          />
+                        )}
+                        {tr?.note || ""}
+                      </div>
+                    </Td>
                   </Tr>
                 ))}
               </TBody>

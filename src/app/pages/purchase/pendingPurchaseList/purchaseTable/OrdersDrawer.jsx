@@ -99,7 +99,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
           leave="ease-in transform-gpu transition-transform duration-200"
           leaveFrom="translate-x-0"
           leaveTo="translate-x-full"
-          className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-2xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
+          className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-3xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
         >
           <div className="flex justify-between px-4 sm:px-5">
             <div>
@@ -336,7 +336,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
             {t("nav.detail.payment_list")}
           </p>
 
-          <div className="mt-1 h-auto min-h-30 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
+          <div className="mt-1 h-auto min-h-50 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
             <Table
               hoverable
               className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2"
