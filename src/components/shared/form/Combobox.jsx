@@ -177,7 +177,7 @@ const CustomCombobox = forwardRef(
                         width: inputWidth,
                       }}
                       className={clsx(
-                        "dark:border-dark-500 dark:bg-dark-750 absolute z-10 max-h-60 overflow-x-hidden overflow-y-auto rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:shadow-none",
+                        "dark:border-dark-500 dark:bg-dark-750 absolute z-10 !max-h-47.5 overflow-x-hidden overflow-y-auto rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden dark:shadow-none",
                         multiple && "mt-2",
                         `left-${inputLeft}`,
                       )}

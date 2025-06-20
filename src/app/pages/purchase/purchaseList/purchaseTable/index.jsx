@@ -4,7 +4,6 @@ import {
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -217,7 +216,6 @@ export default function PurchaseTable() {
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
-    getPaginationRowModel: getPaginationRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
 

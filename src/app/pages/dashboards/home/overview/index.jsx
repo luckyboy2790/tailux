@@ -83,7 +83,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.today_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.today_purchases.total.toFixed().toLocaleString() || 0}
+              {Number(
+                data?.today_purchases.total.toFixed() || 0,
+              ).toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -102,7 +104,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.week_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.week_purchases.total.toFixed().toLocaleString() || 0}
+              {Number(
+                data?.week_purchases.total.toFixed() || 0,
+              ).toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -122,7 +126,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
             <div>
               <p>{t("nav.dashboards.month_purchase")}</p>
               <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                {data?.month_purchases.total.toFixed().toLocaleString() || 0}
+                {Number(
+                  data?.month_purchases.total.toFixed() || 0,
+                ).toLocaleString() || 0}
               </p>
             </div>
             <Avatar
@@ -146,7 +152,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
                 <Spinner color="info" isElastic className="mt-1.5 size-6" />
               ) : (
                 <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                  {extraData?.company_balance.toFixed().toLocaleString() || 0}
+                  {Number(
+                    extraData?.company_balance.toFixed() || 0,
+                  ).toLocaleString() || 0}
                 </p>
               )}
             </div>
@@ -167,7 +175,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.today_sale")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.today_sales.total.toFixed().toLocaleString() || 0}
+              {Number(
+                data?.today_sales.total.toFixed() || 0,
+              ).toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -186,7 +196,8 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.week_sales")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.week_sales.total.toFixed().toLocaleString() || 0}
+              {Number(data?.week_sales.total.toFixed() || 0).toLocaleString() ||
+                0}
             </p>
           </div>
           <Avatar
@@ -205,7 +216,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.expiries_in_5days_purchases")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {data?.expired_in_5days_purchases.toFixed().toLocaleString() || 0}
+              {Number(
+                data?.expired_in_5days_purchases.toFixed() || 0,
+              ).toLocaleString() || 0}
             </p>
           </div>
           <Avatar
@@ -227,7 +240,9 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
               <Spinner color="info" isElastic className="mt-1.5 size-6" />
             ) : (
               <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                {extraData?.expired_purchases.toFixed().toLocaleString() || 0}
+                {Number(
+                  extraData?.expired_purchases.toFixed() || 0,
+                ).toLocaleString() || 0}
               </p>
             )}
           </div>

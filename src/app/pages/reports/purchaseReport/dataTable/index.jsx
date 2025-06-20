@@ -4,7 +4,6 @@ import {
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -50,7 +49,7 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [filters, setFilters] = useLocalStorage("productReportTableFilters", {
+  const [filters, setFilters] = useLocalStorage("purchaseReportTableFilters", {
     pageIndex: 0,
     pageSize: 10,
     sorting: [{ id: "timestamp", desc: true }],
@@ -78,12 +77,12 @@ export default function PurchaseTable() {
   const [supplierId, setSupplierId] = useState(filters.supplierId);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-productReportTable-1",
+    "column-visibility-purchaseReportTable-1",
     {},
   );
 
   const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-productReportTable-1",
+    "column-pinning-purchaseReportTable-1",
     {},
   );
 
@@ -165,7 +164,6 @@ export default function PurchaseTable() {
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
-    getPaginationRowModel: getPaginationRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
 

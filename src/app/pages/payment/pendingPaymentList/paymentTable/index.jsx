@@ -4,7 +4,6 @@ import {
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -216,7 +215,6 @@ export default function PaymentTable() {
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
-    getPaginationRowModel: getPaginationRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
 
