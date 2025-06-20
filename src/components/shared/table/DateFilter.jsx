@@ -13,11 +13,11 @@ import { useState } from "react";
 
 // ----------------------------------------------------------------------
 
-export function DateFilter({ onChange, title, config }) {
+export function DateFilter({ onChange, title, config, value }) {
   const { smAndDown } = useBreakpointsContext();
   const { locale } = useLocaleContext();
 
-  const [selectedDates, setSelectedDates] = useState([null, null]);
+  const [selectedDates, setSelectedDates] = useState(value || [null, null]);
 
   const handleDateChange = (date) => {
     if (date.length === 0) {

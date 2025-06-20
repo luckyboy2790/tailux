@@ -11,16 +11,7 @@ import {
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
 
-import {
-  Table,
-  Card,
-  THead,
-  TBody,
-  Th,
-  Tr,
-  Td,
-  Skeleton,
-} from "components/ui";
+import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
@@ -53,15 +44,19 @@ export default function CategoryTable() {
     enableRowDense: false,
   });
 
+  const [filters, setFilters] = useLocalStorage("categoryTableFilters", {
+    pageIndex: 0,
+    pageSize: 10,
+    globalFilter: "",
+  });
+
   const [totalCount, setTotalCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(filters.pageIndex);
+  const [pageSize, setPageSize] = useState(filters.pageSize);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [globalFilter, setGlobalFilter] = useState("");
-
-  const [sorting, setSorting] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState(filters.globalFilter);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
     "column-visibility-orders-1",
@@ -74,6 +69,14 @@ export default function CategoryTable() {
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  useEffect(() => {
+    setFilters({
+      pageIndex,
+      pageSize,
+      globalFilter,
+    });
+  }, [setFilters, pageIndex, pageSize, globalFilter]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -105,7 +108,6 @@ export default function CategoryTable() {
     columns: columns,
     state: {
       globalFilter,
-      sorting,
       columnVisibility,
       columnPinning,
       tableSettings,
@@ -151,7 +153,6 @@ export default function CategoryTable() {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     globalFilterFn: fuzzyFilter,
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
     getPaginationRowModel: getPaginationRowModel(),

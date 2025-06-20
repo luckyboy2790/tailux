@@ -17,6 +17,8 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 export function Toolbar({
   table,
   onDateRangeChange,
+  startDate,
+  endDate,
   companyId,
   setCompanyId,
   supplierId,
@@ -47,6 +49,8 @@ export function Toolbar({
             <Filters
               table={table}
               onDateRangeChange={onDateRangeChange}
+              startDate={startDate}
+              endDate={endDate}
               companyId={companyId}
               setCompanyId={setCompanyId}
               supplierId={supplierId}
@@ -71,6 +75,8 @@ export function Toolbar({
             <Filters
               table={table}
               onDateRangeChange={onDateRangeChange}
+              startDate={startDate}
+              endDate={endDate}
               companyId={companyId}
               setCompanyId={setCompanyId}
               supplierId={supplierId}
@@ -105,6 +111,8 @@ function SearchInput({ table }) {
 function Filters({
   table,
   onDateRangeChange,
+  startDate,
+  endDate,
   companyId,
   setCompanyId,
   supplierId,
@@ -185,6 +193,7 @@ function Filters({
       {table.getColumn("timestamp") && (
         <DateFilter
           onChange={onDateRangeChange}
+          value={[startDate, endDate]}
           title={t("nav.purchase.purchase_date_range")}
           config={{
             mode: "range",

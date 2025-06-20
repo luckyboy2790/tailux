@@ -48,35 +48,69 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [totalCount, setTotalCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [filters, setFilters] = useLocalStorage("salesReportTableFilters", {
+    pageIndex: 0,
+    pageSize: 10,
+    sorting: [{ id: "timestamp", desc: true }],
+    startDate: "",
+    endDate: "",
+    companyId: "",
+    customerId: "",
+    globalFilter: "",
+  });
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(filters.pageIndex);
+  const [pageSize, setPageSize] = useState(filters.pageSize);
+
+  const [startDate, setStartDate] = useState(filters.startDate);
+  const [endDate, setEndDate] = useState(filters.endDate);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState(filters.globalFilter);
 
-  const [sorting, setSorting] = useState([{ id: "timestamp", desc: true }]);
+  const [sorting, setSorting] = useState(filters.sorting);
 
-  const [companyId, setCompanyId] = useState("");
-  const [customerId, setCustomerId] = useState("");
+  const [companyId, setCompanyId] = useState(filters.companyId);
+  const [customerId, setCustomerId] = useState(filters.customerId);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-orders-1",
+    "column-visibility-salesReportTable-1",
     {},
   );
 
   const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-orders-1",
+    "column-pinning-salesReportTable-1",
     {},
   );
 
   const columns = getColumns(t);
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  useEffect(() => {
+    setFilters({
+      pageIndex,
+      pageSize,
+      sorting,
+      startDate,
+      endDate,
+      companyId,
+      customerId,
+      globalFilter,
+    });
+  }, [
+    setFilters,
+    pageIndex,
+    pageSize,
+    sorting,
+    startDate,
+    endDate,
+    companyId,
+    customerId,
+    globalFilter,
+  ]);
 
   const table = useReactTable({
     data: orders,
@@ -214,6 +248,8 @@ export default function PurchaseTable() {
               setStartDate(date[0]);
               setEndDate(date[1]);
             }}
+            startDate={startDate}
+            endDate={endDate}
             companyId={companyId}
             setCompanyId={setCompanyId}
             customerId={customerId}

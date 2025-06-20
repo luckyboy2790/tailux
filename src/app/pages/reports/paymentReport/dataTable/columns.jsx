@@ -21,6 +21,7 @@ export const getColumns = (t) => [
         {props.row.original?.reference_no}
       </p>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.paymentable?.reference_no, {
     id: "paymentable_reference",
@@ -30,16 +31,19 @@ export const getColumns = (t) => [
         {props.row.original?.paymentable?.reference_no}
       </p>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.paymentable?.supplier_company, {
     id: "party_company",
     header: t("nav.table_fields.supplier"),
     cell: CustomerCell,
+    enableSorting: false,
   }),
   columnHelper.accessor((row) => row?.amount, {
     id: "amount",
     header: t("nav.table_fields.amount"),
     cell: TotalCell,
     filterFn: "inNumberRange",
+    enableSorting: false,
   }),
 ];

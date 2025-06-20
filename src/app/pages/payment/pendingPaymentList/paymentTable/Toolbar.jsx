@@ -14,7 +14,14 @@ import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-export function Toolbar({ table, onDateRangeChange, companyId, setCompanyId }) {
+export function Toolbar({
+  table,
+  onDateRangeChange,
+  startDate,
+  endDate,
+  companyId,
+  setCompanyId,
+}) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
@@ -49,6 +56,8 @@ export function Toolbar({ table, onDateRangeChange, companyId, setCompanyId }) {
               onDateRangeChange={onDateRangeChange}
               companyId={companyId}
               setCompanyId={setCompanyId}
+              startDate={startDate}
+              endDate={endDate}
             />
           </div>
         </>
@@ -71,6 +80,8 @@ export function Toolbar({ table, onDateRangeChange, companyId, setCompanyId }) {
               onDateRangeChange={onDateRangeChange}
               companyId={companyId}
               setCompanyId={setCompanyId}
+              startDate={startDate}
+              endDate={endDate}
             />
           </div>
 
@@ -98,7 +109,14 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onDateRangeChange, companyId, setCompanyId }) {
+function Filters({
+  table,
+  onDateRangeChange,
+  companyId,
+  setCompanyId,
+  startDate,
+  endDate,
+}) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
   const { t } = useTranslation();
@@ -143,6 +161,7 @@ function Filters({ table, onDateRangeChange, companyId, setCompanyId }) {
       {table.getColumn("timestamp") && (
         <DateFilter
           onChange={onDateRangeChange}
+          value={[startDate, endDate]}
           title={t("nav.payment.payment_date_range")}
           config={{
             mode: "range",

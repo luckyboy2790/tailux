@@ -32,7 +32,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const isSafari = getUserAgentBrowser() === "Safari";
 
-export default function PurchaseTable() {
+export default function PaymentTable() {
   const { cardSkin } = useThemeContext();
 
   const { t } = useTranslation();
@@ -50,20 +50,30 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [totalCount, setTotalCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [filters, setFilters] = useLocalStorage("pendingPaymentTableFilters", {
+    pageIndex: 0,
+    pageSize: 10,
+    sorting: [{ id: "timestamp", desc: true }],
+    startDate: "",
+    endDate: "",
+    companyId: "",
+    globalFilter: "",
+  });
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(filters.pageIndex);
+  const [pageSize, setPageSize] = useState(filters.pageSize);
+
+  const [startDate, setStartDate] = useState(filters.startDate);
+  const [endDate, setEndDate] = useState(filters.endDate);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState(filters.globalFilter);
 
-  const [sorting, setSorting] = useState([{ id: "timestamp", desc: true }]);
+  const [sorting, setSorting] = useState(filters.sorting);
 
-  const [companyId, setCompanyId] = useState("");
+  const [companyId, setCompanyId] = useState(filters.companyId);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
     "column-visibility-orders-1",
@@ -76,6 +86,27 @@ export default function PurchaseTable() {
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  useEffect(() => {
+    setFilters({
+      pageIndex,
+      pageSize,
+      sorting,
+      startDate,
+      endDate,
+      companyId,
+      globalFilter,
+    });
+  }, [
+    setFilters,
+    pageIndex,
+    pageSize,
+    sorting,
+    startDate,
+    endDate,
+    companyId,
+    globalFilter,
+  ]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -212,6 +243,8 @@ export default function PurchaseTable() {
               setStartDate(date[0]);
               setEndDate(date[1]);
             }}
+            startDate={startDate}
+            endDate={endDate}
             companyId={companyId}
             setCompanyId={setCompanyId}
           />

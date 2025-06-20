@@ -2,9 +2,9 @@ import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import PaymentIcon from "assets/dualicons/payments.svg?react";
 import { useTranslation } from "react-i18next";
-import PurchaseTable from "./purchaseTable";
+import PaymentTable from "./paymentTable";
 
-const PurchaseList = () => {
+const PendingPaymentList = () => {
   const { t } = useTranslation();
   const breadcrumbs = [
     { title: t("nav.payment.payment"), path: "/payment" },
@@ -25,11 +25,11 @@ const PurchaseList = () => {
             <Breadcrumbs items={breadcrumbs} />
           </div>
 
-          <PurchaseTable />
+          <PaymentTable />
         </div>
       </div>
     </Page>
   );
 };
 
-export default PurchaseList;
+export default PendingPaymentList;

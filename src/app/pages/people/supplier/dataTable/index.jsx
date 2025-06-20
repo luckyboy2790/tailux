@@ -44,13 +44,19 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
+  const [filters, setFilters] = useLocalStorage("supplierTableFilters", {
+    pageIndex: 0,
+    pageSize: 10,
+    globalFilter: "",
+  });
+
   const [totalCount, setTotalCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(filters.pageIndex);
+  const [pageSize, setPageSize] = useState(filters.pageSize);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState(filters.globalFilter);
 
   const [sorting, setSorting] = useState([]);
 
@@ -65,6 +71,14 @@ export default function PurchaseTable() {
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  useEffect(() => {
+    setFilters({
+      pageIndex,
+      pageSize,
+      globalFilter,
+    });
+  }, [setFilters, pageIndex, pageSize, globalFilter]);
 
   const fetchData = useCallback(async () => {
     try {

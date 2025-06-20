@@ -19,6 +19,8 @@ export function Toolbar({
   onDateRangeChange,
   companyId,
   setCompanyId,
+  startDate,
+  endDate,
   supplierId,
   setSupplierId,
 }) {
@@ -51,6 +53,8 @@ export function Toolbar({
               setCompanyId={setCompanyId}
               supplierId={supplierId}
               setSupplierId={setSupplierId}
+              startDate={startDate}
+              endDate={endDate}
             />
           </div>
         </>
@@ -75,6 +79,8 @@ export function Toolbar({
               setCompanyId={setCompanyId}
               supplierId={supplierId}
               setSupplierId={setSupplierId}
+              startDate={startDate}
+              endDate={endDate}
             />
           </div>
 
@@ -109,6 +115,8 @@ function Filters({
   setCompanyId,
   supplierId,
   setSupplierId,
+  startDate,
+  endDate,
 }) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -187,6 +195,7 @@ function Filters({
       {table.getColumn("timestamp") && (
         <DateFilter
           onChange={onDateRangeChange}
+          value={[startDate, endDate]}
           title={t("nav.purchase.purchase_date_range")}
           config={{
             mode: "range",

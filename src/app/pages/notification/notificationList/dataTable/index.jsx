@@ -11,7 +11,7 @@ import {
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
 
-import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton,  } from "components/ui";
+import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
@@ -48,36 +48,48 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
+  const [filters, setFilters] = useLocalStorage("notificationTableFilters", {
+    pageIndex: 0,
+    pageSize: 10,
+    globalFilter: "",
+  });
+
   const [totalCount, setTotalCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageIndex, setPageIndex] = useState(filters.pageIndex);
+  const [pageSize, setPageSize] = useState(filters.pageSize);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [globalFilter, setGlobalFilter] = useState("");
-
-  const [sorting, setSorting] = useState([]);
+  const [globalFilter, setGlobalFilter] = useState(filters.globalFilter);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-orders-1",
+    "column-visibility-notification-1",
     {},
   );
 
   const columns = getColumns(t);
 
   const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-orders-1",
+    "column-pinning-notification-1",
     {},
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  useEffect(() => {
+    setFilters({
+      pageIndex,
+      pageSize,
+      globalFilter,
+    });
+  }, [setFilters, pageIndex, pageSize, globalFilter]);
 
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
 
       const queryString = new URLSearchParams({
-        keyword: "",
+        keyword: globalFilter,
         page: (pageIndex + 1).toString(),
         per_page: pageSize.toString(),
       }).toString();
@@ -93,8 +105,6 @@ export default function PurchaseTable() {
 
       const result = await response.json();
 
-      console.log(result);
-
       setOrders(result.data.notifications);
       setTotalCount(result.data.notification_count);
 
@@ -102,18 +112,13 @@ export default function PurchaseTable() {
     } catch (error) {
       console.log(error);
     }
-  }, [pageIndex, pageSize, token]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  }, [pageIndex, pageSize, token, globalFilter]);
 
   const table = useReactTable({
     data: orders,
     columns: columns,
     state: {
       globalFilter,
-      sorting,
       columnVisibility,
       columnPinning,
       tableSettings,
@@ -159,7 +164,6 @@ export default function PurchaseTable() {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     globalFilterFn: fuzzyFilter,
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
     getPaginationRowModel: getPaginationRowModel(),
@@ -172,6 +176,10 @@ export default function PurchaseTable() {
   useDidUpdate(() => table.resetRowSelection(), [orders]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <Page title="Orders Datatable v1">
@@ -252,70 +260,70 @@ export default function PurchaseTable() {
                   <TBody>
                     {isLoading ? (
                       <>
-                      <Tr
-                        className={clsx(
-                          "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                        )}
-                      >
-                        {new Array(columns.length)
-                          .fill(null)
-                          .map((_, index) => (
-                            <Td
-                              key={index}
-                              className={clsx(
-                                "relative bg-white",
-                                cardSkin === "shadow-sm"
-                                  ? "dark:bg-dark-700"
-                                  : "dark:bg-dark-900",
-                              )}
-                            >
-                              <Skeleton className="size-7 w-full rounded-lg" />
-                            </Td>
-                          ))}
-                      </Tr>
-                      <Tr
-                        className={clsx(
-                          "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                        )}
-                      >
-                        {new Array(columns.length)
-                          .fill(null)
-                          .map((_, index) => (
-                            <Td
-                              key={index}
-                              className={clsx(
-                                "relative bg-white",
-                                cardSkin === "shadow-sm"
-                                  ? "dark:bg-dark-700"
-                                  : "dark:bg-dark-900",
-                              )}
-                            >
-                              <Skeleton className="size-7 w-full rounded-lg" />
-                            </Td>
-                          ))}
-                      </Tr>
-                      <Tr
-                        className={clsx(
-                          "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                        )}
-                      >
-                        {new Array(columns.length)
-                          .fill(null)
-                          .map((_, index) => (
-                            <Td
-                              key={index}
-                              className={clsx(
-                                "relative bg-white",
-                                cardSkin === "shadow-sm"
-                                  ? "dark:bg-dark-700"
-                                  : "dark:bg-dark-900",
-                              )}
-                            >
-                              <Skeleton className="size-7 w-full rounded-lg" />
-                            </Td>
-                          ))}
-                      </Tr>
-                    </>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                      </>
                     ) : (
                       table.getRowModel().rows.map((row) => {
                         return (

@@ -11,16 +11,7 @@ import {
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
-import {
-  Table,
-  Card,
-  THead,
-  TBody,
-  Th,
-  Tr,
-  Td,
-  Skeleton,
-} from "components/ui";
+import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
@@ -59,33 +50,67 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [totalCount, setTotalCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [filters, setFilters] = useLocalStorage("productReportTableFilters", {
+    pageIndex: 0,
+    pageSize: 10,
+    sorting: [{ id: "timestamp", desc: true }],
+    startDate: "",
+    endDate: "",
+    companyId: "",
+    supplierId: "",
+    globalFilter: "",
+  });
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(filters.pageIndex);
+  const [pageSize, setPageSize] = useState(filters.pageSize);
+
+  const [startDate, setStartDate] = useState(filters.startDate);
+  const [endDate, setEndDate] = useState(filters.endDate);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [globalFilter, setGlobalFilter] = useState("");
+  const [globalFilter, setGlobalFilter] = useState(filters.globalFilter);
 
-  const [sorting, setSorting] = useState([{ id: "timestamp", desc: true }]);
+  const [sorting, setSorting] = useState(filters.sorting);
 
-  const [companyId, setCompanyId] = useState("");
-  const [supplierId, setSupplierId] = useState("");
+  const [companyId, setCompanyId] = useState(filters.companyId);
+  const [supplierId, setSupplierId] = useState(filters.supplierId);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-orders-1",
+    "column-visibility-productReportTable-1",
     {},
   );
 
   const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-orders-1",
+    "column-pinning-productReportTable-1",
     {},
   );
 
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
+  useEffect(() => {
+    setFilters({
+      pageIndex,
+      pageSize,
+      sorting,
+      startDate,
+      endDate,
+      companyId,
+      supplierId,
+      globalFilter,
+    });
+  }, [
+    setFilters,
+    pageIndex,
+    pageSize,
+    sorting,
+    startDate,
+    endDate,
+    companyId,
+    supplierId,
+    globalFilter,
+  ]);
 
   const table = useReactTable({
     data: orders,
@@ -223,6 +248,8 @@ export default function PurchaseTable() {
               setStartDate(date[0]);
               setEndDate(date[1]);
             }}
+            startDate={startDate}
+            endDate={endDate}
             companyId={companyId}
             setCompanyId={setCompanyId}
             supplierId={supplierId}
