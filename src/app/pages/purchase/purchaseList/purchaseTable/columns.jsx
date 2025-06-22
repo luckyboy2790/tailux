@@ -41,20 +41,29 @@ export const getColumns = (t) => [
     id: "reference_no",
     label: t("nav.table_fields.reference_no"),
     header: t("nav.table_fields.reference_no"),
-    cell: (props) => (
-      <p
-        className={clsx(
-          "text-sm-plus",
-          props.row.original?.status === 0
-            ? "text-red-600"
-            : "dark:text-dark-100 font-medium text-gray-800",
-        )}
-      >
-        {props.row.original?.reference_no}
-      </p>
-    ),
+    cell: (props) => {
+      const formatText = (text) => {
+        return text
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+      };
+  
+      return (
+        <p
+          className={clsx(
+            "text-sm-plus",
+            props.row.original?.status === 0
+              ? "text-red-600"
+              : "dark:text-dark-100 font-medium text-gray-800",
+          )}
+        >
+          {props.row.original?.reference_no ? formatText(props.row.original?.reference_no) : ""}
+        </p>
+      );
+    },
     enableSorting: false,
-  }),
+  }),  
   columnHelper.accessor((row) => row?.supplier.name, {
     id: "supplier",
     label: t("nav.table_fields.supplier"),

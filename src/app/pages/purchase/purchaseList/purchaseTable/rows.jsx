@@ -65,6 +65,14 @@ export function CustomerCell({ getValue, column, table, row }) {
 
   const name = getValue();
 
+  // Function to capitalize the first letter of each word
+  const formatText = (text) => {
+    return text
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
   return (
     <div className="flex items-center space-x-4">
       <span
@@ -73,7 +81,9 @@ export function CustomerCell({ getValue, column, table, row }) {
           row.original?.status === 0 ? "text-red-600" : "dark:text-dark-100",
         )}
       >
-        <Highlight query={[globalQuery, columnQuery]}>{name || ""}</Highlight>
+        <Highlight query={[globalQuery, columnQuery]}>
+          {name ? formatText(name) : ""}
+        </Highlight>
       </span>
     </div>
   );
