@@ -26,6 +26,7 @@ import { PaymentModal } from "components/shared/PaymentModal";
 import { useDisclosure } from "hooks";
 import { useCookies } from "react-cookie";
 import { useAuthContext } from "app/contexts/auth/context";
+import { ApprovePaymentModal } from "components/shared/ApprovePaymentModal";
 // import { OrdersDrawer } from "./OrdersDrawer";
 // import { useDisclosure } from "hooks";
 
@@ -44,6 +45,10 @@ export function RowActions({ row, table }) {
   const token = cookies.authToken;
 
   const [isOpen, { open, close }] = useDisclosure(false);
+  const [
+    approveModalOpen,
+    { open: openApproveModal, close: closeApproveModal },
+  ] = useDisclosure(false);
 
   const { t } = useTranslation();
 
@@ -109,42 +114,6 @@ export function RowActions({ row, table }) {
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 
-  const handleApprove = async (item) => {
-    try {
-      if (Number(item.status) === 1) {
-        toast.success(t("nav.payment.confirmApprove.success.title"));
-      } else {
-        const response = await fetch(
-          `${API_URL}/api/payment/approve/${row.original?.id}`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          toast.error(result.error);
-
-          return;
-        }
-
-        toast.success(t("nav.payment.confirmApprove.success.title"));
-
-        if (typeof table.options.meta?.refetch === "function") {
-          await table.options.meta.refetch();
-        } else {
-          console.warn("Refetch function not available in table meta.");
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
       <div className="flex justify-center space-x-1.5">
@@ -175,7 +144,7 @@ export function RowActions({ row, table }) {
                           "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
                       )}
                       onClick={() => {
-                        handleApprove(row.original);
+                        openApproveModal();
                       }}
                     >
                       <span>{t("nav.table_fields.approve")}</span>
@@ -229,6 +198,14 @@ export function RowActions({ row, table }) {
         row={{ ...row, refetch: table.options.meta?.refetch }}
         isOpen={isOpen}
         close={close}
+      />
+
+      <ApprovePaymentModal
+        type={"edit"}
+        row={{ ...row, refetch: table.options.meta?.refetch }}
+        isOpen={approveModalOpen}
+        close={closeApproveModal}
+        table={table}
       />
 
       {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}

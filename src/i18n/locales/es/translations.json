@@ -435,6 +435,8 @@
       "cancel": "Cancelar",
       "save": "Guardar",
       "saving": "Guardando",
+      "approve": "Aprobar",
+      "approving": "Aprobando",
       "payment_date_range": "Rango de fechas de pago",
       "confirmDelete": {
         "pending": {
