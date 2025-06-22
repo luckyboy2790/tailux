@@ -14,6 +14,7 @@ import { Profile } from "../Profile";
 import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
 import { useTranslation } from "react-i18next";
+import Customizer from "components/template/Customizer";
 
 // ----------------------------------------------------------------------
 
@@ -79,6 +80,7 @@ export function Header() {
             )}
           />
         </div>
+        <Customizer />
         <Notifications />
         {/* <RightSidebar /> */}
         <LanguageSelector />

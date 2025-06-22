@@ -12,6 +12,7 @@ import { LanguageSelector } from "components/template/LaguageSelector";
 import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
 import { useTranslation } from "react-i18next";
+import Customizer from "components/template/Customizer";
 
 // ----------------------------------------------------------------------
 
@@ -80,6 +81,7 @@ export function Header() {
             </>
           )}
         />
+        <Customizer />
         <Notifications />
         {/* <RightSidebar /> */}
         <LanguageSelector />

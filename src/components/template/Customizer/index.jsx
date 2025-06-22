@@ -35,9 +35,9 @@ export default function Customizer() {
     <>
       <Button
         onClick={open}
-        color="primary"
+        variant="flat"
         isIcon
-        className="fixed top-1/2 z-50 size-9 rounded-full ltr:right-0 ltr:rounded-r-none rtl:left-0 rtl:rounded-l-none"
+        className="size-9 rounded-full"
       >
         <SettingIcon
           className="size-6 animate-spin"
