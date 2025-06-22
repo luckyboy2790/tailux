@@ -33,7 +33,7 @@ export const getColumns = (t) => [
   columnHelper.accessor((row) => row?.images, {
     id: "attachment",
     label: t("nav.product.product_attachment"),
-    header: "",
+    header: t("nav.product.product_attachment"),
     cell: ImageCell,
     enableSorting: false,
   }),
