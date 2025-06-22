@@ -81,24 +81,13 @@ export function ConcurrentTable({ tableData, checkedRows, setCheckedRows }) {
                     ?.map((o) => `${o.product.name}(${o.quantity})`)
                     .join(", ")}
                 </Td>
-                <Td>
-                  {tr.grand_total.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}
-                </Td>
-                <Td>
-                  {tr.paid_amount.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}
-                </Td>
+                <Td>{tr.grand_total.toLocaleString()}</Td>
+                <Td>{tr.paid_amount.toLocaleString()}</Td>
                 <Td>
                   <p
                     className={`${tr.grand_total < tr.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} text-gray-800`}
                   >
-                    $
-                    {balance.toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                    })}
+                    ${balance.toLocaleString()}
                   </p>
                 </Td>
                 <Td>

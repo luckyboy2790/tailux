@@ -12,7 +12,7 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 
 // Local Imports
-import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
+import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 // import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
@@ -23,6 +23,7 @@ import { getColumns } from "./columns";
 import { useThemeContext } from "app/contexts/theme/context";
 import { getUserAgentBrowser } from "utils/dom/getUserAgentBrowser";
 import { useTranslation } from "react-i18next";
+import FileNotFound from "assets/emptyIcon";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -38,6 +39,8 @@ export default function PurchaseTable() {
   const columns = getColumns(t);
 
   const [orders, setOrders] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -127,6 +130,8 @@ export default function PurchaseTable() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+
       const response = await fetch(
         `${API_URL}/api/report/product_quantity_alert`,
       );
@@ -141,6 +146,8 @@ export default function PurchaseTable() {
           );
         }),
       );
+
+      setIsLoading(false);
     };
 
     fetchData();
@@ -219,58 +226,135 @@ export default function PurchaseTable() {
                     ))}
                   </THead>
                   <TBody>
-                    {table.getRowModel().rows.map((row) => {
-                      return (
+                    {isLoading ? (
+                      <>
                         <Tr
-                          key={row.id}
                           className={clsx(
                             "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                            row.getIsSelected() &&
-                              !isSafari &&
-                              "row-selected after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500 after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent",
                           )}
                         >
-                          {/* first row is a normal row */}
-                          {row.getVisibleCells().map((cell) => {
-                            return (
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
                               <Td
-                                key={cell.id}
+                                key={index}
                                 className={clsx(
                                   "relative bg-white",
                                   cardSkin === "shadow-sm"
                                     ? "dark:bg-dark-700"
                                     : "dark:bg-dark-900",
-                                  cell.column.getCanPin() && [
-                                    cell.column.getIsPinned() === "left" &&
-                                      "sticky z-2 ltr:left-0 rtl:right-0",
-                                    cell.column.getIsPinned() === "right" &&
-                                      "sticky z-2 ltr:right-0 rtl:left-0",
-                                  ],
                                 )}
                               >
-                                {cell.column.getIsPinned() && (
-                                  <div
-                                    className={clsx(
-                                      "dark:border-dark-500 pointer-events-none absolute inset-0 border-gray-200",
-                                      cell.column.getIsPinned() === "left"
-                                        ? "ltr:border-r rtl:border-l"
-                                        : "ltr:border-l rtl:border-r",
-                                    )}
-                                  ></div>
-                                )}
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext(),
-                                )}
+                                <Skeleton className="size-7 w-full rounded-lg" />
                               </Td>
-                            );
-                          })}
+                            ))}
                         </Tr>
-                      );
-                    })}
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                      </>
+                    ) : (
+                      table.getRowModel().rows.map((row) => {
+                        return (
+                          <Tr
+                            key={row.id}
+                            className={clsx(
+                              "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                              row.getIsSelected() &&
+                                !isSafari &&
+                                "row-selected after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500 after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent",
+                            )}
+                          >
+                            {row.getVisibleCells().map((cell) => {
+                              return (
+                                <Td
+                                  key={cell.id}
+                                  className={clsx(
+                                    "relative bg-white",
+                                    cardSkin === "shadow-sm"
+                                      ? "dark:bg-dark-700"
+                                      : "dark:bg-dark-900",
+                                    cell.column.getCanPin() && [
+                                      cell.column.getIsPinned() === "left" &&
+                                        "sticky z-2 ltr:left-0 rtl:right-0",
+                                      cell.column.getIsPinned() === "right" &&
+                                        "sticky z-2 ltr:right-0 rtl:left-0",
+                                    ],
+                                  )}
+                                >
+                                  {cell.column.getIsPinned() && (
+                                    <div
+                                      className={clsx(
+                                        "dark:border-dark-500 pointer-events-none absolute inset-0 border-gray-200",
+                                        cell.column.getIsPinned() === "left"
+                                          ? "ltr:border-r rtl:border-l"
+                                          : "ltr:border-l rtl:border-r",
+                                      )}
+                                    ></div>
+                                  )}
+                                  {flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext(),
+                                  )}
+                                </Td>
+                              );
+                            })}
+                          </Tr>
+                        );
+                      })
+                    )}
                   </TBody>
                 </Table>
               </div>
+
+              {!isLoading && table.getCoreRowModel().rows.length <= 0 && (
+                <div className="flex h-60 w-full flex-col items-center justify-center text-gray-500">
+                  <FileNotFound />
+                  <p className="text-lg font-medium">No results found</p>
+                  <p className="text-sm text-gray-400">
+                    Try changing filters or search terms
+                  </p>
+                </div>
+              )}
             </Card>
           </div>
         </div>

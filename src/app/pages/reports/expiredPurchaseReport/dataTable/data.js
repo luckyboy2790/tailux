@@ -12,8 +12,8 @@ export const orderStatusOptions = [
     icon: ClockIcon,
   },
   {
-    value: "paid",
-    label: "Paid",
+    value: "received",
+    label: "Received",
     color: "success",
     icon: CheckBadgeIcon,
   },

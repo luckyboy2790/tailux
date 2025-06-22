@@ -62,7 +62,7 @@ export function CustomerCell({ row, getValue, column, table }) {
         }}
       />
       <span className="dark:text-dark-100 font-medium text-gray-800">
-        <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
+        <Highlight query={[globalQuery, columnQuery]}>{name || ""}</Highlight>
       </span>
     </div>
   );
@@ -181,7 +181,7 @@ export function AddressCell({ getValue, column, table }) {
 
   return (
     <p className="text-xs-plus w-48 truncate xl:w-56 2xl:w-64">
-      <Highlight query={[globalQuery, columnQuery]}>{val}</Highlight>
+      <Highlight query={[globalQuery, columnQuery]}>{val || ""}</Highlight>
     </p>
   );
 }

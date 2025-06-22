@@ -164,7 +164,7 @@ export function AddressCell({ getValue, column, table }) {
 
   return (
     <p className="text-xs-plus w-48 truncate xl:w-56 2xl:w-64">
-      <Highlight query={[globalQuery, columnQuery]}>{val}</Highlight>
+      <Highlight query={[globalQuery, columnQuery]}>{val || ""}</Highlight>
     </p>
   );
 }

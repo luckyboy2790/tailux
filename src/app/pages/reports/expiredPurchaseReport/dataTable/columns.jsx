@@ -93,10 +93,7 @@ export const getColumns = (t) => [
         {(
           (props.row.original?.grand_total || 0) -
           (props.row.original?.paid_amount || 0)
-        ).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
+        ).toLocaleString()}
       </p>
     ),
     filterFn: "inNumberRange",

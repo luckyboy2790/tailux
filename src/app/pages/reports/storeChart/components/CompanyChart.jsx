@@ -59,7 +59,7 @@ export function CompanyChart() {
     dataLabels: {
       enabled: true,
       formatter: function (val) {
-        return val >= 1000 ? (val / 1000).toFixed(2) + "k" : val;
+        return Number(val).toLocaleString();
       },
       offsetY: -30,
     },
@@ -138,7 +138,7 @@ export function CompanyChart() {
         dataLabels: {
           enabled: true,
           formatter: function (val) {
-            return val >= 1000 ? (val / 1000).toFixed(2) + "k" : val;
+            return Number(val).toLocaleString();
           },
           offsetY: -30,
         },

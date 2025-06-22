@@ -18,6 +18,7 @@ import { Badge, Tag } from "components/ui";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
 import { orderStatusOptions } from "./data";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ export function CustomerCell({ getValue, column, table }) {
   return (
     <div className="flex items-center space-x-4">
       <span className="dark:text-dark-100 font-medium text-gray-800">
-        <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
+        <Highlight query={[globalQuery, columnQuery]}>{name || ""}</Highlight>
       </span>
     </div>
   );
@@ -76,11 +77,11 @@ export function ProfitCell({ getValue, row }) {
         ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
-        {(
+        {Math.round(
           (Number(row.original?.paid_amount) /
             Number(row.original?.grand_total)) *
-          100
-        ).toFixed(5)}
+            100,
+        )}
         %
       </Badge>
     </div>
@@ -90,14 +91,14 @@ export function ProfitCell({ getValue, row }) {
 export function OrderStatusCell({ getValue, row, column, table }) {
   const val = getValue();
 
+  const { t } = useTranslation();
+
   let purchaseStatus;
 
-  if (val?.paid_amount < val?.grand_total) {
+  if (val?.status == 0) {
     purchaseStatus = "pending";
-  } else if (val?.paid_amount === 0) {
-    purchaseStatus = "partial";
-  } else {
-    purchaseStatus = "paid";
+  } else if (val?.status == 1) {
+    purchaseStatus = "received";
   }
 
   const option = orderStatusOptions.find(
@@ -119,7 +120,7 @@ export function OrderStatusCell({ getValue, row, column, table }) {
       >
         {option.icon && <option.icon className="h-4 w-4" />}
 
-        <span>{option.label}</span>
+        <span>{t(`nav.purchase.${option.value}`)}</span>
       </ListboxButton>
       {/* <Transition
         as={ListboxOptions}
@@ -166,7 +167,7 @@ export function AddressCell({ getValue, column, table }) {
 
   return (
     <p className="text-xs-plus w-48 truncate xl:w-56 2xl:w-64">
-      <Highlight query={[globalQuery, columnQuery]}>{val}</Highlight>
+      <Highlight query={[globalQuery, columnQuery]}>{val || ""}</Highlight>
     </p>
   );
 }

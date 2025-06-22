@@ -97,14 +97,13 @@ export const getColumns = (t) => [
       <p
         className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
       >
-        $
-        {(
-          (props.row.original?.grand_total || 0) -
-          (props.row.original?.paid_amount || 0)
-        ).toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}
+        {(() => {
+          const diff =
+            (props.row.original?.grand_total || 0) -
+            (props.row.original?.paid_amount || 0);
+          const absValue = Math.abs(diff).toLocaleString();
+          return `${diff < 0 ? "-" : ""}$${absValue}`;
+        })()}
       </p>
     ),
     filterFn: "inNumberRange",

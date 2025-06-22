@@ -102,7 +102,7 @@ export function CompanyChart() {
         dataLabels: {
           enabled: true,
           formatter: function (val) {
-            return val >= 1000 ? (val / 1000).toFixed(2) + "k" : val;
+            return Number(val).toLocaleString();
           },
           offsetY: -30,
         },
@@ -153,7 +153,6 @@ export function CompanyChart() {
           <div className="flex items-center gap-3">
             <h2 className="text-sm">{t("nav.company")} :</h2>
             <Select
-              defaultValue="Potato"
               data={companies}
               onChange={(e) => {
                 setCompanyId(e.target.value);
