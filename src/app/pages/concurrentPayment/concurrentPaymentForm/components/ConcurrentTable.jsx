@@ -23,17 +23,37 @@ const cols = [
   "Amount",
 ];
 
-const EditableInput = ({ value, onChange }) => (
-  <Input
-    type="number"
-    className="w-30"
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-  />
-);
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+const EditableInput = ({ value, onChange }) => {
+  const [raw, setRaw] = useState(value);
+  const [focused, setFocused] = useState(false);
+
+  const handleChange = (e) => {
+    const num = e.target.value.replace(/,/g, "");
+    if (!/^\d*$/.test(num)) return;
+    const parsed = Number(num);
+    setRaw(parsed);
+    onChange(parsed);
+  };
+
+  return (
+    <Input
+      type="text"
+      className="w-30"
+      value={focused ? raw : raw.toLocaleString()}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      onChange={handleChange}
+    />
+  );
+};
 
 export function ConcurrentTable({ tableData, checkedRows, setCheckedRows }) {
   const { locale } = useLocaleContext();
+
+  const { t } = useTranslation();
 
   const toggleRow = (id, amount, checked) => {
     setCheckedRows((prev) => ({
@@ -105,6 +125,36 @@ export function ConcurrentTable({ tableData, checkedRows, setCheckedRows }) {
               </Tr>
             );
           })}
+          <Tr className="font-semibold">
+            <Td colSpan={5}>{t("nav.customer_table.total_amount")}</Td>
+            <Td>
+              {tableData
+                .reduce((sum, row) => sum + Number(row.grand_total || 0), 0)
+                .toLocaleString()}
+            </Td>
+            <Td>
+              {tableData
+                .reduce((sum, row) => sum + Number(row.paid_amount || 0), 0)
+                .toLocaleString()}
+            </Td>
+            <Td>
+              {tableData
+                .reduce(
+                  (sum, row) =>
+                    sum +
+                    (Number(row.grand_total || 0) -
+                      Number(row.paid_amount || 0)),
+                  0,
+                )
+                .toLocaleString()}
+            </Td>
+            <Td>
+              {Object.values(checkedRows)
+                .filter((r) => r.checked)
+                .reduce((sum, r) => sum + Number(r.amount || 0), 0)
+                .toLocaleString()}
+            </Td>
+          </Tr>
         </TBody>
       </Table>
     </div>

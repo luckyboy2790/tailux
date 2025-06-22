@@ -39,10 +39,7 @@ export default function Customizer() {
         isIcon
         className="size-9 rounded-full"
       >
-        <SettingIcon
-          className="size-6 animate-spin"
-          style={{ animationDuration: "2s" }}
-        />
+        <SettingIcon className="size-6" />
       </Button>
 
       <Transition show={isOpen}>

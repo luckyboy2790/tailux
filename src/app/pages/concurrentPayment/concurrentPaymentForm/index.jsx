@@ -209,7 +209,7 @@ const ConcurrentPage = () => {
                   className="flex items-center gap-2"
                   onClick={handleSubmit}
                 >
-                  <FaFileInvoice /> Submit
+                  <FaFileInvoice /> {t("nav.advanced_delete.submit")}
                 </Button>
               </div>
             </Box>
