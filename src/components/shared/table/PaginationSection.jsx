@@ -35,6 +35,7 @@ export function PaginationSection({
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));
             setPageSize(Number(e.target.value));
+            setPageIndex(0);
           }}
           classNames={{
             root: "w-fit",
