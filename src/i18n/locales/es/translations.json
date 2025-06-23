@@ -550,7 +550,10 @@
       "users_report": "Reportes de Usuarios",
       "view_report": "Ver Reporte",
       "purchase": "Compra",
-      "sale": "Venta"
+      "sale": "Venta",
+      "view_reports": "Ver Reportes",
+      "overview": "Resumen",
+      "payment": "Pago"
     },
     "people": {
       "people": "Personas",

@@ -550,7 +550,10 @@
       "users_report": "Users Report",
       "view_report": "View Report",
       "purchase": "Purchase",
-      "sale": "Sale"
+      "sale": "Sale",
+      "view_reports": "View Reports",
+      "overview": "Overview",
+      "payment": "Payment"
     },
     "people": {
       "people": "People",
