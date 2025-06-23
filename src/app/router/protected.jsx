@@ -357,6 +357,14 @@ const protectedRoutes = {
               }),
             },
             {
+              path: "suppliers_report/:id",
+              lazy: async () => ({
+                Component: (
+                  await import("app/pages/reports/supplierReportDetail")
+                ).default,
+              }),
+            },
+            {
               path: "users_report",
               lazy: async () => ({
                 Component: (await import("app/pages/reports/usersReport"))

@@ -23,9 +23,12 @@ import dayjs from "dayjs";
 
 // Local Import
 import { Button } from "components/ui";
+import { useNavigate } from "react-router";
 
 export function RowActions({ row }) {
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
 
   const exportRowToExcel = () => {
     if (!row) return;
@@ -91,6 +94,22 @@ export function RowActions({ row }) {
               anchor={{ to: "bottom end", gap: 12 }}
               className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                      focus &&
+                        "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                    )}
+                    onClick={() =>
+                      navigate(`/report/suppliers_report/${row.original?.id}`)
+                    }
+                  >
+                    <span>{t("nav.report.view_report")}</span>
+                  </button>
+                )}
+              </MenuItem>
               <MenuItem>
                 {({ focus }) => (
                   <button
