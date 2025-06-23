@@ -9,6 +9,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Fragment } from "react";
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 // Local Imports
 import {
@@ -27,8 +28,13 @@ import { getOrderStatusOptions } from "./data";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { Image } from "antd";
 import { useTranslation } from "react-i18next";
+import { ConfirmModal } from "components/shared/ConfirmModal";
+import { toast } from "sonner";
+import { useCookies } from "react-cookie";
 
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 // ----------------------------------------------------------------------
 
@@ -43,12 +49,32 @@ const cols = [
 
 const paymentCols = ["#", "Date", "Reference No", "Amount", "Note"];
 
-export function OrdersDrawer({ isOpen, close, row }) {
+export function OrdersDrawer({ isOpen, close, row, table }) {
   let orderStatus;
 
   const { t } = useTranslation();
 
   const orderStatusOptions = getOrderStatusOptions(t);
+
+  const [approveModalOpen, setApproveModalOpen] = useState(false);
+  const [confirmApproveLoading, setConfirmApproveLoading] = useState(false);
+
+  const [approveSuccess, setApproveSuccess] = useState(false);
+  const [approveError, setApproveError] = useState(false);
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
+
+  const approveConfirmMessages = {
+    pending: {
+      description: t("nav.purchase.confirmApprove.pending.description"),
+      actionText: t("nav.purchase.confirmApprove.pending.actionText"),
+    },
+    success: {
+      title: t("nav.purchase.confirmApprove.success.title"),
+    },
+  };
 
   const val = row.original;
 
@@ -77,6 +103,65 @@ export function OrdersDrawer({ isOpen, close, row }) {
     { subtotal: 0, quantity: 0 },
   );
 
+  const openApproveModal = () => {
+    setApproveModalOpen(true);
+    setApproveError(false);
+    setApproveSuccess(false);
+  };
+
+  const closeApproveModal = () => {
+    setApproveModalOpen(false);
+  };
+
+  const approveState = approveError
+    ? "error"
+    : approveSuccess
+      ? "success"
+      : "pending";
+
+  const handleApprove = async () => {
+    try {
+      setConfirmApproveLoading(true);
+
+      const response = await fetch(
+        `${API_URL}/api/purchase/approve/${row.original?.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        toast.error(t("nav.purchase.confirmApprove.failed.title"));
+
+        setConfirmApproveLoading(false);
+
+        closeApproveModal();
+
+        throw new Error("Something went wrong");
+      }
+
+      toast.success(t("nav.purchase.confirmApprove.success.title"));
+
+      setApproveSuccess(true);
+      setConfirmApproveLoading(false);
+
+      closeApproveModal();
+
+      close();
+
+      if (typeof table.options.meta?.refetch === "function") {
+        await table.options.meta.refetch();
+      } else {
+        console.warn("Refetch function not available in table meta.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-100" onClose={close}>
@@ -101,6 +186,12 @@ export function OrdersDrawer({ isOpen, close, row }) {
           leaveTo="translate-x-full"
           className="dark:bg-dark-700 fixed top-0 right-0 flex h-full w-full max-w-3xl transform-gpu flex-col overflow-y-scroll bg-white py-4 transition-transform duration-200"
         >
+          <div className="mb-5 flex w-full justify-between px-4 sm:px-5">
+            <Button color="primary" onClick={openApproveModal}>
+              {t("nav.payment.approve")}
+            </Button>
+          </div>
+
           <div className="flex justify-between px-4 sm:px-5">
             <div>
               <div className="font-semibold">
@@ -108,9 +199,6 @@ export function OrdersDrawer({ isOpen, close, row }) {
               </div>
               <div className="text-primary-600 dark:text-primary-400 text-xl font-medium">
                 {row.original.reference_no} &nbsp;
-                <Badge className="align-text-bottom" color={statusOption.color}>
-                  {statusOption.label}
-                </Badge>
               </div>
               <p className="font-medium">{date}</p>
             </div>
@@ -152,6 +240,24 @@ export function OrdersDrawer({ isOpen, close, row }) {
               <div className="dark:text-dark-50 mt-1.5 text-lg font-medium text-gray-800">
                 {row.original.supplier.company}
               </div>
+            </div>
+          </div>
+
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
+          <div className="flex w-full justify-between px-4 sm:px-5">
+            <div className="flex flex-col">
+              <div className="mb-1.5 font-semibold">
+                {t("nav.purchase.status")}:
+              </div>
+              <Badge
+                className="mt-1.5 align-text-bottom"
+                color={statusOption.color}
+              >
+                {statusOption.label}
+              </Badge>
             </div>
           </div>
 
@@ -399,8 +505,23 @@ export function OrdersDrawer({ isOpen, close, row }) {
               </div>
             </div>
           </div>
+
+          <div className="mt-5 flex w-full justify-between px-4 sm:px-5">
+            <Button color="primary" onClick={openApproveModal}>
+              {t("nav.payment.approve")}
+            </Button>
+          </div>
         </TransitionChild>
       </Dialog>
+
+      <ConfirmModal
+        show={approveModalOpen}
+        onClose={closeApproveModal}
+        messages={approveConfirmMessages}
+        onOk={handleApprove}
+        confirmLoading={confirmApproveLoading}
+        state={approveState}
+      />
     </Transition>
   );
 }

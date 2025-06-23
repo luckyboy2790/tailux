@@ -407,6 +407,10 @@ export function OrdersDrawer({ isOpen, close, row }) {
             role="none"
           />
 
+          <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
+            {t("nav.table_fields.return_list")}
+          </p>
+
           <div className="mt-1 h-auto min-h-50 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
             <Table
               hoverable

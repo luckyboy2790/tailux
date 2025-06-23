@@ -213,6 +213,7 @@
       "shipping_carrier": "Transportista",
       "p_payment": "P-Pendiente",
       "p_return": "D-Pendiente",
+      "status": "Estado",
       "select_supplier_message": "Seleccione un proveedor",
       "confirmDelete": {
         "pending": {
@@ -227,7 +228,7 @@
       },
       "confirmApprove": {
         "pending": {
-          "description": "",
+          "description": "¿Está seguro de que desea aprobar esta compra?",
           "actionText": "Aprobar"
         },
         "failed": {

@@ -213,6 +213,7 @@
       "shipping_carrier": "Shipping Carrier",
       "p_payment": "P-Payment",
       "p_return": "P-Return",
+      "status": "Status",
       "select_supplier_message": "Please select a supplier",
       "confirmDelete": {
         "pending": {
@@ -227,7 +228,7 @@
       },
       "confirmApprove": {
         "pending": {
-          "description": "",
+          "description": "Are you sure you want to approve this purchase?",
           "actionText": "Approve"
         },
         "failed": {

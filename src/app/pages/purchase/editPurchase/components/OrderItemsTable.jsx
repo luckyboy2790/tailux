@@ -44,7 +44,7 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
   };
 
   useEffect(() => {
-    setValue(initialValue ?? 1);
+    setValue(initialValue ?? "");
   }, [initialValue]);
 
   return (
@@ -52,7 +52,7 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
       value={value.toLocaleString()}
       onChange={(e) => {
         const rawValue = e.target.value.replace(/[^0-9]/g, "");
-        setValue(rawValue ? Number(rawValue) : 1);
+        setValue(rawValue ? Number(rawValue) : "");
       }}
       onBlur={onBlur}
       type="text"

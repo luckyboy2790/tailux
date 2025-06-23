@@ -212,7 +212,7 @@ export function ProductModal({ type, row, isOpen, close }) {
                       const rawValue = e.target.value.replace(/[^0-9.]/g, "");
                       setData({
                         ...data,
-                        product_cost: rawValue ? Number(rawValue) : 0,
+                        product_cost: rawValue ? Number(rawValue) : "",
                       });
                     }}
                   />
@@ -226,7 +226,7 @@ export function ProductModal({ type, row, isOpen, close }) {
                       const rawValue = e.target.value.replace(/[^0-9.]/g, "");
                       setData({
                         ...data,
-                        product_price: rawValue ? Number(rawValue) : 0,
+                        product_price: rawValue ? Number(rawValue) : "",
                       });
                     }}
                   />
@@ -240,7 +240,7 @@ export function ProductModal({ type, row, isOpen, close }) {
                       const rawValue = e.target.value.replace(/[^0-9.]/g, "");
                       setData({
                         ...data,
-                        alert_quantity: rawValue ? Number(rawValue) : 0,
+                        alert_quantity: rawValue ? Number(rawValue) : "",
                       });
                     }}
                   />

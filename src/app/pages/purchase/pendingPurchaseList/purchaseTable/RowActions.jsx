@@ -278,7 +278,12 @@ export function RowActions({ row, table }) {
         state={approveState}
       />
 
-      <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
+      <OrdersDrawer
+        row={row}
+        close={closeDrawer}
+        isOpen={isDrawerOpen}
+        table={table}
+      />
     </>
   );
 }

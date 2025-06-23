@@ -201,7 +201,7 @@ export function PreturnModal({ type, row, isOpen, close }) {
                       const rawValue = e.target.value.replace(/[^0-9.]/g, "");
                       setData({
                         ...data,
-                        amount: rawValue ? Number(rawValue) : 0,
+                        amount: rawValue ? Number(rawValue) : "",
                       });
                     }}
                   />

@@ -330,7 +330,7 @@ const AddPurchase = () => {
                               /[^0-9]/g,
                               "",
                             );
-                            field.onChange(rawValue ? Number(rawValue) : 0);
+                            field.onChange(rawValue ? Number(rawValue) : "");
                           }}
                           error={errors?.discount?.message}
                         />
@@ -350,7 +350,7 @@ const AddPurchase = () => {
                               /[^0-9]/g,
                               "",
                             );
-                            field.onChange(rawValue ? Number(rawValue) : 0);
+                            field.onChange(rawValue ? Number(rawValue) : "");
                           }}
                           error={errors?.shipping?.message}
                         />
@@ -370,7 +370,7 @@ const AddPurchase = () => {
                               /[^0-9]/g,
                               "",
                             );
-                            field.onChange(rawValue ? Number(rawValue) : 0);
+                            field.onChange(rawValue ? Number(rawValue) : "");
                           }}
                           error={errors?.returns?.message}
                         />
