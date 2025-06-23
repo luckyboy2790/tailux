@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 // Local Imports
 import { OrderStatusCell } from "./rows";
+import { RowActions } from "./RowActions";
 
 // ----------------------------------------------------------------------
 
@@ -81,7 +82,9 @@ export const getColumns = (t) => [
     cell: (props) => {
       return (
         <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800 capitalize">
-          {props.row.original?.role ? t(`nav.user.${props.row.original.role.toLowerCase()}`) : ''}
+          {props.row.original?.role
+            ? t(`nav.user.${props.row.original.role.toLowerCase()}`)
+            : ""}
         </p>
       );
     },
@@ -104,4 +107,10 @@ export const getColumns = (t) => [
   //       cell: AddressCell,
   //     },
   //   ),
+  columnHelper.display({
+    id: "actions",
+    label: t("nav.customer_table.action"),
+    header: t("nav.customer_table.action"),
+    cell: RowActions,
+  }),
 ];
