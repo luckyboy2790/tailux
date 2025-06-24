@@ -186,7 +186,6 @@ export default function PurchaseTable() {
     data: orders,
     columns: columns,
     state: {
-      globalFilter,
       sorting,
       columnVisibility,
       columnPinning,
@@ -228,7 +227,10 @@ export default function PurchaseTable() {
     enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: (value) => {
+      setGlobalFilter(value);
+      setPageIndex(0);
+    },
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
@@ -261,13 +263,20 @@ export default function PurchaseTable() {
             onDateRangeChange={(date) => {
               setStartDate(date[0]);
               setEndDate(date[1]);
+              setPageIndex(0);
             }}
             startDate={startDate}
             endDate={endDate}
             companyId={companyId}
-            setCompanyId={setCompanyId}
+            setCompanyId={(id) => {
+              setCompanyId(id);
+              setPageIndex(0);
+            }}
             supplierId={supplierId}
-            setSupplierId={setSupplierId}
+            setSupplierId={(id) => {
+              setSupplierId(id);
+              setPageIndex(0);
+            }}
           />
           <div
             className={clsx(

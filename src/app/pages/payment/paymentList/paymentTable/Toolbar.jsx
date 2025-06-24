@@ -246,16 +246,29 @@ export function Toolbar({ table, onDateRangeChange, companyId, setCompanyId }) {
 }
 
 function SearchInput({ table }) {
+  const { t } = useTranslation();
+  const [inputValue, setInputValue] = useState(
+    table.getState().globalFilter || "",
+  );
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      table.setGlobalFilter(inputValue);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [inputValue, table]);
+
   return (
     <Input
-      value={table.getState().globalFilter}
-      onChange={(e) => table.setGlobalFilter(e.target.value)}
+      value={inputValue}
+      onChange={(e) => setInputValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: "ring-primary-500/50 h-8 text-xs focus:ring-3",
         root: "shrink-0",
       }}
-      placeholder="Search ID, Customer..."
+      placeholder={t("nav.search_placeholder")}
     />
   );
 }

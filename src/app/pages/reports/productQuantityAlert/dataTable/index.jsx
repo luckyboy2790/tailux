@@ -67,7 +67,6 @@ export default function PurchaseTable() {
     data: orders,
     columns: columns,
     state: {
-      globalFilter,
       sorting,
       columnVisibility,
       columnPinning,

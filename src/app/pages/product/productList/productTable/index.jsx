@@ -119,7 +119,6 @@ export default function ProductTable() {
     data: orders,
     columns: columns,
     state: {
-      globalFilter,
       sorting,
       columnVisibility,
       columnPinning,
@@ -161,7 +160,10 @@ export default function ProductTable() {
     enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: (value) => {
+      setGlobalFilter(value);
+      setPageIndex(0);
+    },
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),

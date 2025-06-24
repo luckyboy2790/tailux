@@ -48,16 +48,19 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [filters, setFilters] = useLocalStorage("salesReportTableFilters", {
-    pageIndex: 0,
-    pageSize: 10,
-    sorting: [{ id: "timestamp", desc: true }],
-    startDate: "",
-    endDate: "",
-    companyId: "",
-    customerId: "",
-    globalFilter: "",
-  });
+  const [filters, setFilters] = useLocalStorage(
+    "customerSalesReportTableFilters",
+    {
+      pageIndex: 0,
+      pageSize: 10,
+      sorting: [{ id: "timestamp", desc: true }],
+      startDate: "",
+      endDate: "",
+      companyId: "",
+      customerId: "",
+      globalFilter: "",
+    },
+  );
 
   const [totalCount, setTotalCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(filters.pageIndex);
@@ -75,12 +78,12 @@ export default function PurchaseTable() {
   const [companyId, setCompanyId] = useState(filters.companyId);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-salesReportTable-1",
+    "column-visibility-customerSalesReportTable-1",
     {},
   );
 
   const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-salesReportTable-1",
+    "column-pinning-customerSalesReportTable-1",
     {},
   );
 
@@ -115,7 +118,6 @@ export default function PurchaseTable() {
     data: orders,
     columns: columns,
     state: {
-      globalFilter,
       sorting,
       columnVisibility,
       columnPinning,
@@ -156,7 +158,10 @@ export default function PurchaseTable() {
     enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: (value) => {
+      setGlobalFilter(value);
+      setPageIndex(0);
+    },
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
@@ -245,11 +250,15 @@ export default function PurchaseTable() {
             onDateRangeChange={(date) => {
               setStartDate(date[0]);
               setEndDate(date[1]);
+              setPageIndex(0);
             }}
             startDate={startDate}
             endDate={endDate}
             companyId={companyId}
-            setCompanyId={setCompanyId}
+            setCompanyId={(id) => {
+              setCompanyId(id);
+              setPageIndex(0);
+            }}
           />
           <div
             className={clsx(

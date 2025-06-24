@@ -50,16 +50,19 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [filters, setFilters] = useLocalStorage("purchaseReportTableFilters", {
-    pageIndex: 0,
-    pageSize: 10,
-    sorting: [{ id: "timestamp", desc: true }],
-    startDate: "",
-    endDate: "",
-    companyId: "",
-    supplierId: "",
-    globalFilter: "",
-  });
+  const [filters, setFilters] = useLocalStorage(
+    "userPurchaseReportTableFilters",
+    {
+      pageIndex: 0,
+      pageSize: 10,
+      sorting: [{ id: "timestamp", desc: true }],
+      startDate: "",
+      endDate: "",
+      companyId: "",
+      supplierId: "",
+      globalFilter: "",
+    },
+  );
 
   const [totalCount, setTotalCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(filters.pageIndex);
@@ -79,12 +82,12 @@ export default function PurchaseTable() {
   const userId = useParams().id;
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-purchaseReportTable-1",
+    "column-visibility-userPurchaseReportTable-1",
     {},
   );
 
   const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-purchaseReportTable-1",
+    "column-pinning-userPurchaseReportTable-1",
     {},
   );
 
@@ -115,7 +118,6 @@ export default function PurchaseTable() {
     data: orders,
     columns: columns,
     state: {
-      globalFilter,
       sorting,
       columnVisibility,
       columnPinning,
@@ -156,7 +158,10 @@ export default function PurchaseTable() {
     enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: (value) => {
+      setGlobalFilter(value);
+      setPageIndex(0);
+    },
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
