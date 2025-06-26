@@ -279,7 +279,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.discount")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.discount.toLocaleString()}
+                    {row.original?.discount_string.toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -340,12 +340,24 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.balance")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {(
-                      Number(row.original?.total_amount) -
-                      Number(row.original?.discount) +
-                      Number(row.original?.shipping) -
-                      Number(row.original?.paid_amount)
-                    ).toLocaleString()}
+                    {(() => {
+                      const totalAmount =
+                        Number(row.original?.total_amount) || 0;
+                      const shipping = Number(row.original?.shipping) || 0;
+                      const paid = Number(row.original?.paid_amount) || 0;
+                      const rawDiscount =
+                        row.original?.discount_string?.toString() || "0";
+
+                      const discount = rawDiscount.includes("%")
+                        ? (totalAmount *
+                            parseFloat(rawDiscount.replace("%", ""))) /
+                          100
+                        : Number(rawDiscount);
+
+                      const balance = totalAmount - discount + shipping - paid;
+
+                      return balance.toLocaleString();
+                    })()}
                   </Td>
                 </Tr>
               </TBody>
