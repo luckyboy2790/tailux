@@ -12,7 +12,7 @@ const Upload = forwardRef((props, ref) => {
     onChange = () => {},
     children,
     multiple,
-    accept,
+    // accept,
     name,
     form,
     disabled,
@@ -41,7 +41,8 @@ const Upload = forwardRef((props, ref) => {
       <input
         hidden
         type="file"
-        accept={accept}
+        // accept={accept}
+        accept="image/*"
         multiple={multiple}
         onChange={handleChange}
         ref={useMergedRef(ref, inputRef)}
