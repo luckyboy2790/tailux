@@ -23,6 +23,8 @@ import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useNavigate } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
+import { SupplierModal } from "components/shared/SupplierModal";
+import { useDisclosure } from "hooks";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -66,6 +68,8 @@ const AddPurchase = () => {
   const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isOpen, { open, close }] = useDisclosure(false);
 
   const navigate = useNavigate();
 
@@ -114,7 +118,7 @@ const AddPurchase = () => {
       setSupplier(supplierData);
     };
     fetchData();
-  }, [t]);
+  }, [t, close, isOpen]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -270,20 +274,35 @@ const AddPurchase = () => {
                           field: { onChange, value },
                           fieldState: { error },
                         }) => (
-                          <Combobox
-                            label={t("nav.purchase.supplier")}
-                            data={supplier}
-                            value={
-                              supplier.find((s) => s.value === value) || null
-                            }
-                            onChange={(selected) =>
-                              onChange(selected?.value || "")
-                            }
-                            placeholder={t("nav.select.select_supplier")}
-                            displayField="label"
-                            searchFields={["label"]}
-                            error={error?.message}
-                          />
+                          <div className="flex w-full items-start gap-2">
+                            <div className="relative flex-1">
+                              <Combobox
+                                label={t("nav.purchase.supplier")}
+                                data={supplier}
+                                value={
+                                  supplier.find((s) => s.value === value) ||
+                                  null
+                                }
+                                onChange={(selected) =>
+                                  onChange(selected?.value || "")
+                                }
+                                placeholder={t("nav.select.select_supplier")}
+                                displayField="label"
+                                searchFields={["label"]}
+                                error={error?.message}
+                              />
+                              {!error && <div className="h-5" />}
+                            </div>
+                            <div className="pt-[26px]">
+                              <Button
+                                color="primary"
+                                className="h-9.5"
+                                onClick={open}
+                              >
+                                +
+                              </Button>
+                            </div>
+                          </div>
                         )}
                       />
 
@@ -388,6 +407,8 @@ const AddPurchase = () => {
           </form>
         </FormProvider>
       </div>
+
+      <SupplierModal type={"add"} isOpen={isOpen} close={close} />
     </Page>
   );
 };

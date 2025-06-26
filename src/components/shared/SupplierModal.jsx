@@ -41,7 +41,7 @@ export function SupplierModal({ type, row, isOpen, close }) {
 
   useEffect(() => {
     if (type === "edit") {
-      const rowData = row.original;
+      const rowData = row?.original;
 
       setData({
         name: rowData?.name,
@@ -63,7 +63,7 @@ export function SupplierModal({ type, row, isOpen, close }) {
         note: "",
       });
     }
-  }, [type, row.original]);
+  }, [type, row?.original]);
 
   const handleSave = async () => {
     if (loading) return;
@@ -87,7 +87,7 @@ export function SupplierModal({ type, row, isOpen, close }) {
     formData.append("note", data.note);
 
     if (type === "edit") {
-      formData.append("id", row.original?.id);
+      formData.append("id", row?.original?.id);
     }
 
     try {
