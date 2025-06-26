@@ -47,8 +47,6 @@ export default function PurchaseTable() {
     enableRowDense: false,
   });
 
-  const [globalFilter, setGlobalFilter] = useState("");
-
   const [sorting, setSorting] = useState([]);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
@@ -109,7 +107,6 @@ export default function PurchaseTable() {
     enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
