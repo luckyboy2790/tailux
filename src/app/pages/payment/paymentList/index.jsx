@@ -3,14 +3,19 @@ import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import PaymentIcon from "assets/dualicons/payments.svg?react";
 import { useTranslation } from "react-i18next";
 import PaymentTable from "./paymentTable";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { Button } from "components/ui";
+import { TiArrowBack } from "react-icons/ti";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 const PurchaseList = () => {
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
+
   const breadcrumbs = [
     { title: t("nav.payment.payment"), path: "/payment" },
     { title: t("nav.payment.list") },
@@ -55,6 +60,19 @@ const PurchaseList = () => {
               </h2>
             </div>
             <Breadcrumbs items={breadcrumbs} />
+          </div>
+
+          <div className="flex items-center justify-end">
+            <Button
+              color="primary"
+              className="flex items-center gap-1"
+              onClick={() => {
+                navigate("/purchase/list");
+              }}
+            >
+              <TiArrowBack className="size-4" />
+              Back
+            </Button>
           </div>
 
           <PaymentTable />

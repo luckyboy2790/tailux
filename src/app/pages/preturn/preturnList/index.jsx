@@ -3,8 +3,13 @@ import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import PaymentIcon from "assets/dualicons/payments.svg?react";
 import { useTranslation } from "react-i18next";
 import PreturnTable from "./preturnTable";
+import { Button } from "components/ui";
+import { TiArrowBack } from "react-icons/ti";
+import { useNavigate } from "react-router";
 
 const PurchaseList = () => {
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
   const breadcrumbs = [
     { title: t("nav.return.return"), path: "/preturn" },
@@ -23,6 +28,19 @@ const PurchaseList = () => {
               </h2>
             </div>
             <Breadcrumbs items={breadcrumbs} />
+          </div>
+
+          <div className="flex items-center justify-end">
+            <Button
+              color="primary"
+              className="flex items-center gap-1"
+              onClick={() => {
+                navigate("/purchase/list");
+              }}
+            >
+              <TiArrowBack className="size-4" />
+              Back
+            </Button>
           </div>
 
           <PreturnTable />
