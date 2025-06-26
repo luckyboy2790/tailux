@@ -326,11 +326,7 @@ const AddPurchase = () => {
                           type="text"
                           value={(field.value || 0).toLocaleString()}
                           onChange={(e) => {
-                            const rawValue = e.target.value.replace(
-                              /[^0-9]/g,
-                              "",
-                            );
-                            field.onChange(rawValue ? Number(rawValue) : "");
+                            field.onChange(e.target.value);
                           }}
                           error={errors?.discount?.message}
                         />

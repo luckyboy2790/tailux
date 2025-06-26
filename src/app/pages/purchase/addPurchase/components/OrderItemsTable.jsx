@@ -47,6 +47,10 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
     setValue(initialValue ?? 1);
   }, [initialValue]);
 
+  useEffect(() => {
+    onBlur();
+  }, [value]);
+
   return (
     <Input
       value={value.toLocaleString()}
@@ -54,7 +58,6 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
         const rawValue = e.target.value.replace(/[^0-9]/g, "");
         setValue(rawValue ? Number(rawValue) : "");
       }}
-      onBlur={onBlur}
       type="text"
     />
   );
@@ -158,8 +161,17 @@ const EditableDatePicker = ({
 };
 
 export function OrderItemsTable({ orders, setOrders, watch }) {
+  const subtotal = orders.reduce(
+    (sum, o) => sum + (Number(o.product_cost) || 0) * (Number(o.quantity) || 1),
+    0,
+  );
+
   const { t } = useTranslation();
-  const discount = Number(watch("discount")) || 0;
+  const rawDiscount = watch("discount") || "0";
+  const parsedDiscount =
+    typeof rawDiscount === "string" && rawDiscount.includes("%")
+      ? (subtotal * parseFloat(rawDiscount.replace("%", ""))) / 100
+      : Number(rawDiscount);
   const shipping = Number(watch("shipping")) || 0;
   const returns = Number(watch("returns")) || 0;
 
@@ -261,12 +273,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
     getFilteredRowModel: getFilteredRowModel(),
     autoResetPageIndex,
   });
-
-  const subtotal = orders.reduce(
-    (sum, o) => sum + (Number(o.product_cost) || 0) * (Number(o.quantity) || 1),
-    0,
-  );
-  const grandTotal = subtotal - discount - shipping - returns;
+  const grandTotal = subtotal - parsedDiscount - shipping - returns;
 
   return (
     <div>
@@ -327,7 +334,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
             </TBody>
           </Table>
           <div className="mt-4 mr-4 mb-3 text-right font-medium text-black dark:text-white">
-            {`Purchase (${subtotal.toLocaleString()}) - Discount (${discount.toLocaleString()}) - Shipping (${shipping.toLocaleString()}) - Returns (${returns.toLocaleString()}) = `}
+            {`Purchase (${subtotal.toLocaleString()}) - Discount (${parsedDiscount.toLocaleString()}) - Shipping (${shipping.toLocaleString()}) - Returns (${returns.toLocaleString()}) = `}
             <span className="text-primary font-bold">
               {grandTotal.toLocaleString()}
             </span>

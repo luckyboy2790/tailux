@@ -44,11 +44,14 @@ export const getColumns = (t) => [
     cell: (props) => {
       const formatText = (text) => {
         return text
-          .split(' ')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-          .join(' ');
+          .split(" ")
+          .map(
+            (word) =>
+              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+          )
+          .join(" ");
       };
-  
+
       return (
         <p
           className={clsx(
@@ -58,12 +61,14 @@ export const getColumns = (t) => [
               : "dark:text-dark-100 font-medium text-gray-800",
           )}
         >
-          {props.row.original?.reference_no ? formatText(props.row.original?.reference_no) : ""}
+          {props.row.original?.reference_no
+            ? formatText(props.row.original?.reference_no)
+            : ""}
         </p>
       );
     },
     enableSorting: false,
-  }),  
+  }),
   columnHelper.accessor((row) => row?.supplier.name, {
     id: "supplier",
     label: t("nav.table_fields.supplier"),
@@ -92,27 +97,26 @@ export const getColumns = (t) => [
     label: t("nav.table_fields.balance"),
     header: t("nav.table_fields.balance"),
     cell: (props) => {
-      const balance =
-        (props.row.original?.total_amount || 0) -
-        (props.row.original?.discount || 0) +
-        (props.row.original?.shipping || 0) -
-        (props.row.original?.paid_amount || 0);
+      const original = props.row.original;
+
+      const total = Number(original?.total_amount) || 0;
+      const shipping = Number(original?.shipping) || 0;
+      const paid = Number(original?.paid_amount) || 0;
+
+      const rawDiscount = original?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const balance = total - discount + shipping - paid;
       const formatted = Math.abs(balance).toLocaleString();
-      // return (
-      //   <p
-      //     className={clsx(
-      //       "text-sm-plus",
-      //       balance < 0 ? "text-red-600" : "dark:text-dark-100 font-medium text-gray-800",
-      //     )}
-      //   >
-      //     {`${balance < 0 ? "-" : ""}$${formatted}`}
-      //   </p>
-      // );
+
       return (
         <p
           className={clsx(
             "text-sm-plus",
-            props.row.original?.status === 0
+            original?.status === 0
               ? "text-red-600"
               : balance < 0
                 ? "font-medium text-orange-600"
