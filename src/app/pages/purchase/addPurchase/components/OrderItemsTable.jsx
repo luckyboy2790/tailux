@@ -8,7 +8,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import { useSkipper } from "utils/react-table/useSkipper";
 import {
@@ -39,9 +45,9 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  const onBlur = () => {
+  const onBlur = useCallback(() => {
     table.options.meta?.updateData(index, id, value);
-  };
+  }, [index, id, table, value]);
 
   useEffect(() => {
     setValue(initialValue ?? 1);
@@ -49,7 +55,7 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
 
   useEffect(() => {
     onBlur();
-  }, [value]);
+  }, [onBlur]);
 
   return (
     <Input
