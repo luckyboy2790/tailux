@@ -15,6 +15,7 @@ import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
 import { useTranslation } from "react-i18next";
 import Customizer from "components/template/Customizer";
+import { useAuthContext } from "app/contexts/auth/context";
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,8 @@ export function Header() {
   const { cardSkin } = useThemeContext();
 
   const { t } = useTranslation();
+
+  const { user } = useAuthContext();
 
   return (
     <header
@@ -80,6 +83,9 @@ export function Header() {
             )}
           />
         </div>
+        {user?.role !== "admin" && (
+          <div className="pr-3 text-lg">{user?.company?.name || ""}</div>
+        )}
         <Customizer />
         <Notifications />
         {/* <RightSidebar /> */}

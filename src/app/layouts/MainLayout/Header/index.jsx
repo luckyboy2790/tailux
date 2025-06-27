@@ -13,6 +13,7 @@ import { Search } from "components/template/Search";
 import { useThemeContext } from "app/contexts/theme/context";
 import { useTranslation } from "react-i18next";
 import Customizer from "components/template/Customizer";
+import { useAuthContext } from "app/contexts/auth/context";
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ export function Header() {
 
   const { t } = useTranslation();
 
+  const { user } = useAuthContext();
+
   return (
     <header
       className={clsx(
@@ -53,6 +56,9 @@ export function Header() {
       <SidebarToggleBtn />
 
       <div className="flex items-center gap-2 ltr:-mr-1.5 rtl:-ml-1.5">
+        {user?.role !== "admin" && (
+          <div className="pr-3 text-lg">{user?.company?.name || ""}</div>
+        )}
         <Search
           renderButton={(open) => (
             <>
