@@ -187,8 +187,6 @@ const EditableDatePicker = ({
 };
 
 export function OrderItemsTable({ orders, setOrders }) {
-  console.log(orders);
-
   const { t } = useTranslation();
 
   const defaultColumns = useMemo(

@@ -14,6 +14,7 @@ import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -47,6 +48,8 @@ const AddPurchaseOrder = () => {
     watch,
     reset,
   } = methods;
+
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,6 +99,14 @@ const AddPurchaseOrder = () => {
         }));
 
       setOrders(mappedOrders);
+
+      console.log(user);
+
+      if (user.role === "user" || user.role === "secretary") {
+        reset({
+          store_id: user?.first_store_id || -1,
+        });
+      }
     };
     fetchData();
   }, [t, id, token, reset]);
@@ -141,23 +152,25 @@ const AddPurchaseOrder = () => {
             category: o.category,
           })),
       ),
-      total_amount: orders.reduce((sum, o) => {
-        const cost = Number(o.product_cost) || 0;
-        const qty = Number(o.receive) || 0;
-        const discount = o.discount || 0;
+      total_amount: orders
+        .filter((o) => o.checked)
+        .reduce((sum, o) => {
+          const cost = Number(o.product_cost) || 0;
+          const qty = Number(o.receive) || 0;
+          const discount = o.discount || 0;
 
-        let discountAmount = 0;
-        if (typeof discount === "string" && discount.trim().endsWith("%")) {
-          const percent = parseFloat(discount.trim().replace("%", ""));
-          if (!isNaN(percent)) discountAmount = (cost * percent) / 100;
-        } else {
-          const flat = Number(discount);
-          if (!isNaN(flat)) discountAmount = flat;
-        }
-        const subtotal = (cost - discountAmount).toFixed() * qty;
+          let discountAmount = 0;
+          if (typeof discount === "string" && discount.trim().endsWith("%")) {
+            const percent = parseFloat(discount.trim().replace("%", ""));
+            if (!isNaN(percent)) discountAmount = (cost * percent) / 100;
+          } else {
+            const flat = Number(discount);
+            if (!isNaN(flat)) discountAmount = flat;
+          }
+          const subtotal = (cost - discountAmount).toFixed() * qty;
 
-        return sum + subtotal;
-      }, 0),
+          return sum + subtotal;
+        }, 0),
       note: formData.note || "",
       status: 1,
     };
@@ -281,6 +294,9 @@ const AddPurchaseOrder = () => {
                           displayField="label"
                           searchFields={["label"]}
                           error={error?.message}
+                          disabled={
+                            user?.role === "user" || user?.role === "secretary"
+                          }
                         />
                       )}
                     />
