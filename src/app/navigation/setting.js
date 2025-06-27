@@ -9,26 +9,30 @@ const ROOT_PEOPLE = "/setting";
 const path = (root, item) => `${root}${item}`;
 
 export const getSettingNav = (role) => {
-  const childs = [
-    {
-      id: "setting.company",
-      path: path(ROOT_PEOPLE, "/company"),
-      type: NAV_TYPE_ITEM,
-      title: "Company",
-      title_translate: "Empresa",
-      transKey: "nav.setting.company",
-      Icon: CompanyIcon,
-    },
-    {
-      id: "setting.store",
-      path: path(ROOT_PEOPLE, "/store"),
-      type: NAV_TYPE_ITEM,
-      title: "Store",
-      title_translate: "Tienda",
-      transKey: "nav.setting.store",
-      Icon: StoreIcon,
-    },
-  ];
+  const childs = [];
+
+  if (role !== "user") {
+    childs.push(
+      {
+        id: "setting.company",
+        path: path(ROOT_PEOPLE, "/company"),
+        type: NAV_TYPE_ITEM,
+        title: "Company",
+        title_translate: "Empresa",
+        transKey: "nav.setting.company",
+        Icon: CompanyIcon,
+      },
+      {
+        id: "setting.store",
+        path: path(ROOT_PEOPLE, "/store"),
+        type: NAV_TYPE_ITEM,
+        title: "Store",
+        title_translate: "Tienda",
+        transKey: "nav.setting.store",
+        Icon: StoreIcon,
+      },
+    );
+  }
 
   if (role === "admin" || role === "user") {
     childs.push({
