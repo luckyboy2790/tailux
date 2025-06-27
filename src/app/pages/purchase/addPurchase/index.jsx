@@ -25,6 +25,7 @@ import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
 import { SupplierModal } from "components/shared/SupplierModal";
 import { useDisclosure } from "hooks";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -67,6 +68,8 @@ const AddPurchase = () => {
 
   const token = cookie.authToken;
 
+  const { user } = useAuthContext();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [isOpen, { open, close }] = useDisclosure(false);
@@ -87,6 +90,7 @@ const AddPurchase = () => {
     control,
     formState: { errors },
     watch,
+    reset,
   } = methods;
 
   useEffect(() => {
@@ -116,9 +120,15 @@ const AddPurchase = () => {
         })) ?? []),
       ];
       setSupplier(supplierData);
+
+      if (user?.role === "user" || user?.role === "secretary") {
+        reset({
+          store: user.first_store_id,
+        });
+      }
     };
     fetchData();
-  }, [t, close, isOpen]);
+  }, [t, close, isOpen, user, reset]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -265,6 +275,9 @@ const AddPurchase = () => {
                         data={stores}
                         {...register("store")}
                         error={errors?.store?.message}
+                        disabled={
+                          user?.role === "user" || user?.role === "secretary"
+                        }
                       />
 
                       <Controller
