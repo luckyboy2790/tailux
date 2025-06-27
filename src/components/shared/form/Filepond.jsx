@@ -1,6 +1,7 @@
 // Import Dependencies
 import { FilePond as BaseFilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import { forwardRef } from "react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -16,7 +17,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-registerPlugin(FilePondPluginImagePreview);
+registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 const styles = `@layer vendor {
   ${filepondCSS} ${filepondImagePreviewCSS}
@@ -51,7 +52,13 @@ const FilePond = forwardRef(
         )}
         style={{ "--fp-grid": grid, ...style }}
       >
-        <BaseFilePond className={classNames?.filepond} ref={ref} {...rest} />
+        <BaseFilePond
+          className={classNames?.filepond}
+          allowFileTypeValidation={true}
+          acceptedFileTypes={["image/*"]}
+          ref={ref}
+          {...rest}
+        />
       </div>
     );
   },

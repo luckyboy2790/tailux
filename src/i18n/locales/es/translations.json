@@ -180,6 +180,7 @@
       "shipping": "Envío",
       "return": "Devoluciones",
       "note": "Notas",
+      "back": "Atrás",
       "purchase_date_required": "La fecha de compra es obligatoria",
       "reference_no_required": "Referencia No es obligatoria",
       "reference_no_too_short": "Referencia No es demasiado corta",
@@ -236,6 +237,14 @@
         },
         "success": {
           "title": "Compra Aprobada"
+        }
+      },
+      "confirmCreate": {
+        "success": {
+          "title": "Pago creado"
+        },
+        "failed": {
+          "title": "Pago creado fallido"
         }
       },
       "add_purchase_order": "Agregar Orden de Compra",
@@ -439,6 +448,7 @@
       "approve": "Aprobar",
       "approving": "Aprobando",
       "payment_date_range": "Rango de fechas de pago",
+      "select_purchase": "Seleccionar Comprar",
       "confirmDelete": {
         "pending": {
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."

@@ -180,6 +180,7 @@
       "shipping": "Shipping",
       "return": "Return",
       "note": "Note",
+      "back": "Back",
       "purchase_date_required": "Purchase Date is required",
       "reference_no_required": "Reference No is required",
       "reference_no_too_short": "Reference No is too short",
@@ -439,6 +440,7 @@
       "approve": "Approve",
       "approving": "Approving",
       "payment_date_range": "Payment Date Range",
+      "select_purchase": "Select Purchase",
       "confirmDelete": {
         "pending": {
           "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
@@ -461,6 +463,14 @@
         },
         "success": {
           "title": "Payment Approved"
+        }
+      },
+      "confirmCreate": {
+        "success": {
+          "title": "Payment Created"
+        },
+        "failed": {
+          "title": "Payment Created Failed"
         }
       }
     },

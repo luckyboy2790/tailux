@@ -12,6 +12,7 @@ import { Combobox } from "components/shared/form/Combobox";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,6 +29,10 @@ const ConcurrentPage = () => {
   const [checkedRows, setCheckedRows] = useState({});
 
   const navigate = useNavigate();
+
+  const { user } = useAuthContext();
+
+  const role = user.role;
 
   const [cookies] = useCookies(["authToken"]);
 
@@ -91,6 +96,23 @@ const ConcurrentPage = () => {
   }, [supplierId, token]);
 
   const handleSubmit = async () => {
+    if (!date) {
+      toast.error(t("nav.payment.payment_date_range"));
+
+      return;
+    }
+    if (!referenceNo) {
+      toast.error(t("nav.purchase.reference_no_required"));
+
+      return;
+    }
+
+    if (checkedRows.length <= 0) {
+      toast.error(t("nav.payment.select_purchase"));
+
+      return;
+    }
+
     const purchases = Object.entries(checkedRows)
       .filter(([, value]) => value.checked)
       .map(([id, value]) => ({
@@ -124,13 +146,13 @@ const ConcurrentPage = () => {
       });
 
       if (!response.ok) {
-        toast.error("Upload failed");
+        toast.error(t("nav.payment.confirmCreate.failed.title"));
         return;
       }
 
-      toast.success("Upload success");
+      toast.success(t("nav.payment.confirmCreate.success.title"));
 
-      navigate("/payment/pending");
+      navigate(role === "secretary" ? "/payment/pending" : "/purchase/list");
     } catch (error) {
       console.error("Upload error:", error);
     }

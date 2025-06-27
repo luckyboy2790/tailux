@@ -71,7 +71,7 @@ const PurchaseList = () => {
               }}
             >
               <TiArrowBack className="size-4" />
-              Back
+              {t("nav.purchase.back")}
             </Button>
           </div>
 
