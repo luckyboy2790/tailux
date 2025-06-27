@@ -33,8 +33,11 @@ export function OrderIdCell({ getValue }) {
 export function DateCell({ getValue, row }) {
   const { locale } = useLocaleContext();
   const timestapms = getValue();
+
+  const createdAt = row.original?.created_at;
+
   const date = dayjs(timestapms).locale(locale).format("DD MMM YYYY");
-  const time = dayjs(timestapms).locale(locale).format("hh:mm A");
+  const time = dayjs(createdAt).locale(locale).format("hh:mm A");
   return (
     <>
       <p
@@ -101,7 +104,9 @@ export function TypeCell({ row, column, table }) {
   return (
     <div className="flex items-center space-x-4">
       <span className="dark:text-dark-100 font-medium text-gray-800">
-        <Highlight query={[globalQuery, columnQuery]}>{type_data || ""}</Highlight>
+        <Highlight query={[globalQuery, columnQuery]}>
+          {type_data || ""}
+        </Highlight>
       </span>
     </div>
   );
