@@ -9,14 +9,7 @@ import dayjs from "dayjs";
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
-import {
-  Button,
-  Card,
-  GhostSpinner,
-  Input,
-  Select,
-  Textarea,
-} from "components/ui";
+import { Button, GhostSpinner, Input, Select, Textarea } from "components/ui";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
@@ -256,101 +249,99 @@ const EditSale = () => {
           >
             <div className="w-full">
               <div className="col-span-12 lg:col-span-8">
-                <Card className="p-4 sm:px-5">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+                  <Controller
+                    name="sale_date"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        {...field}
+                        onChange={(val) =>
+                          field.onChange(dayjs(val).format("YYYY-MM-DD"))
+                        }
+                        value={field.value || ""}
+                        label={t("nav.sale.sale_date")}
+                        error={errors?.sale_date?.message}
+                        placeholder={t(
+                          "nav.purchase.purchase_date_placeholder",
+                        )}
+                      />
+                    )}
+                  />
+
+                  <Input
+                    label={t("nav.purchase.reference_no")}
+                    placeholder={t("nav.purchase.reference_no")}
+                    {...register("reference_no")}
+                    error={errors?.reference_no?.message}
+                  />
+
+                  <Select
+                    label={t("nav.people.user")}
+                    data={users}
+                    {...register("user_id")}
+                    error={errors?.user_id?.message}
+                    disabled
+                  />
+
+                  <Select
+                    label={t("nav.purchase.store")}
+                    data={stores}
+                    {...register("store")}
+                    error={errors?.store?.message}
+                    disabled
+                  />
+
+                  <Select
+                    label={t("nav.people.customer")}
+                    data={customer}
+                    {...register("customer_id")}
+                    error={errors?.customer_id?.message}
+                  />
+
+                  <div className="flex flex-col gap-2.5">
                     <Controller
-                      name="sale_date"
+                      name="attachment"
                       control={control}
                       render={({ field }) => (
-                        <DatePicker
+                        <CoverImageUpload
+                          label={t("nav.purchase.attachment")}
+                          error={errors?.attachment?.message}
                           {...field}
-                          onChange={(val) =>
-                            field.onChange(dayjs(val).format("YYYY-MM-DD"))
-                          }
-                          value={field.value || ""}
-                          label={t("nav.sale.sale_date")}
-                          error={errors?.sale_date?.message}
-                          placeholder={t(
-                            "nav.purchase.purchase_date_placeholder",
-                          )}
+                          onChange={(files) => {
+                            setImageEditable(true);
+                            field.onChange(files);
+                          }}
                         />
                       )}
                     />
-
-                    <Input
-                      label={t("nav.purchase.reference_no")}
-                      placeholder={t("nav.purchase.reference_no")}
-                      {...register("reference_no")}
-                      error={errors?.reference_no?.message}
-                    />
-
-                    <Select
-                      label={t("nav.people.user")}
-                      data={users}
-                      {...register("user_id")}
-                      error={errors?.user_id?.message}
-                      disabled
-                    />
-
-                    <Select
-                      label={t("nav.purchase.store")}
-                      data={stores}
-                      {...register("store")}
-                      error={errors?.store?.message}
-                      disabled
-                    />
-
-                    <Select
-                      label={t("nav.people.customer")}
-                      data={customer}
-                      {...register("customer_id")}
-                      error={errors?.customer_id?.message}
-                    />
-
-                    <div className="flex flex-col gap-2.5">
-                      <Controller
-                        name="attachment"
-                        control={control}
-                        render={({ field }) => (
-                          <CoverImageUpload
-                            label={t("nav.purchase.attachment")}
-                            error={errors?.attachment?.message}
-                            {...field}
-                            onChange={(files) => {
-                              setImageEditable(true);
-                              field.onChange(files);
-                            }}
+                    <div className="flex gap-1">
+                      {!imageEditable &&
+                        images.map((item, index) => (
+                          <Image
+                            key={index}
+                            width={45}
+                            height={45}
+                            src={`${IMG_URL}${item}`}
                           />
-                        )}
-                      />
-                      <div className="flex gap-1">
-                        {!imageEditable &&
-                          images.map((item, index) => (
-                            <Image
-                              key={index}
-                              width={45}
-                              height={45}
-                              src={`${IMG_URL}${item}`}
-                            />
-                          ))}
-                      </div>
+                        ))}
                     </div>
                   </div>
+                </div>
 
-                  <div className="mt-5 space-y-5">
-                    <OrderItemsTable orders={orders} setOrders={setOrders} />
-                  </div>
+                <div className="mt-5 space-y-5">
+                  <OrderItemsTable orders={orders} setOrders={setOrders} />
+                </div>
 
-                  <div className="mt-5 space-y-5">
-                    <Textarea
-                      label={t("nav.purchase.note")}
-                      rows="5"
-                      {...register("note")}
-                      error={errors?.note?.message}
-                      className="mt-5"
-                    />
-                  </div>
-                </Card>
+                <div className="mt-5 space-y-5">
+                  <Textarea
+                    label={t("nav.purchase.note")}
+                    rows="5"
+                    {...register("note")}
+                    error={errors?.note?.message}
+                    className="mt-5"
+                  />
+                </div>
               </div>
             </div>
           </form>

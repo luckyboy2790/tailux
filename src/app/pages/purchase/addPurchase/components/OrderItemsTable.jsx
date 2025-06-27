@@ -126,7 +126,6 @@ const EditableSelect = ({
       displayField="label"
       searchFields={["label"]}
       error={value?.value === ""}
-      className="min-w-[180px]"
     />
   );
 };
@@ -322,7 +321,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
               {table.getRowModel().rows.map((row) => (
                 <Tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <Td key={cell.id}>
+                    <Td key={cell.id} className="w-[150px] text-center">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

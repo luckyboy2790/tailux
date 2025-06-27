@@ -8,7 +8,7 @@ import { CoverImageUpload } from "./components/CoverImageUpload";
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
-import { Button, Card, GhostSpinner, Input, Textarea } from "components/ui";
+import { Button, GhostSpinner, Input, Textarea } from "components/ui";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
@@ -241,80 +241,78 @@ const AddPurchaseOrder = () => {
           >
             <div className="w-full">
               <div className="col-span-12 lg:col-span-8">
-                <Card className="p-4 sm:px-5">
-                  <div className="mt-5 space-y-5">
-                    <OrderItemsTable
-                      orders={orders}
-                      setOrders={setOrders}
-                      watch={watch}
+                <div className="mt-5 space-y-5">
+                  <OrderItemsTable
+                    orders={orders}
+                    setOrders={setOrders}
+                    watch={watch}
+                  />
+                </div>
+
+                <div className="mt-5 space-y-5">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
+                    <Input
+                      label={t("nav.purchase.reference_no")}
+                      placeholder={t("nav.purchase.reference_no")}
+                      {...register("reference_no")}
+                      error={errors?.reference_no?.message}
+                    />
+
+                    <Controller
+                      name="store_id"
+                      control={control}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <Combobox
+                          label={t("nav.purchase.store")}
+                          data={stores}
+                          value={
+                            stores.find((s) => {
+                              return s.value === value;
+                            }) || null
+                          }
+                          onChange={(selected) =>
+                            onChange(selected?.value || "")
+                          }
+                          placeholder={t("nav.select.select_store")}
+                          displayField="label"
+                          searchFields={["label"]}
+                          error={error?.message}
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      name="attachment"
+                      control={control}
+                      render={({ field }) => (
+                        <CoverImageUpload
+                          label={t("nav.purchase.attachment")}
+                          error={errors?.attachment?.message}
+                          {...field}
+                        />
+                      )}
+                    />
+
+                    <Input
+                      label={t("nav.purchase.shipping_carrier")}
+                      placeholder={t("nav.purchase.shipping_carrier")}
+                      {...register("shipping_carrier")}
+                      error={errors?.shipping_carrier?.message}
                     />
                   </div>
+                </div>
 
-                  <div className="mt-5 space-y-5">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-                      <Input
-                        label={t("nav.purchase.reference_no")}
-                        placeholder={t("nav.purchase.reference_no")}
-                        {...register("reference_no")}
-                        error={errors?.reference_no?.message}
-                      />
-
-                      <Controller
-                        name="store_id"
-                        control={control}
-                        render={({
-                          field: { onChange, value },
-                          fieldState: { error },
-                        }) => (
-                          <Combobox
-                            label={t("nav.purchase.store")}
-                            data={stores}
-                            value={
-                              stores.find((s) => {
-                                return s.value === value;
-                              }) || null
-                            }
-                            onChange={(selected) =>
-                              onChange(selected?.value || "")
-                            }
-                            placeholder={t("nav.select.select_store")}
-                            displayField="label"
-                            searchFields={["label"]}
-                            error={error?.message}
-                          />
-                        )}
-                      />
-
-                      <Controller
-                        name="attachment"
-                        control={control}
-                        render={({ field }) => (
-                          <CoverImageUpload
-                            label={t("nav.purchase.attachment")}
-                            error={errors?.attachment?.message}
-                            {...field}
-                          />
-                        )}
-                      />
-
-                      <Input
-                        label={t("nav.purchase.shipping_carrier")}
-                        placeholder={t("nav.purchase.shipping_carrier")}
-                        {...register("shipping_carrier")}
-                        error={errors?.shipping_carrier?.message}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mt-5 space-y-5">
-                    <Textarea
-                      label={t("nav.purchase.note")}
-                      rows="5"
-                      {...register("note")}
-                      error={errors?.note?.message}
-                    />
-                  </div>
-                </Card>
+                <div className="mt-5 space-y-5">
+                  <Textarea
+                    label={t("nav.purchase.note")}
+                    rows="5"
+                    {...register("note")}
+                    error={errors?.note?.message}
+                  />
+                </div>
               </div>
             </div>
           </form>

@@ -10,7 +10,6 @@ import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
 import {
   Button,
-  Card,
   GhostSpinner,
   Input,
   Select,
@@ -241,180 +240,177 @@ const AddPurchase = () => {
           >
             <div className="w-full">
               <div className="col-span-12 lg:col-span-8">
-                <Card className="p-4 sm:px-5">
-                  <div className="mt-5 space-y-5">
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                      <Controller
-                        name="purchase_date"
-                        control={control}
-                        render={({ field }) => (
-                          <DatePicker
-                            {...field}
-                            onChange={(val) =>
-                              field.onChange(dayjs(val).format("YYYY-MM-DD"))
-                            }
-                            value={field.value || ""}
-                            label={t("nav.purchase.purchase_date")}
-                            error={errors?.purchase_date?.message}
-                            placeholder={t(
-                              "nav.purchase.purchase_date_placeholder",
-                            )}
-                          />
-                        )}
-                      />
+                <div className="mt-5 space-y-5">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+                    <Controller
+                      name="purchase_date"
+                      control={control}
+                      render={({ field }) => (
+                        <DatePicker
+                          {...field}
+                          onChange={(val) =>
+                            field.onChange(dayjs(val).format("YYYY-MM-DD"))
+                          }
+                          value={field.value || ""}
+                          label={t("nav.purchase.purchase_date")}
+                          error={errors?.purchase_date?.message}
+                          placeholder={t(
+                            "nav.purchase.purchase_date_placeholder",
+                          )}
+                        />
+                      )}
+                    />
 
-                      <Input
-                        label={t("nav.purchase.reference_no")}
-                        placeholder={t("nav.purchase.reference_no")}
-                        {...register("reference_no")}
-                        error={errors?.reference_no?.message}
-                      />
+                    <Input
+                      label={t("nav.purchase.reference_no")}
+                      placeholder={t("nav.purchase.reference_no")}
+                      {...register("reference_no")}
+                      error={errors?.reference_no?.message}
+                    />
 
-                      <Select
-                        label={t("nav.purchase.store")}
-                        data={stores}
-                        {...register("store")}
-                        error={errors?.store?.message}
-                        disabled={
-                          user?.role === "user" || user?.role === "secretary"
-                        }
-                      />
+                    <Select
+                      label={t("nav.purchase.store")}
+                      data={stores}
+                      {...register("store")}
+                      error={errors?.store?.message}
+                      disabled={
+                        user?.role === "user" || user?.role === "secretary"
+                      }
+                    />
 
-                      <Controller
-                        name="supplier_id"
-                        control={control}
-                        render={({
-                          field: { onChange, value },
-                          fieldState: { error },
-                        }) => (
-                          <div className="flex w-full items-start gap-2">
-                            <div className="relative flex-1">
-                              <Combobox
-                                label={t("nav.purchase.supplier")}
-                                data={supplier}
-                                value={
-                                  supplier.find((s) => s.value === value) ||
-                                  null
-                                }
-                                onChange={(selected) =>
-                                  onChange(selected?.value || "")
-                                }
-                                placeholder={t("nav.select.select_supplier")}
-                                displayField="label"
-                                searchFields={["label"]}
-                                error={error?.message}
-                              />
-                              {!error && <div className="h-5" />}
-                            </div>
-                            <div className="pt-[26px]">
-                              <Button
-                                color="primary"
-                                className="h-9.5"
-                                onClick={open}
-                              >
-                                +
-                              </Button>
-                            </div>
+                    <Controller
+                      name="supplier_id"
+                      control={control}
+                      render={({
+                        field: { onChange, value },
+                        fieldState: { error },
+                      }) => (
+                        <div className="flex w-full items-start gap-2">
+                          <div className="relative flex-1">
+                            <Combobox
+                              label={t("nav.purchase.supplier")}
+                              data={supplier}
+                              value={
+                                supplier.find((s) => s.value === value) || null
+                              }
+                              onChange={(selected) =>
+                                onChange(selected?.value || "")
+                              }
+                              placeholder={t("nav.select.select_supplier")}
+                              displayField="label"
+                              searchFields={["label"]}
+                              error={error?.message}
+                            />
+                            {!error && <div className="h-5" />}
                           </div>
-                        )}
-                      />
+                          <div className="pt-[26px]">
+                            <Button
+                              color="primary"
+                              className="h-9.5"
+                              onClick={open}
+                            >
+                              +
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    />
 
+                    <Input
+                      label={t("nav.purchase.days_of_credit")}
+                      type="number"
+                      {...register("day_of_credit")}
+                      error={errors?.day_of_credit?.message}
+                    />
+
+                    <Controller
+                      name="attachment"
+                      control={control}
+                      render={({ field }) => (
+                        <CoverImageUpload
+                          label={t("nav.purchase.attachment")}
+                          error={errors?.attachment?.message}
+                          {...field}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-5">
+                  <OrderItemsTable
+                    orders={orders}
+                    setOrders={setOrders}
+                    watch={watch}
+                  />
+                </div>
+
+                <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+                  <Controller
+                    name="discount"
+                    control={control}
+                    render={({ field }) => (
                       <Input
-                        label={t("nav.purchase.days_of_credit")}
-                        type="number"
-                        {...register("day_of_credit")}
-                        error={errors?.day_of_credit?.message}
+                        label={t("nav.purchase.discount")}
+                        type="text"
+                        value={(field.value || 0).toLocaleString()}
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                        }}
+                        error={errors?.discount?.message}
                       />
+                    )}
+                  />
 
-                      <Controller
-                        name="attachment"
-                        control={control}
-                        render={({ field }) => (
-                          <CoverImageUpload
-                            label={t("nav.purchase.attachment")}
-                            error={errors?.attachment?.message}
-                            {...field}
-                          />
-                        )}
+                  <Controller
+                    name="shipping"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        label={t("nav.purchase.shipping")}
+                        type="text"
+                        value={(field.value || 0).toLocaleString()}
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(
+                            /[^0-9]/g,
+                            "",
+                          );
+                          field.onChange(rawValue ? Number(rawValue) : "");
+                        }}
+                        error={errors?.shipping?.message}
                       />
-                    </div>
-                  </div>
+                    )}
+                  />
 
-                  <div className="mt-5 space-y-5">
-                    <OrderItemsTable
-                      orders={orders}
-                      setOrders={setOrders}
-                      watch={watch}
-                    />
-                  </div>
+                  <Controller
+                    name="returns"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        label={t("nav.purchase.return")}
+                        type="text"
+                        value={(field.value || 0).toLocaleString()}
+                        onChange={(e) => {
+                          const rawValue = e.target.value.replace(
+                            /[^0-9]/g,
+                            "",
+                          );
+                          field.onChange(rawValue ? Number(rawValue) : "");
+                        }}
+                        error={errors?.returns?.message}
+                      />
+                    )}
+                  />
+                </div>
 
-                  <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                    <Controller
-                      name="discount"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          label={t("nav.purchase.discount")}
-                          type="text"
-                          value={(field.value || 0).toLocaleString()}
-                          onChange={(e) => {
-                            field.onChange(e.target.value);
-                          }}
-                          error={errors?.discount?.message}
-                        />
-                      )}
-                    />
-
-                    <Controller
-                      name="shipping"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          label={t("nav.purchase.shipping")}
-                          type="text"
-                          value={(field.value || 0).toLocaleString()}
-                          onChange={(e) => {
-                            const rawValue = e.target.value.replace(
-                              /[^0-9]/g,
-                              "",
-                            );
-                            field.onChange(rawValue ? Number(rawValue) : "");
-                          }}
-                          error={errors?.shipping?.message}
-                        />
-                      )}
-                    />
-
-                    <Controller
-                      name="returns"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          label={t("nav.purchase.return")}
-                          type="text"
-                          value={(field.value || 0).toLocaleString()}
-                          onChange={(e) => {
-                            const rawValue = e.target.value.replace(
-                              /[^0-9]/g,
-                              "",
-                            );
-                            field.onChange(rawValue ? Number(rawValue) : "");
-                          }}
-                          error={errors?.returns?.message}
-                        />
-                      )}
-                    />
-                  </div>
-
-                  <div className="mt-5 space-y-5">
-                    <Textarea
-                      label={t("nav.purchase.note")}
-                      rows="5"
-                      {...register("note")}
-                      error={errors?.note?.message}
-                    />
-                  </div>
-                </Card>
+                <div className="mt-5 space-y-5">
+                  <Textarea
+                    label={t("nav.purchase.note")}
+                    rows="5"
+                    {...register("note")}
+                    error={errors?.note?.message}
+                  />
+                </div>
               </div>
             </div>
           </form>

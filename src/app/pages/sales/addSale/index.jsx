@@ -9,14 +9,7 @@ import dayjs from "dayjs";
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
-import {
-  Button,
-  Card,
-  GhostSpinner,
-  Input,
-  Select,
-  Textarea,
-} from "components/ui";
+import { Button, GhostSpinner, Input, Select, Textarea } from "components/ui";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
@@ -225,84 +218,82 @@ const AddSale = () => {
           >
             <div className="w-full">
               <div className="col-span-12 lg:col-span-8">
-                <Card className="p-4 sm:px-5">
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                    <Controller
-                      name="sale_date"
-                      control={control}
-                      render={({ field }) => (
-                        <DatePicker
-                          {...field}
-                          onChange={(val) =>
-                            field.onChange(dayjs(val).format("YYYY-MM-DD"))
-                          }
-                          value={field.value || ""}
-                          label={t("nav.sale.sale_date")}
-                          error={errors?.sale_date?.message}
-                          placeholder={t(
-                            "nav.purchase.purchase_date_placeholder",
-                          )}
-                        />
-                      )}
-                    />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+                  <Controller
+                    name="sale_date"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        {...field}
+                        onChange={(val) =>
+                          field.onChange(dayjs(val).format("YYYY-MM-DD"))
+                        }
+                        value={field.value || ""}
+                        label={t("nav.sale.sale_date")}
+                        error={errors?.sale_date?.message}
+                        placeholder={t(
+                          "nav.purchase.purchase_date_placeholder",
+                        )}
+                      />
+                    )}
+                  />
 
-                    <Input
-                      label={t("nav.purchase.reference_no")}
-                      placeholder={t("nav.purchase.reference_no")}
-                      {...register("reference_no")}
-                      error={errors?.reference_no?.message}
-                    />
+                  <Input
+                    label={t("nav.purchase.reference_no")}
+                    placeholder={t("nav.purchase.reference_no")}
+                    {...register("reference_no")}
+                    error={errors?.reference_no?.message}
+                  />
 
-                    <Select
-                      label={t("nav.purchase.supplier")}
-                      data={users}
-                      {...register("user_id")}
-                      error={errors?.user_id?.message}
-                      disabled
-                    />
+                  <Select
+                    label={t("nav.purchase.supplier")}
+                    data={users}
+                    {...register("user_id")}
+                    error={errors?.user_id?.message}
+                    disabled
+                  />
 
-                    <Select
-                      label={t("nav.purchase.store")}
-                      data={stores}
-                      {...register("store")}
-                      error={errors?.store?.message}
-                      disabled
-                    />
+                  <Select
+                    label={t("nav.purchase.store")}
+                    data={stores}
+                    {...register("store")}
+                    error={errors?.store?.message}
+                    disabled
+                  />
 
-                    <Select
-                      label={t("nav.people.customer")}
-                      data={customer}
-                      {...register("customer_id")}
-                      error={errors?.customer_id?.message}
-                    />
+                  <Select
+                    label={t("nav.people.customer")}
+                    data={customer}
+                    {...register("customer_id")}
+                    error={errors?.customer_id?.message}
+                  />
 
-                    <Controller
-                      name="attachment"
-                      control={control}
-                      render={({ field }) => (
-                        <CoverImageUpload
-                          label={t("nav.purchase.attachment")}
-                          error={errors?.attachment?.message}
-                          {...field}
-                        />
-                      )}
-                    />
-                  </div>
+                  <Controller
+                    name="attachment"
+                    control={control}
+                    render={({ field }) => (
+                      <CoverImageUpload
+                        label={t("nav.purchase.attachment")}
+                        error={errors?.attachment?.message}
+                        {...field}
+                      />
+                    )}
+                  />
+                </div>
 
-                  <div className="mt-5 space-y-5">
-                    <OrderItemsTable orders={orders} setOrders={setOrders} />
-                  </div>
+                <div className="mt-5 space-y-5">
+                  <OrderItemsTable orders={orders} setOrders={setOrders} />
+                </div>
 
-                  <div className="mt-5 space-y-5">
-                    <Textarea
-                      label={t("nav.purchase.note")}
-                      rows="5"
-                      {...register("note")}
-                      error={errors?.note?.message}
-                      className="mt-5"
-                    />
-                  </div>
-                </Card>
+                <div className="mt-5 space-y-5">
+                  <Textarea
+                    label={t("nav.purchase.note")}
+                    rows="5"
+                    {...register("note")}
+                    error={errors?.note?.message}
+                    className="mt-5"
+                  />
+                </div>
               </div>
             </div>
           </form>
