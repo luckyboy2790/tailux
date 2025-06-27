@@ -90,7 +90,7 @@ export function SearchDialog({ close }) {
   const { isDark } = useThemeContext();
   const searchRef = useRef(null);
   const { result, query, setQuery } = useFuse(data, {
-    keys: ["title", "title_translate"],
+    keys: [currentLanguage === "es" ? "title_translate" : "title"],
     threshold: 0.2,
     matchAllOnEmptyQuery: false,
   });
