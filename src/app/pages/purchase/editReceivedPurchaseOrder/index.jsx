@@ -101,6 +101,8 @@ const AddPurchaseOrder = () => {
         const originalQty = matched?.quantity || 0;
         const receivedQty = Number(matched?.received_quantity) || 0;
 
+        console.log(matched);
+
         return {
           id: receivedItem.purchase_order_item_id,
           product_name: matched?.product || "",
@@ -112,6 +114,7 @@ const AddPurchaseOrder = () => {
           balance: originalQty - receivedQty + Number(receivedItem.quantity),
           receive: Number(receivedItem.quantity),
           checked: true,
+          images: matched?.images || [],
         };
       });
 

@@ -24,8 +24,11 @@ import { DatePicker } from "components/shared/form/Datepicker";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { Combobox } from "components/shared/form/Combobox";
+import { Image } from "antd";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -209,6 +212,20 @@ export function OrderItemsTable({ orders, setOrders }) {
         accessorKey: "product_name",
         id: "product_name",
         header: t("nav.purchase.product_name"),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2 space-x-2 rtl:space-x-reverse">
+            <span>{row.getValue("product_name")}</span>
+            {row.original?.images?.length > 0 &&
+              row.original?.images?.map((image) => (
+                <Image
+                  key={image}
+                  width={30}
+                  height={30}
+                  src={`${IMG_URL}${image}`}
+                />
+              ))}
+          </div>
+        ),
       },
       {
         accessorKey: "product_cost",

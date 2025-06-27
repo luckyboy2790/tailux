@@ -92,6 +92,7 @@ const AddPurchaseOrder = () => {
           balance: Number(item.quantity) - Number(item.received_quantity),
           receive: Number(item.quantity) - Number(item.received_quantity),
           checked: false,
+          images: item.images,
         }));
 
       setOrders(mappedOrders);
