@@ -102,8 +102,6 @@ export function CompanyChart() {
 
         const companyCartData = await response.json();
 
-        console.log(companyCartData);
-
         if (companyCartData.status !== "Success") {
           console.error(
             "Failed to fetch company chart data:",

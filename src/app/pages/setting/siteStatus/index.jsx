@@ -100,17 +100,12 @@ const PurchaseList = () => {
       return;
     }
 
-    console.log(format(start, "HH:mm"));
-    console.log(format(end, "HH:mm"));
-
     const newEntry = {
       start: format(start, "HH:mm"),
       end: format(end, "HH:mm"),
     };
 
     const updatedTimeline = [...settings, newEntry];
-
-    console.log(updatedTimeline);
 
     const res = await fetch(`${API_URL}/api/site_setting/set`, {
       method: "POST",

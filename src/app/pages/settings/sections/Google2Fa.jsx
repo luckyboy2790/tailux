@@ -62,8 +62,6 @@ export default function General() {
 
       setQrUrl(result.data);
 
-      console.log(result.user);
-
       dispatch({ type: "UPDATE_USER", payload: { user: result.user } });
     } catch (error) {
       console.error("Error fetching user data:", error);

@@ -47,8 +47,6 @@ export function CustomerCell({ getValue, column, table }) {
 
   const name = getValue();
 
-  console.log(name);
-
   return (
     <div className="flex items-center space-x-4">
       <span className="dark:text-dark-100 font-medium text-gray-800">

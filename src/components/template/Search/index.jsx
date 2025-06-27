@@ -85,8 +85,6 @@ export function SearchDialog({ close }) {
 
   const currentLanguage = i18n.language;
 
-  console.log(currentLanguage);
-
   const { isDark } = useThemeContext();
   const searchRef = useRef(null);
   const { result, query, setQuery } = useFuse(data, {

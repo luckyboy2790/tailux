@@ -150,8 +150,6 @@ const AddSale = () => {
       status: 1,
     };
 
-    console.log(payload);
-
     try {
       if (isLoading) return;
 

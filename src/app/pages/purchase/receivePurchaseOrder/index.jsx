@@ -100,8 +100,6 @@ const AddPurchaseOrder = () => {
 
       setOrders(mappedOrders);
 
-      console.log(user);
-
       if (user.role === "user" || user.role === "secretary") {
         reset({
           store_id: user?.first_store_id || -1,

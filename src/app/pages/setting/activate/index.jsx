@@ -43,8 +43,6 @@ export default function Activate() {
       if (response.ok) {
         navigate("/", { replace: true });
       } else {
-        console.log(result);
-
         toast.error(result?.error);
       }
     } catch (error) {

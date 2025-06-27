@@ -162,8 +162,6 @@ export default function PurchaseTable() {
 
         const result = await response.json();
 
-        console.log(result);
-
         setOrders(result.data.data);
         setTotalCount(result.data.total);
 
