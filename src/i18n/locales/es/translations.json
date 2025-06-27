@@ -216,6 +216,7 @@
       "p_return": "D-Pendiente",
       "status": "Estado",
       "select_supplier_message": "Seleccione un proveedor",
+      "invalid_row_message": "Categoría, Nombre del Producto y Costo del Producto son obligatorios para cada fila",
       "confirmDelete": {
         "pending": {
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."

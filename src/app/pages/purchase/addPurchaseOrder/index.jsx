@@ -15,6 +15,7 @@ import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useNavigate } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -89,6 +90,22 @@ const AddPurchaseOrder = () => {
   const onSubmit = async (formData) => {
     setIsLoading(true);
 
+    // ✅ Validation per item
+    const invalidItemIndex = orders.findIndex((o) => {
+      const nameValid = o.product_name?.trim();
+      const costValid = Number(o.product_cost) > 0;
+      const categoryValid = o.category !== "";
+      return !(nameValid && costValid && categoryValid);
+    });
+
+    if (invalidItemIndex !== -1) {
+      toast.error(
+        `${t("nav.purchase.invalid_row_message") || "Invalid item data"} (#${invalidItemIndex + 1})`,
+      );
+      setIsLoading(false);
+      return;
+    }
+
     const payload = {
       id: "",
       date: formData.purchase_date,
@@ -131,7 +148,6 @@ const AddPurchaseOrder = () => {
         const subtotal = (cost - discountAmount) * qty;
         return sum + subtotal;
       }, 0),
-
       note: formData.note || "",
       status: 1,
     };
@@ -272,6 +288,7 @@ const AddPurchaseOrder = () => {
                       <Input
                         label={t("nav.purchase.discount")}
                         {...register("discount")}
+                        placeholder={t("nav.purchase.discount")}
                         error={errors?.discount?.message}
                       />
 

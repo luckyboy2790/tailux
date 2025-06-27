@@ -31,17 +31,6 @@ import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-const initialData = [
-  {
-    product_name: "",
-    product_cost: 0,
-    quantity: 1,
-    discount: "",
-    image: [],
-    category: "",
-  },
-];
-
 const fuzzyFilter = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value);
   addMeta({ itemRank });
@@ -56,10 +45,7 @@ const EditableNumberInput = ({
 }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
-
-  const onBlur = () => {
-    table.options.meta?.updateData(index, id, value);
-  };
+  const isInvalid = !value || isNaN(value) || Number(value) <= 0;
 
   useEffect(() => {
     setValue(initialValue ?? "");
@@ -67,12 +53,15 @@ const EditableNumberInput = ({
 
   return (
     <Input
-      value={value.toLocaleString()}
+      value={value?.toLocaleString?.() || ""}
       onChange={(e) => {
         const rawValue = e.target.value.replace(/[^0-9]/g, "");
-        setValue(rawValue ? Number(rawValue) : "");
+        const numericValue = rawValue ? Number(rawValue) : "";
+        setValue(numericValue);
+        table.options.meta?.updateData(index, id, numericValue);
       }}
-      onBlur={onBlur}
+      error={isInvalid}
+      required
       type="text"
     />
   );
@@ -81,6 +70,7 @@ const EditableNumberInput = ({
 const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
+  const isInvalid = !value?.toString().trim();
 
   const onBlur = () => {
     table.options.meta?.updateData(index, id, value);
@@ -95,6 +85,8 @@ const EditableInput = ({ getValue, row: { index }, column: { id }, table }) => {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
+      error={isInvalid}
+      required
     />
   );
 };
@@ -163,7 +155,7 @@ const EditableSelect = ({
       placeholder={t("nav.select.select_category")}
       displayField="label"
       searchFields={["label"]}
-      error={value?.value === ""}
+      error={!value?.value}
       required
       className="min-w-[180px]"
     />
@@ -350,7 +342,17 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
 
   const handleAddRow = () => {
     if (watch("supplier_id") !== "") {
-      setData((old) => [...old, ...initialData]);
+      const prev = orders?.[0] || {};
+      const newRow = {
+        product_name: prev.product_name || "",
+        product_cost: prev.product_cost ?? 0,
+        quantity: prev.quantity ?? 1,
+        discount: watch("discount") || "",
+        image: [],
+        category: prev.category || "",
+      };
+
+      setData((old) => [newRow, ...old]);
     } else {
       toast.error(t("nav.purchase.select_supplier_message"));
     }

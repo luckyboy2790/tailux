@@ -216,6 +216,7 @@
       "p_return": "P-Return",
       "status": "Status",
       "select_supplier_message": "Please select a supplier",
+      "invalid_row_message": "Category, Product Name, and Product Cost are required for each item",
       "confirmDelete": {
         "pending": {
           "description": "Are you sure you want to delete this row? Once deleted, it cannot be restored."
