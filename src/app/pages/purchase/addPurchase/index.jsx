@@ -8,13 +8,7 @@ import dayjs from "dayjs";
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
-import {
-  Button,
-  GhostSpinner,
-  Input,
-  Select,
-  Textarea,
-} from "components/ui";
+import { Button, GhostSpinner, Input, Select, Textarea } from "components/ui";
 import { Delta } from "components/shared/form/TextEditor";
 import { CoverImageUpload } from "./components/CoverImageUpload";
 import { DatePicker } from "components/shared/form/Datepicker";
@@ -127,6 +121,12 @@ const AddPurchase = () => {
       }
     };
     fetchData();
+
+    reset({
+      discount: 0,
+      shipping: 0,
+      returns: 0,
+    });
   }, [t, close, isOpen, user, reset]);
 
   const onSubmit = async (formData) => {
@@ -353,7 +353,7 @@ const AddPurchase = () => {
                       <Input
                         label={t("nav.purchase.discount")}
                         type="text"
-                        value={(field.value || 0).toLocaleString()}
+                        value={(field.value || "").toLocaleString()}
                         onChange={(e) => {
                           field.onChange(e.target.value);
                         }}
@@ -369,7 +369,7 @@ const AddPurchase = () => {
                       <Input
                         label={t("nav.purchase.shipping")}
                         type="text"
-                        value={(field.value || 0).toLocaleString()}
+                        value={(field.value || "").toLocaleString()}
                         onChange={(e) => {
                           const rawValue = e.target.value.replace(
                             /[^0-9]/g,
@@ -389,7 +389,7 @@ const AddPurchase = () => {
                       <Input
                         label={t("nav.purchase.return")}
                         type="text"
-                        value={(field.value || 0).toLocaleString()}
+                        value={(field.value || "").toLocaleString()}
                         onChange={(e) => {
                           const rawValue = e.target.value.replace(
                             /[^0-9]/g,
