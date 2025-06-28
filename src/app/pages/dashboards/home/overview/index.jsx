@@ -83,13 +83,11 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.today_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {(
-                Number(
-                  data?.today_purchases.total === "" ||
-                    !data?.today_purchases.total
-                    ? 0
-                    : data?.today_purchases.total,
-                ).toFixed() || 0
+              {Number(
+                data?.today_purchases.total === "" ||
+                  !data?.today_purchases.total
+                  ? 0
+                  : data?.today_purchases.total,
               ).toLocaleString() || 0}
             </p>
           </div>
@@ -109,13 +107,11 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.week_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {(
-                Number(
-                  data?.week_purchases.total === "" ||
-                    !data?.week_purchases.total
-                    ? 0
-                    : data?.week_purchases.total,
-                ).toFixed() || 0
+              {console.log(typeof data?.week_purchases.total)}
+              {Number(
+                data?.week_purchases.total === "" || !data?.week_purchases.total
+                  ? 0
+                  : data?.week_purchases.total,
               ).toLocaleString() || 0}
             </p>
           </div>
@@ -136,13 +132,11 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
             <div>
               <p>{t("nav.dashboards.month_purchase")}</p>
               <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                {(
-                  Number(
-                    data?.month_purchases.total === "" ||
-                      !data?.month_purchases.total
-                      ? 0
-                      : data?.month_purchases.total,
-                  ).toFixed() || 0
+                {Number(
+                  data?.month_purchases.total === "" ||
+                    !data?.month_purchases.total
+                    ? 0
+                    : data?.month_purchases.total,
                 ).toLocaleString() || 0}
               </p>
             </div>
@@ -167,13 +161,11 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
                 <Spinner color="info" isElastic className="mt-1.5 size-6" />
               ) : (
                 <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                  {(
-                    Number(
-                      extraData?.company_balance === "" ||
-                        !extraData?.company_balance
-                        ? 0
-                        : extraData?.company_balance,
-                    ).toFixed() || 0
+                  {Number(
+                    extraData?.company_balance === "" ||
+                      !extraData?.company_balance
+                      ? 0
+                      : extraData?.company_balance,
                   ).toLocaleString() || 0}
                 </p>
               )}
@@ -195,12 +187,10 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.today_sale")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {(
-                Number(
-                  data?.today_sales.total === "" || !data?.today_sales.total
-                    ? 0
-                    : data?.today_sales.total,
-                ).toFixed() || 0
+              {Number(
+                data?.today_sales.total === "" || !data?.today_sales.total
+                  ? 0
+                  : data?.today_sales.total,
               ).toLocaleString() || 0}
             </p>
           </div>
@@ -220,12 +210,10 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.week_sales")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {(
-                Number(
-                  data?.week_sales.total === "" || !data?.week_sales.total
-                    ? 0
-                    : data?.week_sales.total,
-                ).toFixed() || 0
+              {Number(
+                data?.week_sales.total === "" || !data?.week_sales.total
+                  ? 0
+                  : data?.week_sales.total,
               ).toLocaleString() || 0}
             </p>
           </div>
@@ -246,12 +234,10 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
             <p>{t("nav.dashboards.expiries_in_5days_purchases")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
               {Number(
-                Number(
-                  data?.expired_in_5days_purchases === "" ||
-                    !data?.expired_in_5days_purchases
-                    ? 0
-                    : data?.expired_in_5days_purchases,
-                ).toFixed() || 0,
+                data?.expired_in_5days_purchases === "" ||
+                  !data?.expired_in_5days_purchases
+                  ? 0
+                  : data?.expired_in_5days_purchases,
               ).toLocaleString() || 0}
             </p>
           </div>
@@ -274,13 +260,11 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
               <Spinner color="info" isElastic className="mt-1.5 size-6" />
             ) : (
               <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-                {(
-                  Number(
-                    extraData?.expired_purchases === "" ||
-                      !extraData?.expired_purchases
-                      ? 0
-                      : extraData?.expired_purchases,
-                  ).toFixed() || 0
+                {Number(
+                  extraData?.expired_purchases === "" ||
+                    !extraData?.expired_purchases
+                    ? 0
+                    : extraData?.expired_purchases,
                 ).toLocaleString() || 0}
               </p>
             )}
