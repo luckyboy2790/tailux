@@ -84,7 +84,6 @@ export const getColumns = (t) => [
 
       const total = Number(original?.total_amount) || 0;
       const shipping = Number(original?.shipping) || 0;
-      const paid = Number(original?.paid_amount) || 0;
 
       const rawDiscount = original?.discount_string?.toString() || "0";
 
@@ -92,7 +91,7 @@ export const getColumns = (t) => [
         ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
         : Number(rawDiscount);
 
-      const balance = total - discount.toFixed(0) + shipping - paid;
+      const balance = total - discount.toFixed(0) + shipping;
       const formatted = Math.abs(balance).toLocaleString();
 
       return (

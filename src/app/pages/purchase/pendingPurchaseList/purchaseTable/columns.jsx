@@ -14,9 +14,10 @@ import {
   //   OrderIdCell,
   // OrderStatusCell,
   // ProfitCell,
-  TotalCell,
   UserCell,
 } from "./rows";
+
+import clsx from "clsx";
 
 // ----------------------------------------------------------------------
 
@@ -70,7 +71,34 @@ export const getColumns = (t) => [
     id: "total",
     label: t("nav.table_fields.grand_total"),
     header: t("nav.table_fields.grand_total"),
-    cell: TotalCell,
+    cell: (props) => {
+      const original = props.row.original;
+
+      const total = Number(original?.total_amount) || 0;
+      const shipping = Number(original?.shipping) || 0;
+
+      const rawDiscount = original?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const balance = total - discount.toFixed(0) + shipping;
+      const formatted = Math.abs(balance).toLocaleString();
+
+      return (
+        <p
+          className={clsx(
+            "text-sm-plus",
+            balance < 0
+              ? "font-medium text-orange-600"
+              : "dark:text-dark-100 font-medium text-gray-800",
+          )}
+        >
+          {`${balance < 0 ? "-" : ""}$${formatted}`}
+        </p>
+      );
+    },
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
