@@ -1,6 +1,8 @@
 // Import Dependencies
 import { createColumnHelper } from "@tanstack/react-table";
 
+import clsx from "clsx";
+
 import {
   //   AddressCell,
   CustomerCell,
@@ -8,7 +10,6 @@ import {
   //   OrderIdCell,
   OrderStatusCell,
   ProfitCell,
-  TotalCell,
 } from "./rows";
 
 // ----------------------------------------------------------------------
@@ -77,7 +78,36 @@ export const getColumns = (t) => [
     id: "total",
     label: t("nav.table_fields.grand_total"),
     header: t("nav.table_fields.grand_total"),
-    cell: TotalCell,
+    cell: (props) => {
+      const original = props.row.original;
+
+      const total = Number(original?.total_amount) || 0;
+      const shipping = Number(original?.shipping) || 0;
+
+      const rawDiscount = original?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const balance = total - discount.toFixed(0) + shipping;
+      const formatted = Math.abs(balance).toLocaleString();
+
+      return (
+        <p
+          className={clsx(
+            "text-sm-plus",
+            original?.status === 0
+              ? "text-red-600"
+              : balance < 0
+                ? "font-medium text-orange-600"
+                : "dark:text-dark-100 font-medium text-gray-800",
+          )}
+        >
+          {`${balance < 0 ? "-" : ""}$${formatted}`}
+        </p>
+      );
+    },
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
@@ -89,23 +119,41 @@ export const getColumns = (t) => [
     filterFn: "inNumberRange",
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.grand_total - row?.paid_amount, {
+  columnHelper.accessor((row) => row?.total_amount - row?.paid_amount, {
     id: "balance",
     label: t("nav.table_fields.balance"),
     header: t("nav.table_fields.balance"),
-    cell: (props) => (
-      <p
-        className={`text-sm-plus ${props.row.original?.grand_total < props.row.original?.paid_amount ? "dark:text-red-500" : "dark:text-dark-100"} font-medium text-gray-800`}
-      >
-        {(() => {
-          const diff =
-            (props.row.original?.grand_total || 0) -
-            (props.row.original?.paid_amount || 0);
-          const absValue = Math.abs(diff).toLocaleString();
-          return `${diff < 0 ? "-" : ""}$${absValue}`;
-        })()}
-      </p>
-    ),
+    cell: (props) => {
+      const original = props.row.original;
+
+      const total = Number(original?.total_amount) || 0;
+      const shipping = Number(original?.shipping) || 0;
+      const paid = Number(original?.paid_amount) || 0;
+
+      const rawDiscount = original?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const balance = total - discount.toFixed(0) + shipping - paid;
+      const formatted = Math.abs(balance).toLocaleString();
+
+      return (
+        <p
+          className={clsx(
+            "text-sm-plus",
+            original?.status === 0
+              ? "text-red-600"
+              : balance < 0
+                ? "font-medium text-orange-600"
+                : "dark:text-dark-100 font-medium text-gray-800",
+          )}
+        >
+          {`${balance < 0 ? "-" : ""}$${formatted}`}
+        </p>
+      );
+    },
     filterFn: "inNumberRange",
     enableSorting: false,
   }),

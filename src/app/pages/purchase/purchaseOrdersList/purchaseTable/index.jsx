@@ -461,44 +461,46 @@ export default function PurchaseTable() {
                             </Tr>
                           );
                         })}
-                        <Tr>
-                          <Td colSpan={4}>{t("nav.detail.sub_total")}</Td>
-                          <Td>
-                            $
-                            {table
-                              .getCoreRowModel()
-                              .rows.reduce(
-                                (acc, row) => acc + row.original.grand_total,
-                                0,
-                              )
-                              .toLocaleString()}
-                          </Td>
-                          <Td>
-                            $
-                            {table
-                              .getCoreRowModel()
-                              .rows.reduce(
-                                (acc, row) =>
-                                  acc + Number(row.original.received_amount),
-                                0,
-                              )
-                              .toLocaleString()}
-                          </Td>
-                          <Td>
-                            $
-                            {table
-                              .getCoreRowModel()
-                              .rows.reduce(
-                                (acc, row) =>
-                                  acc +
-                                  Number(row.original.grand_total) -
-                                  Number(row.original.received_amount),
-                                0,
-                              )
-                              .toLocaleString()}
-                          </Td>
-                          <Td colSpan={2}></Td>
-                        </Tr>
+                        {table.getCoreRowModel().rows.length > 0 && (
+                          <Tr>
+                            <Td colSpan={4}>{t("nav.detail.sub_total")}</Td>
+                            <Td>
+                              $
+                              {table
+                                .getCoreRowModel()
+                                .rows.reduce(
+                                  (acc, row) => acc + row.original.grand_total,
+                                  0,
+                                )
+                                .toLocaleString()}
+                            </Td>
+                            <Td>
+                              $
+                              {table
+                                .getCoreRowModel()
+                                .rows.reduce(
+                                  (acc, row) =>
+                                    acc + Number(row.original.received_amount),
+                                  0,
+                                )
+                                .toLocaleString()}
+                            </Td>
+                            <Td>
+                              $
+                              {table
+                                .getCoreRowModel()
+                                .rows.reduce(
+                                  (acc, row) =>
+                                    acc +
+                                    Number(row.original.grand_total) -
+                                    Number(row.original.received_amount),
+                                  0,
+                                )
+                                .toLocaleString()}
+                            </Td>
+                            <Td colSpan={2}></Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </TBody>

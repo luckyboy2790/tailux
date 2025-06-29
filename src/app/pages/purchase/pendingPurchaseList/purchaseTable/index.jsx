@@ -447,47 +447,55 @@ export default function PurchaseTable() {
                             </Tr>
                           );
                         })}
-                        <Tr>
-                          <Td colSpan={5}>{t("nav.detail.sub_total")}</Td>
-                          {(() => {
-                            const rows = table.getCoreRowModel().rows;
-                            const totalBalance = rows.reduce((acc, row) => {
-                              const original = row.original;
+                        {table.getCoreRowModel().rows.length > 0 && (
+                          <Tr>
+                            <Td colSpan={5}>{t("nav.detail.sub_total")}</Td>
+                            {(() => {
+                              const rows = table.getCoreRowModel().rows;
+                              const totalBalance = rows.reduce((acc, row) => {
+                                const original = row.original;
 
-                              const total = Number(original?.total_amount) || 0;
-                              const shipping = Number(original?.shipping) || 0;
+                                const total =
+                                  Number(original?.total_amount) || 0;
+                                const shipping =
+                                  Number(original?.shipping) || 0;
 
-                              const rawDiscount =
-                                original?.discount_string?.toString() || "0";
-                              const discount = rawDiscount.includes("%")
-                                ? (total *
-                                    parseFloat(rawDiscount.replace("%", ""))) /
-                                  100
-                                : Number(rawDiscount) || 0;
+                                const rawDiscount =
+                                  original?.discount_string?.toString() || "0";
+                                const discount = rawDiscount.includes("%")
+                                  ? (total *
+                                      parseFloat(
+                                        rawDiscount.replace("%", ""),
+                                      )) /
+                                    100
+                                  : Number(rawDiscount) || 0;
 
-                              const balance =
-                                total - Number(discount.toFixed(0)) + shipping;
+                                const balance =
+                                  total -
+                                  Number(discount.toFixed(0)) +
+                                  shipping;
 
-                              return acc + balance;
-                            }, 0);
+                                return acc + balance;
+                              }, 0);
 
-                            return (
-                              <Td
-                                className={clsx(
-                                  "text-sm-plus font-medium",
-                                  totalBalance < 0
-                                    ? "text-orange-600"
-                                    : "dark:text-dark-100 font-medium text-gray-800",
-                                )}
-                              >
-                                {`${totalBalance < 0 ? "-" : ""}$${Math.abs(
-                                  totalBalance,
-                                ).toLocaleString()}`}
-                              </Td>
-                            );
-                          })()}
-                          <Td colSpan={2}></Td>
-                        </Tr>
+                              return (
+                                <Td
+                                  className={clsx(
+                                    "text-sm-plus font-medium",
+                                    totalBalance < 0
+                                      ? "text-orange-600"
+                                      : "dark:text-dark-100 font-medium text-gray-800",
+                                  )}
+                                >
+                                  {`${totalBalance < 0 ? "-" : ""}$${Math.abs(
+                                    totalBalance,
+                                  ).toLocaleString()}`}
+                                </Td>
+                              );
+                            })()}
+                            <Td colSpan={2}></Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </TBody>

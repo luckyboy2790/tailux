@@ -93,6 +93,8 @@ export const getColumns = (t) => [
           style: "currency",
           currency: "USD",
           signDisplay: "always",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
         })
           .format(value)
           .replace("+", "");

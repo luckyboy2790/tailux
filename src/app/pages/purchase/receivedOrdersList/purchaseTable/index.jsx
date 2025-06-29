@@ -446,25 +446,27 @@ export default function PurchaseTable() {
                             </Tr>
                           );
                         })}
-                        <Tr>
-                          <Td colSpan={6}>{t("nav.detail.sub_total")}</Td>
-                          <Td
-                            className={clsx(
-                              "text-sm-plus",
-                              "dark:text-dark-100",
-                            )}
-                          >
-                            $
-                            {table
-                              .getCoreRowModel()
-                              .rows.reduce(
-                                (acc, row) => acc + row.original.total_amount,
-                                0,
-                              )
-                              .toLocaleString()}
-                          </Td>
-                          <Td colSpan={1}></Td>
-                        </Tr>
+                        {table.getCoreRowModel().rows.length > 0 && (
+                          <Tr>
+                            <Td colSpan={6}>{t("nav.detail.sub_total")}</Td>
+                            <Td
+                              className={clsx(
+                                "text-sm-plus",
+                                "dark:text-dark-100",
+                              )}
+                            >
+                              $
+                              {table
+                                .getCoreRowModel()
+                                .rows.reduce(
+                                  (acc, row) => acc + row.original.total_amount,
+                                  0,
+                                )
+                                .toLocaleString()}
+                            </Td>
+                            <Td colSpan={1}></Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </TBody>

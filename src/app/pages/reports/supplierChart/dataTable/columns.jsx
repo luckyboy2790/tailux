@@ -70,8 +70,8 @@ export const getColumns = (t) => [
     },
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.total_sales, {
-    id: "total_sales",
+  columnHelper.accessor((row) => row?.total_purchases, {
+    id: "total_purchases",
     label: t("nav.total_purchase"),
     header: t("nav.total_purchase"),
     cell: TotalCell,
@@ -104,6 +104,8 @@ export const getColumns = (t) => [
           style: "currency",
           currency: "USD",
           signDisplay: "always",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
         })
           .format(value)
           .replace("+", "");

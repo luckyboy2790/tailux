@@ -396,55 +396,77 @@ export default function PurchaseTable() {
                         </Tr>
                       </>
                     ) : (
-                      table.getRowModel().rows.map((row) => {
-                        return (
-                          <Tr
-                            key={row.id}
-                            className={clsx(
-                              "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                              row.getIsSelected() &&
-                                !isSafari &&
-                                "row-selected after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500 after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent",
-                            )}
-                          >
-                            {/* first row is a normal row */}
-                            {row.getVisibleCells().map((cell) => {
-                              return (
-                                <Td
-                                  key={cell.id}
-                                  className={clsx(
-                                    "relative bg-white",
-                                    cardSkin === "shadow-sm"
-                                      ? "dark:bg-dark-700"
-                                      : "dark:bg-dark-900",
-                                    cell.column.getCanPin() && [
-                                      cell.column.getIsPinned() === "left" &&
-                                        "sticky z-2 ltr:left-0 rtl:right-0",
-                                      cell.column.getIsPinned() === "right" &&
-                                        "sticky z-2 ltr:right-0 rtl:left-0",
-                                    ],
-                                  )}
-                                >
-                                  {cell.column.getIsPinned() && (
-                                    <div
-                                      className={clsx(
-                                        "dark:border-dark-500 pointer-events-none absolute inset-0 border-gray-200",
-                                        cell.column.getIsPinned() === "left"
-                                          ? "ltr:border-r rtl:border-l"
-                                          : "ltr:border-l rtl:border-r",
-                                      )}
-                                    ></div>
-                                  )}
-                                  {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext(),
-                                  )}
-                                </Td>
-                              );
-                            })}
+                      <>
+                        {table.getRowModel().rows.map((row) => {
+                          return (
+                            <Tr
+                              key={row.id}
+                              className={clsx(
+                                "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                                row.getIsSelected() &&
+                                  !isSafari &&
+                                  "row-selected after:bg-primary-500/10 ltr:after:border-l-primary-500 rtl:after:border-r-primary-500 after:pointer-events-none after:absolute after:inset-0 after:z-2 after:h-full after:w-full after:border-3 after:border-transparent",
+                              )}
+                            >
+                              {/* first row is a normal row */}
+                              {row.getVisibleCells().map((cell) => {
+                                return (
+                                  <Td
+                                    key={cell.id}
+                                    className={clsx(
+                                      "relative bg-white",
+                                      cardSkin === "shadow-sm"
+                                        ? "dark:bg-dark-700"
+                                        : "dark:bg-dark-900",
+                                      cell.column.getCanPin() && [
+                                        cell.column.getIsPinned() === "left" &&
+                                          "sticky z-2 ltr:left-0 rtl:right-0",
+                                        cell.column.getIsPinned() === "right" &&
+                                          "sticky z-2 ltr:right-0 rtl:left-0",
+                                      ],
+                                    )}
+                                  >
+                                    {cell.column.getIsPinned() && (
+                                      <div
+                                        className={clsx(
+                                          "dark:border-dark-500 pointer-events-none absolute inset-0 border-gray-200",
+                                          cell.column.getIsPinned() === "left"
+                                            ? "ltr:border-r rtl:border-l"
+                                            : "ltr:border-l rtl:border-r",
+                                        )}
+                                      ></div>
+                                    )}
+                                    {flexRender(
+                                      cell.column.columnDef.cell,
+                                      cell.getContext(),
+                                    )}
+                                  </Td>
+                                );
+                              })}
+                            </Tr>
+                          );
+                        })}
+                        {table.getCoreRowModel().rows.length > 0 && (
+                          <Tr>
+                            <Td colSpan={4}>{t("nav.detail.sub_total")}</Td>
+                            <Td
+                              className={clsx(
+                                "text-sm-plus",
+                                "dark:text-dark-100",
+                              )}
+                            >
+                              $
+                              {table
+                                .getCoreRowModel()
+                                .rows.reduce(
+                                  (acc, row) => acc + row.original.amount,
+                                  0,
+                                )
+                                .toLocaleString()}
+                            </Td>
                           </Tr>
-                        );
-                      })
+                        )}
+                      </>
                     )}
                   </TBody>
                 </Table>
