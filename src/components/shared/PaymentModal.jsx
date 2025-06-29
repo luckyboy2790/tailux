@@ -49,13 +49,24 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
         note: rowData.note || "",
       });
     } else {
+      const original = row.original;
+
+      const total = Number(original?.total_amount) || 0;
+      const shipping = Number(original?.shipping) || 0;
+      const paid = Number(original?.paid_amount) || 0;
+
+      const rawDiscount = original?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const balance = total - discount.toFixed(0) + shipping - paid;
+      const formatted = Math.abs(balance).toLocaleString();
+
       setData({
         date: dayjs().format("YYYY-MM-DD"),
-        amount:
-          paymentType === "purchase"
-            ? Number(row.original?.grand_total) -
-              Number(row.original?.paid_amount)
-            : 0,
+        amount: paymentType === "purchase" ? formatted : 0,
         attachment: [],
         reference_no: "",
         note: "",
