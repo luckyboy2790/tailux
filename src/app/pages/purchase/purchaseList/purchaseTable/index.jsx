@@ -442,7 +442,7 @@ export default function PurchaseTable() {
                       })
                     )}
                     <Tr>
-                      <Td colSpan={4}>Total</Td>
+                      <Td colSpan={4}>{t("nav.detail.sub_total")}</Td>
                       <Td
                         className={clsx("text-sm-plus", "dark:text-dark-100")}
                       >
