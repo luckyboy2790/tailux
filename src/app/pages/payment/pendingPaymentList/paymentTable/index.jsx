@@ -435,6 +435,22 @@ export default function PaymentTable() {
                         );
                       })
                     )}
+                    <Tr>
+                      <Td colSpan={5}>{t("nav.detail.sub_total")}</Td>
+                      <Td
+                        className={clsx("text-sm-plus", "dark:text-dark-100")}
+                      >
+                        $
+                        {table
+                          .getCoreRowModel()
+                          .rows.reduce(
+                            (acc, row) => acc + row.original.amount,
+                            0,
+                          )
+                          .toLocaleString()}
+                      </Td>
+                      <Td colSpan={2}></Td>
+                    </Tr>
                   </TBody>
                 </Table>
               </div>
