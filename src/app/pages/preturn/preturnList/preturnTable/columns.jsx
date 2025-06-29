@@ -106,12 +106,14 @@ export const getColumns = (t, role) => {
   ];
 
   if (role === "admin" || role === "user") {
-    columnHelper.display({
-      id: "actions",
-      label: t("nav.table_fields.actions"),
-      header: t("nav.table_fields.actions"),
-      cell: RowActions,
-    });
+    columns.push(
+      columnHelper.display({
+        id: "actions",
+        label: t("nav.table_fields.actions"),
+        header: t("nav.table_fields.actions"),
+        cell: RowActions,
+      }),
+    );
   }
 
   return columns;
