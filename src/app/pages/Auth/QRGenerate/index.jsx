@@ -23,6 +23,16 @@ export default function QRGenerate() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const previousClassList = document.documentElement.classList.value;
+
+    document.documentElement.classList.add("dark");
+
+    return () => {
+      document.documentElement.className = previousClassList;
+    };
+  }, []);
+
+  useEffect(() => {
     const generateQR = async () => {
       try {
         const userData = JSON.parse(localStorage.getItem("pending2FAUser"));

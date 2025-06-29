@@ -10,11 +10,22 @@ import { useAuthContext } from "app/contexts/auth/context";
 import { getSchema } from "./schema";
 import { Page } from "components/shared/Page";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
 export default function SignIn() {
   const { login, errorMessage } = useAuthContext();
+
+  useEffect(() => {
+    const previousClassList = document.documentElement.classList.value;
+
+    document.documentElement.classList.add("dark");
+
+    return () => {
+      document.documentElement.className = previousClassList;
+    };
+  }, []);
 
   const { t } = useTranslation();
 

@@ -10,6 +10,7 @@ import { getSchema } from "./schema";
 import { Page } from "components/shared/Page";
 import { useAuthContext } from "app/contexts/auth/context";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,16 @@ export default function Google2Fa() {
   const { t } = useTranslation();
 
   const schema = getSchema(t);
+
+  useEffect(() => {
+    const previousClassList = document.documentElement.classList.value;
+
+    document.documentElement.classList.add("dark");
+
+    return () => {
+      document.documentElement.className = previousClassList;
+    };
+  }, []);
 
   const {
     register,

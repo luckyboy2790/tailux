@@ -107,7 +107,7 @@ const AddPurchaseOrder = () => {
       }
     };
     fetchData();
-  }, [t, id, token, reset]);
+  }, [t, id, token, reset, user]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
