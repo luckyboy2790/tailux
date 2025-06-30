@@ -461,7 +461,6 @@ export default function PurchaseTable() {
                                 )
                                 .toLocaleString()}
                             </Td>
-                            <Td colSpan={2}></Td>
                           </Tr>
                         )}
                       </>

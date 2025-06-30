@@ -326,6 +326,7 @@ export default function PurchaseTable() {
                                 <Td
                                   key={cell.id}
                                   className={clsx(
+                                    "relative",
                                     cell.column.getCanPin() && [
                                       cell.column.getIsPinned() === "left" &&
                                         "sticky z-2 ltr:left-0 rtl:right-0",
