@@ -134,7 +134,7 @@ export function RowActions({ row, table }) {
               anchor={{ to: "bottom end", gap: 12 }}
               className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
-              {user.role === "admin" || user.role === "staff" ? (
+              {user.role === "admin" || user.role === "user" ? (
                 <MenuItem>
                   {({ focus }) => (
                     <button

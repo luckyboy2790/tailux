@@ -19,7 +19,6 @@ export const useNavigation = () => {
   const { user } = useAuthContext();
   const role = user?.role;
 
-  // Default navigation data
   let returnData = [
     dashboards,
     purchase,
@@ -32,17 +31,21 @@ export const useNavigation = () => {
     category,
     report,
     getPeopleNav(role),
-    getSettingNav(role),
-    concurrent_payments,
   ];
 
-  // Check if role is 'buyer' and return only specific data
   if (role === "buyer") {
     returnData = [getPurchaseOrder(role), received];
   }
 
-  // If the role is 'admin', add advanced delete option
-  if (role === "admin") {
+  if (role === "admin" || role === "user") {
+    returnData.push(getSettingNav(role));
+  }
+
+  if (role !== "buyer") {
+    returnData.push(concurrent_payments);
+  }
+
+  if (role === "admin" || role === "user") {
     returnData.push(advanced_delete);
   }
 
