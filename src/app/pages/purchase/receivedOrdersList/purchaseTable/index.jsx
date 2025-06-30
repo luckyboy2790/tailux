@@ -161,6 +161,7 @@ export default function PurchaseTable() {
     companyId,
     supplierId,
     sorting,
+    token,
   ]);
 
   useEffect(() => {
