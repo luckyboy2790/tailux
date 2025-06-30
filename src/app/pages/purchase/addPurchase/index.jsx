@@ -19,6 +19,7 @@ import { useCookies } from "react-cookie";
 import { SupplierModal } from "components/shared/SupplierModal";
 import { useDisclosure } from "hooks";
 import { useAuthContext } from "app/contexts/auth/context";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -196,7 +197,13 @@ const AddPurchase = () => {
 
       const result = await res.json();
 
-      if (!res.ok) throw new Error(result.message || "Something went wrong");
+      console.log(result);
+
+      if (!res.ok) {
+        toast.error(t(`nav.error_message.${result.error}`));
+
+        throw new Error(result.error || "Something went wrong");
+      }
 
       navigate("/purchase/list");
     } catch (error) {

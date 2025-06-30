@@ -891,6 +891,11 @@
           "title": "Error deleting notifications"
         }
       }
+    },
+    "error_message": {
+      "reference_already_taken": "Reference Number is already taken.",
+      "missing_required_fields": "Missing required fields.",
+      "select_at_least_one_product": "Select at least one product."
     }
   }
 }

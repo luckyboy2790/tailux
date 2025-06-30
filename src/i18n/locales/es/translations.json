@@ -890,6 +890,11 @@
           "title": "Error al eliminar notificaciones"
         }
       }
+    },
+    "error_message": {
+      "reference_already_taken": "El número de referencia ya está tomado.",
+      "missing_required_fields": "Faltan campos obligatorios.",
+      "select_at_least_one_product": "Seleccione al menos un producto."
     }
   }
 }
