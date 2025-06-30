@@ -29,7 +29,7 @@ export function OrderIdCell({ getValue }) {
   );
 }
 
-export function DateCell({ getValue }) {
+export function DateCell({ getValue, row }) {
   const { locale } = useLocaleContext();
   const timestapms = getValue();
 

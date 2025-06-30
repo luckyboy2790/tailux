@@ -10,7 +10,7 @@ import {
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 
-import { Table, Card, THead, TBody, Th, Tr, Td,  Skeleton } from "components/ui";
+import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
 import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
@@ -244,70 +244,70 @@ export default function PurchaseTable() {
                   <TBody>
                     {isLoading ? (
                       <>
-                      <Tr
-                        className={clsx(
-                          "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                        )}
-                      >
-                        {new Array(columns.length)
-                          .fill(null)
-                          .map((_, index) => (
-                            <Td
-                              key={index}
-                              className={clsx(
-                                "relative bg-white",
-                                cardSkin === "shadow-sm"
-                                  ? "dark:bg-dark-700"
-                                  : "dark:bg-dark-900",
-                              )}
-                            >
-                              <Skeleton className="size-7 w-full rounded-lg" />
-                            </Td>
-                          ))}
-                      </Tr>
-                      <Tr
-                        className={clsx(
-                          "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                        )}
-                      >
-                        {new Array(columns.length)
-                          .fill(null)
-                          .map((_, index) => (
-                            <Td
-                              key={index}
-                              className={clsx(
-                                "relative bg-white",
-                                cardSkin === "shadow-sm"
-                                  ? "dark:bg-dark-700"
-                                  : "dark:bg-dark-900",
-                              )}
-                            >
-                              <Skeleton className="size-7 w-full rounded-lg" />
-                            </Td>
-                          ))}
-                      </Tr>
-                      <Tr
-                        className={clsx(
-                          "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
-                        )}
-                      >
-                        {new Array(columns.length)
-                          .fill(null)
-                          .map((_, index) => (
-                            <Td
-                              key={index}
-                              className={clsx(
-                                "relative bg-white",
-                                cardSkin === "shadow-sm"
-                                  ? "dark:bg-dark-700"
-                                  : "dark:bg-dark-900",
-                              )}
-                            >
-                              <Skeleton className="size-7 w-full rounded-lg" />
-                            </Td>
-                          ))}
-                      </Tr>
-                    </>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                        <Tr
+                          className={clsx(
+                            "dark:border-b-dark-500 relative border-y border-transparent border-b-gray-200",
+                          )}
+                        >
+                          {new Array(columns.length)
+                            .fill(null)
+                            .map((_, index) => (
+                              <Td
+                                key={index}
+                                className={clsx(
+                                  "relative bg-white",
+                                  cardSkin === "shadow-sm"
+                                    ? "dark:bg-dark-700"
+                                    : "dark:bg-dark-900",
+                                )}
+                              >
+                                <Skeleton className="size-7 w-full rounded-lg" />
+                              </Td>
+                            ))}
+                        </Tr>
+                      </>
                     ) : (
                       table.getRowModel().rows.map((row) => {
                         return (
@@ -326,10 +326,6 @@ export default function PurchaseTable() {
                                 <Td
                                   key={cell.id}
                                   className={clsx(
-                                    "relative bg-white",
-                                    cardSkin === "shadow-sm"
-                                      ? "dark:bg-dark-700"
-                                      : "dark:bg-dark-900",
                                     cell.column.getCanPin() && [
                                       cell.column.getIsPinned() === "left" &&
                                         "sticky z-2 ltr:left-0 rtl:right-0",
