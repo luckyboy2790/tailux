@@ -279,7 +279,11 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.discount")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.discount_string || 0}
+                    {String(row.original?.discount_string || "").includes("%")
+                      ? row.original.discount_string
+                      : Number(
+                          row.original?.discount_string || 0,
+                        ).toLocaleString()}
                   </Td>
                 </Tr>
 

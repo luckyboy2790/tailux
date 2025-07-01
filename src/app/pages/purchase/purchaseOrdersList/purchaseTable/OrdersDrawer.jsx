@@ -168,7 +168,11 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     </Td>
                     <Td>{tr?.product}</Td>
                     <Td>{Number(tr?.cost || 0).toLocaleString()}</Td>
-                    <Td>{tr?.discount_string}</Td>
+                    <Td>
+                      {String(tr?.discount_string || "").includes("%")
+                        ? tr?.discount_string
+                        : Number(tr?.discount_string || 0).toLocaleString()}
+                    </Td>
                     <Td>{Number(tr?.quantity || 0).toLocaleString()}</Td>
                     <Td>
                       <div className="gap-2">
