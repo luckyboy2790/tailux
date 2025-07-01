@@ -4,6 +4,7 @@ import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CoverImageUpload } from "./components/CoverImageUpload";
+import { IoCloseSharp } from "react-icons/io5";
 
 // Local Imports
 import useValidationSchema from "./schema";
@@ -23,7 +24,7 @@ const AddPurchaseOrder = () => {
   const { t } = useTranslation();
   const [orders, setOrders] = useState([]);
   const [stores, setStores] = useState([]);
-  const [imageEditable, setImageEditable] = useState(false);
+  const [imageEditable, setImageEditable] = useState(0);
   const [images, setImages] = useState([]);
 
   const { id } = useParams();
@@ -193,6 +194,7 @@ const AddPurchaseOrder = () => {
       }, 0),
       note: formData.note || "",
       status: 1,
+      fileName: images,
     };
 
     try {
@@ -328,21 +330,35 @@ const AddPurchaseOrder = () => {
                             error={errors?.attachment?.message}
                             {...field}
                             onChange={(files) => {
-                              setImageEditable(true);
+                              setImageEditable(1);
                               field.onChange(files);
                             }}
                           />
                         )}
                       />
-                      <div className="flex gap-1">
-                        {!imageEditable &&
+                      <div className="flex flex-wrap gap-2">
+                        {imageEditable !== 1 &&
                           images.map((item, index) => (
-                            <Image
-                              key={index}
-                              width={45}
-                              height={45}
-                              src={`${IMG_URL}${item}`}
-                            />
+                            <div key={index} className="relative">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setImages((prev) =>
+                                    prev.filter((_, i) => i !== index),
+                                  );
+                                  setImageEditable(2);
+                                }}
+                                className="absolute -top-2.5 -right-2.5 z-10 flex h-5 w-5 cursor-pointer items-center justify-center text-lg text-white"
+                              >
+                                <IoCloseSharp />
+                              </button>
+                              <Image
+                                width={45}
+                                height={45}
+                                src={`${IMG_URL}${item}`}
+                                className="rounded"
+                              />
+                            </div>
                           ))}
                       </div>
                     </div>

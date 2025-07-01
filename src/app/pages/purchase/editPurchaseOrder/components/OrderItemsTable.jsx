@@ -264,7 +264,7 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
                       <button
                         type="button"
                         onClick={() => handleRemoveImage(index)}
-                        className="absolute -top-2.5 -right-2.5 z-10 flex h-5 w-5 items-center justify-center rounded-full text-white"
+                        className="absolute -top-2.5 -right-2.5 z-10 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full text-white"
                       >
                         <IoCloseSharp />
                       </button>
