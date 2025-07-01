@@ -116,6 +116,8 @@ export function StoreModal({ type, row, isOpen, close }) {
 
       if (!response.ok) throw new Error(result?.error);
 
+      console.log("Upload success:", result);
+
       if (row?.refetch && typeof row.refetch === "function") {
         await row.refetch();
       }
@@ -130,6 +132,8 @@ export function StoreModal({ type, row, isOpen, close }) {
       toast.success("Store saved successfully.");
     } catch (error) {
       console.error("Upload failed:", error);
+
+      console.log(String(error)?.split(": "));
 
       toast.error(String(error)?.split(": ")?.[1]);
     } finally {

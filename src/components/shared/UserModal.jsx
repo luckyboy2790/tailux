@@ -215,6 +215,8 @@ export function UserModal({ type, row, isOpen, close }) {
 
       toast.success("User saved successfully.");
     } catch (error) {
+      console.log(String(error)?.split(": "));
+
       toast.error(String(error)?.split(": ")?.[1]);
     } finally {
       setLoading(false);
