@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 
+import { IoCloseSharp } from "react-icons/io5";
+
 // Local Imports
 import useValidationSchema from "./schema";
 import { Page } from "components/shared/Page";
@@ -53,7 +55,7 @@ const AddPurchaseOrder = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [imageEditable, setImageEditable] = useState(false);
+  const [imageEditable, setImageEditable] = useState(0);
   const [images, setImages] = useState([]);
 
   const navigate = useNavigate();
@@ -160,6 +162,7 @@ const AddPurchaseOrder = () => {
         category: o.category,
         imageEditable: o.imageEditable || false,
         original_id: o?.id || "no",
+        fileName: o?.fileName || "",
       })),
       items_json: JSON.stringify(
         orders.map((o) => ({
@@ -169,8 +172,9 @@ const AddPurchaseOrder = () => {
           discount: o.discount,
           image: o.image,
           category: o.category,
-          imageEditable: o.imageEditable || false,
+          imageEditable: o.imageEditable || 0,
           original_id: o?.id || "no",
+          fileName: o?.fileName || "",
         })),
       ),
       discount_string: formData.discount.toString(),
@@ -194,6 +198,7 @@ const AddPurchaseOrder = () => {
 
       note: formData.note || "",
       status: 1,
+      fileName: images,
     };
 
     try {
@@ -346,21 +351,35 @@ const AddPurchaseOrder = () => {
                             error={errors?.attachment?.message}
                             {...field}
                             onChange={(files) => {
-                              setImageEditable(true);
+                              setImageEditable(1);
                               field.onChange(files);
                             }}
                           />
                         )}
                       />
-                      <div className="flex gap-1">
-                        {!imageEditable &&
-                          images?.map((item, index) => (
-                            <Image
-                              key={index}
-                              width={45}
-                              height={45}
-                              src={`${IMG_URL}${item}`}
-                            />
+                      <div className="flex flex-wrap gap-2">
+                        {imageEditable !== 1 &&
+                          images.map((item, index) => (
+                            <div key={index} className="relative">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setImages((prev) =>
+                                    prev.filter((_, i) => i !== index),
+                                  );
+                                  setImageEditable(2);
+                                }}
+                                className="absolute -top-2.5 -right-2.5 z-10 flex h-5 w-5 cursor-pointer items-center justify-center text-lg text-white"
+                              >
+                                <IoCloseSharp />
+                              </button>
+                              <Image
+                                width={45}
+                                height={45}
+                                src={`${IMG_URL}${item}`}
+                                className="rounded"
+                              />
+                            </div>
                           ))}
                       </div>
                     </div>

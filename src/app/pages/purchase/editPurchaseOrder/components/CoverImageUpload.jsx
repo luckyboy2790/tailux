@@ -13,12 +13,22 @@ const CoverImageUpload = ({ label, value = [], onChange }) => {
   const uploadRef = useRef();
   const { t } = useTranslation();
 
+  const formatFileName = (file) => {
+    const name = typeof file === "string" ? file : file.name;
+    const [base, ...extParts] = name.split(".");
+    const ext = extParts.length ? "." + extParts.join(".") : "";
+
+    if (base.length <= 4) return base + ext;
+    return `${base.slice(0, 2)}...${base.slice(-2)}${ext}`;
+  };
+
   const filesList =
-    value.length > 0 ? value.map((file) => file.name || file).join(", ") : t("nav.choose_file");
+    value.length > 0
+      ? value.map(formatFileName).join(", ")
+      : t("nav.choose_file");
 
   const handleFileChange = (newFiles) => {
     const filesArray = Array.from(newFiles);
-    console.log("Uploading files:", filesArray);
     onChange(filesArray);
   };
 
@@ -29,7 +39,13 @@ const CoverImageUpload = ({ label, value = [], onChange }) => {
 
   return (
     <div className="max-w-xl">
-      <Upload name="file" label={label} multiple ref={uploadRef} onChange={handleFileChange}>
+      <Upload
+        name="file"
+        label={label}
+        multiple
+        ref={uploadRef}
+        onChange={handleFileChange}
+      >
         {(props) => (
           <Input
             component="button"
@@ -60,6 +76,5 @@ const CoverImageUpload = ({ label, value = [], onChange }) => {
     </div>
   );
 };
-
 
 export { CoverImageUpload };

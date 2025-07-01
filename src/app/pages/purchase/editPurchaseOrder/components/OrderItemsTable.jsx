@@ -1,6 +1,7 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { FaTimes } from "react-icons/fa";
 import { rankItem } from "@tanstack/match-sorter-utils";
+import { IoCloseSharp } from "react-icons/io5";
 import {
   flexRender,
   getCoreRowModel,
@@ -41,7 +42,7 @@ const initialData = [
     discount: "",
     image: [],
     category: "",
-    imageEditable: false,
+    imageEditable: 0,
   },
 ];
 
@@ -237,9 +238,16 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
         header: t("nav.purchase.image"),
         cell: ({ row, column, table }) => {
           const value = row.getValue(column.id) || [];
+
           const handleChange = (newFiles) => {
             table.options.meta?.updateData(row.index, column.id, newFiles);
-            table.options.meta?.updateData(row.index, "imageEditable", true);
+            table.options.meta?.updateData(row.index, "imageEditable", 1);
+          };
+
+          const handleRemoveImage = (indexToRemove) => {
+            const updatedImages = value.filter((_, i) => i !== indexToRemove);
+            table.options.meta?.updateData(row.index, column.id, updatedImages);
+            table.options.meta?.updateData(row.index, "imageEditable", 2);
           };
 
           return (
@@ -249,15 +257,24 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
                 onChange={handleChange}
                 className="max-w-xs"
               />
-              {!row.original.imageEditable && (
+              {row.original.imageEditable !== 1 && (
                 <div className="flex gap-1">
                   {value.map((item, index) => (
-                    <Image
-                      key={index}
-                      width={38}
-                      height={38}
-                      src={`${IMG_URL}/pre_order_items/${item}`}
-                    />
+                    <div key={index} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute -top-2.5 -right-2.5 z-10 flex h-5 w-5 items-center justify-center rounded-full text-white"
+                      >
+                        <IoCloseSharp />
+                      </button>
+                      <Image
+                        width={38}
+                        height={38}
+                        src={`${IMG_URL}/pre_order_items/${item}`}
+                        className="rounded"
+                      />
+                    </div>
                   ))}
                 </div>
               )}
@@ -347,11 +364,24 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
     meta: {
       updateData: (rowIndex, columnId, value) => {
         skipAutoResetPageIndex();
-        setData((old) =>
-          old.map((row, index) =>
-            index === rowIndex ? { ...row, [columnId]: value } : row,
-          ),
-        );
+        setData((old) => {
+          const updated = old.map((row, index) => {
+            if (index !== rowIndex) return row;
+
+            if (columnId === "image") {
+              return {
+                ...row,
+                [columnId]: value,
+                fileName: row.image?.filter(
+                  (img, i) => i < value.length && value[i] === img,
+                ),
+              };
+            }
+
+            return { ...row, [columnId]: value };
+          });
+          return updated;
+        });
       },
       removeRow: (rowIndex) => {
         setData((old) => old.filter((_, index) => index !== rowIndex));

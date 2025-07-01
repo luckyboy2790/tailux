@@ -74,8 +74,6 @@ export function CustomerCell({ getValue, column, table }) {
 export function TotalCell({ getValue }) {
   const value = Number(getValue());
 
-  console.log(getValue());
-
   return (
     <p className="text-sm-plus dark:text-dark-100 font-medium text-gray-800">
       ${!isNaN(value) ? Number(value).toLocaleString() : "0"}

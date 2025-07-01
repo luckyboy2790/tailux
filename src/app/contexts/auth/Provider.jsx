@@ -162,8 +162,6 @@ export function AuthProvider({ children }) {
         const nowBogota = DateTime.now().setZone("America/Bogota");
         const nowMinutes = nowBogota.hour * 60 + nowBogota.minute;
 
-        console.log(nowBogota.toString(), nowMinutes);
-
         for (const { start, end } of disabledTimes) {
           const [startH, startM] = start.split(":").map(Number);
           const [endH, endM] = end.split(":").map(Number);

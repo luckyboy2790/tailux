@@ -122,7 +122,6 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
       if (!response.ok) throw new Error("Failed to upload");
 
       const result = await response.json();
-      console.log("Upload success:", result);
 
       if (row?.refetch && typeof row.refetch === "function") {
         await row.refetch();

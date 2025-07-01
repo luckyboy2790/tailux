@@ -29,7 +29,6 @@ const CoverImageUpload = ({ label, value = [], onChange }) => {
 
   const handleFileChange = (newFiles) => {
     const filesArray = Array.from(newFiles);
-    console.log("Uploading files:", filesArray);
     onChange(filesArray);
   };
 

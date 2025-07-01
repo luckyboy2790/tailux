@@ -107,7 +107,6 @@ const Overview = ({ data, extraData, companyId, setCompanyId, loading }) => {
           <div>
             <p>{t("nav.dashboards.week_purchase")}</p>
             <p className="this:info text-this dark:text-this-lighter mt-0.5 text-2xl font-medium">
-              {console.log(typeof data?.week_purchases.total)}
               {Number(
                 data?.week_purchases.total === "" || !data?.week_purchases.total
                   ? 0
