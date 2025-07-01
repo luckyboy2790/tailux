@@ -250,10 +250,10 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     </Td>
                     <Td>{tr?.product_id}</Td>
                     <Td>{tr?.product?.name}</Td>
-                    <Td>{Number(tr?.price).toLocaleString()}</Td>
-                    <Td>{Number(tr?.quantity).toLocaleString()}</Td>
+                    <Td>{Number(tr?.price || 0).toLocaleString()}</Td>
+                    <Td>{Number(tr?.quantity || 0).toLocaleString()}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                      {tr.subtotal.toLocaleString()}
+                      {(tr.subtotal || 0).toLocaleString()}
                     </Td>
                   </Tr>
                 ))}
@@ -262,9 +262,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
                   <Td colSpan={4} className="text-end">
                     {t("nav.detail.total_cop")}
                   </Td>
-                  <Td>{sums.quantity.toLocaleString()}</Td>
+                  <Td>{Number(sums.quantity || 0).toLocaleString()}</Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {sums.subtotal.toLocaleString()}
+                    {Number(sums.subtotal || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -333,7 +333,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                         .format("DD MMM YYYY")}
                     </Td>
                     <Td>{tr?.reference_no}</Td>
-                    <Td>{tr?.amount.toLocaleString()}</Td>
+                    <Td>{Number(tr?.amount || 0).toLocaleString()}</Td>
                     <Td>
                       <div className="flex items-center justify-start gap-2">
                         {tr?.images?.map((img) => (

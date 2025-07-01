@@ -167,9 +167,9 @@ export function OrdersDrawer({ isOpen, close, row }) {
                       {index + 1}
                     </Td>
                     <Td>{tr?.product}</Td>
-                    <Td>{Number(tr?.cost).toLocaleString()}</Td>
+                    <Td>{Number(tr?.cost || 0).toLocaleString()}</Td>
                     <Td>{tr?.discount_string}</Td>
-                    <Td>{Number(tr?.quantity).toLocaleString()}</Td>
+                    <Td>{Number(tr?.quantity || 0).toLocaleString()}</Td>
                     <Td>
                       <div className="gap-2">
                         {tr?.images.length &&

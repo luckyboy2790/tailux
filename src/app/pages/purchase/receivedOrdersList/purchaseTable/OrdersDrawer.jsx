@@ -213,8 +213,8 @@ export function OrdersDrawer({ isOpen, close, row }) {
                         ? tr?.category?.name
                         : tr?.category || ""}
                     </Td>
-                    <Td>{Number(tr?.cost).toLocaleString()}</Td>
-                    <Td>{Number(tr?.quantity).toLocaleString()}</Td>
+                    <Td>{Number(tr?.cost || 0).toLocaleString()}</Td>
+                    <Td>{Number(tr?.quantity || 0).toLocaleString()}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
                       {(tr?.amount || 0).toLocaleString()}
                     </Td>

@@ -349,10 +349,10 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                     </Td>
                     <Td>{tr?.product_id}</Td>
                     <Td>{tr?.product_name}</Td>
-                    <Td>{tr?.cost}</Td>
-                    <Td>{tr?.quantity}</Td>
+                    <Td>{Number(tr?.cost || 0).toLocaleString()}</Td>
+                    <Td>{Number(tr?.quantity || 0).toLocaleString()}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                      {tr.subtotal.toLocaleString()}
+                      {Number(tr.subtotal || 0).toLocaleString()}
                     </Td>
                   </Tr>
                 ))}
@@ -361,9 +361,9 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                   <Td colSpan={4} className="text-end">
                     {t("nav.detail.total_cop")}
                   </Td>
-                  <Td>{sums.quantity.toLocaleString()}</Td>
+                  <Td>{Number(sums.quantity || 0).toLocaleString()}</Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {sums.subtotal.toLocaleString()}
+                    {Number(sums.subtotal || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -372,7 +372,7 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                     {t("nav.detail.discount")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.discount.toLocaleString()}
+                    {Number(row.original?.discount || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -381,7 +381,7 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                     {t("nav.detail.shipping")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.shipping.toLocaleString()}
+                    {Number(row.original?.shipping || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -390,7 +390,9 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                     {t("nav.detail.returns")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {(row.original?.returned_amount || 0).toLocaleString()}
+                    {Number(
+                      row.original?.returned_amount || 0,
+                    ).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -412,7 +414,7 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                     {t("nav.detail.paid")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {Number(row.original?.paid_amount).toLocaleString()}
+                    {Number(row.original?.paid_amount || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -474,7 +476,7 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
                         .format("DD MMM YYYY")}
                     </Td>
                     <Td>{tr?.reference_no}</Td>
-                    <Td>{tr?.amount.toLocaleString()}</Td>
+                    <Td>{Number(tr?.amount || 0).toLocaleString()}</Td>
                     <Td>{tr?.note || ""}</Td>
                   </Tr>
                 ))}
