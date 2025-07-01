@@ -279,7 +279,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.discount")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.discount_string.toLocaleString()}
+                    {row.original?.discount_string || 0}
                   </Td>
                 </Tr>
 
@@ -288,7 +288,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.shipping")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {row.original?.shipping.toLocaleString()}
+                    {(row.original?.shipping || 0).toLocaleString()}
                   </Td>
                 </Tr>
 
@@ -331,7 +331,7 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     {t("nav.detail.paid")}
                   </Td>
                   <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    {Number(row.original?.paid_amount).toLocaleString()}
+                    {Number(row.original?.paid_amount || "0").toLocaleString()}
                   </Td>
                 </Tr>
 
