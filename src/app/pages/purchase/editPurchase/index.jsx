@@ -18,6 +18,8 @@ import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
 import { Image } from "antd";
 
+import { IoCloseSharp } from "react-icons/io5";
+
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
 
@@ -43,7 +45,7 @@ const EditPurchase = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [imageEditable, setImageEditable] = useState(false);
+  const [imageEditable, setImageEditable] = useState(0);
   const [images, setImages] = useState([]);
 
   const methods = useForm({
@@ -178,6 +180,7 @@ const EditPurchase = () => {
       ),
       note: formData.note || "",
       status: 1,
+      fileName: images,
     };
 
     try {
@@ -314,21 +317,35 @@ const EditPurchase = () => {
                           error={errors?.attachment?.message}
                           {...field}
                           onChange={(files) => {
-                            setImageEditable(true);
+                            setImageEditable(1);
                             field.onChange(files);
                           }}
                         />
                       )}
                     />
-                    <div className="flex gap-1">
-                      {!imageEditable &&
+                    <div className="flex flex-wrap gap-2">
+                      {imageEditable !== 1 &&
                         images.map((item, index) => (
-                          <Image
-                            key={index}
-                            width={45}
-                            height={45}
-                            src={`${IMG_URL}${item}`}
-                          />
+                          <div key={index} className="relative">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setImages((prev) =>
+                                  prev.filter((_, i) => i !== index),
+                                );
+                                setImageEditable(2);
+                              }}
+                              className="absolute -top-2.5 -right-2.5 z-10 flex h-5 w-5 cursor-pointer items-center justify-center text-lg text-white"
+                            >
+                              <IoCloseSharp />
+                            </button>
+                            <Image
+                              width={45}
+                              height={45}
+                              src={`${IMG_URL}${item}`}
+                              className="rounded"
+                            />
+                          </div>
                         ))}
                     </div>
                   </div>
