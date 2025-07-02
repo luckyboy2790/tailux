@@ -21,6 +21,7 @@ export function PaginationSection({
   setPageIndex,
   pageSize,
   setPageSize,
+  setIsLoading,
 }) {
   const { t } = useTranslation();
   const { isXl, is2xl } = useBreakpointsContext();
@@ -36,6 +37,7 @@ export function PaginationSection({
             table.setPageSize(Number(e.target.value));
             setPageSize(Number(e.target.value));
             setPageIndex(0);
+            setIsLoading(true);
           }}
           classNames={{
             root: "w-fit",
@@ -51,6 +53,7 @@ export function PaginationSection({
           onChange={(page) => {
             table.setPageIndex(page - 1);
             setPageIndex(page - 1);
+            setIsLoading(true);
           }}
           siblings={isXl ? 2 : is2xl ? 3 : 1}
           boundaries={isXl ? 2 : 1}
@@ -71,4 +74,5 @@ export function PaginationSection({
 
 PaginationSection.propTypes = {
   table: PropTypes.object,
+  setIsLoading: PropTypes.func,
 };

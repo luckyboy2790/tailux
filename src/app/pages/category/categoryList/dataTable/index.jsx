@@ -381,6 +381,7 @@ export default function CategoryTable() {
                     total={totalCount}
                     pageIndex={pageIndex}
                     setPageIndex={setPageIndex}
+                    setIsLoading={setIsLoading}
                     pageSize={pageSize}
                     setPageSize={setPageSize}
                   />

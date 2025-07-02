@@ -397,6 +397,7 @@ export default function ProductTable() {
                     total={totalCount}
                     pageIndex={pageIndex}
                     setPageIndex={setPageIndex}
+                    setIsLoading={setIsLoading}
                     pageSize={pageSize}
                     setPageSize={setPageSize}
                   />

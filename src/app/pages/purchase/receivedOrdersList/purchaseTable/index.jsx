@@ -488,6 +488,7 @@ export default function PurchaseTable() {
                     total={totalCount}
                     pageIndex={pageIndex}
                     setPageIndex={setPageIndex}
+                    setIsLoading={setIsLoading}
                     pageSize={pageSize}
                     setPageSize={setPageSize}
                   />
