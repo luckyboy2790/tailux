@@ -102,7 +102,7 @@ const AddPurchaseOrder = () => {
 
       setOrders(mappedOrders);
 
-      if (user.role === "user" || user.role === "secretary") {
+      if (user.role !== "admin") {
         reset({
           store_id: user?.first_store_id || -1,
         });
@@ -294,9 +294,7 @@ const AddPurchaseOrder = () => {
                           displayField="label"
                           searchFields={["label"]}
                           error={error?.message}
-                          disabled={
-                            user?.role === "user" || user?.role === "secretary"
-                          }
+                          disabled={user?.role !== "admin"}
                         />
                       )}
                     />
