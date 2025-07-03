@@ -35,7 +35,6 @@ const EditSale = () => {
   const { id } = useParams();
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
-  const [users, setUsers] = useState([]);
   const [customer, setCustomer] = useState([]);
 
   const [imageEditable, setImageEditable] = useState(0);
@@ -109,8 +108,6 @@ const EditSale = () => {
         })) ?? []),
       ];
 
-      setUsers(userData);
-
       const customerRes = await fetch(
         `${API_URL}/api/customer/get_all_customers`,
         {
@@ -148,7 +145,7 @@ const EditSale = () => {
         reference_no: data.reference_no || "",
         store: data.store_id?.toString() || "",
         user_id:
-          users.find((user) => user.value === Number(data.user_id))?.label ||
+          userData.find((user) => user.value === Number(data.user_id))?.label ||
           "",
         customer_id: data.customer_id?.toString() || "",
         attachment: imagePaths,
@@ -159,7 +156,7 @@ const EditSale = () => {
     };
 
     init();
-  }, [id, reset, cookie.authToken, t, users]);
+  }, [id, reset, cookie.authToken, t]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);

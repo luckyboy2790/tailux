@@ -53,7 +53,11 @@ const AddPurchaseOrder = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
+      const storeRes = await fetch(`${API_URL}/api/store/get_stores`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const storeResult = await storeRes.json();
       const storeData = [
         { key: -1, value: "", label: "" },

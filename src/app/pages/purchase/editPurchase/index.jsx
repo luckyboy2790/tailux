@@ -66,7 +66,11 @@ const EditPurchase = () => {
 
   useEffect(() => {
     const init = async () => {
-      const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
+      const storeRes = await fetch(`${API_URL}/api/store/get_stores`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const storeResult = await storeRes.json();
       let storeData = [
         { key: -1, value: "", label: t("nav.select.select_store") },

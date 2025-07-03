@@ -16,6 +16,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import { Image } from "antd";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
@@ -34,6 +35,8 @@ const AddPurchaseOrder = () => {
   const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const { user } = useAuthContext();
 
   const navigate = useNavigate();
 
@@ -55,7 +58,11 @@ const AddPurchaseOrder = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
+      const storeRes = await fetch(`${API_URL}/api/store/get_stores`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const storeResult = await storeRes.json();
       const storeData = [
         { key: -1, value: "", label: "" },
@@ -316,6 +323,7 @@ const AddPurchaseOrder = () => {
                           displayField="label"
                           searchFields={["label"]}
                           error={error?.message}
+                          disabled={user?.role !== "admin"}
                         />
                       )}
                     />
