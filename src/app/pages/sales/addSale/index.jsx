@@ -33,7 +33,6 @@ const AddSale = () => {
   const { id } = useParams();
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
-  const [users, setUsers] = useState([]);
   const [customer, setCustomer] = useState([]);
 
   const [cookie] = useCookies();
@@ -62,7 +61,7 @@ const AddSale = () => {
         },
       });
       const storeResult = await storeRes.json();
-      const storeData = [
+      let storeData = [
         { key: -1, value: "", label: "Select store" },
         ...(storeResult?.data?.map((item, key) => ({
           key,
@@ -70,23 +69,14 @@ const AddSale = () => {
           label: item?.name,
         })) ?? []),
       ];
-      setStores(storeData);
 
-      const userRes = await fetch(`${API_URL}/api/users`, {
-        headers: {
-          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
-        },
-      });
-      const userResult = await userRes.json();
-      const userData = [
-        { key: -1, value: "", label: "Select users" },
-        ...(userResult?.map((item, key) => ({
-          key,
-          value: item?.id,
-          label: `${item.first_name} ${item.last_name}`,
-        })) ?? []),
-      ];
-      setUsers(userData);
+      if (user.role !== "admin") {
+        storeData = storeData.filter(
+          (item) => item.value === user.first_store_id,
+        );
+      }
+
+      setStores(storeData);
 
       const customerRes = await fetch(
         `${API_URL}/api/customer/get_all_customers`,
@@ -111,7 +101,7 @@ const AddSale = () => {
 
       reset({
         store: user.first_store_id,
-        user_id: user.id,
+        user_id: `${user.first_name} ${user.last_name}`,
       });
     };
 
@@ -243,9 +233,9 @@ const AddSale = () => {
                     error={errors?.reference_no?.message}
                   />
 
-                  <Select
-                    label={t("nav.purchase.supplier")}
-                    data={users}
+                  <Input
+                    label={t("nav.people.user")}
+                    placeholder={t("nav.people.user")}
                     {...register("user_id")}
                     error={errors?.user_id?.message}
                     disabled

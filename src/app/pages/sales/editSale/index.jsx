@@ -61,13 +61,25 @@ const EditSale = () => {
 
   useEffect(() => {
     const init = async () => {
+      if (!id) return;
+
+      const res = await fetch(`${API_URL}/api/sales/get_detail?saleId=${id}`, {
+        headers: {
+          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
+        },
+      });
+      const result = await res.json();
+      if (!res.ok) return;
+
+      const data = result.data;
+
       const storeRes = await fetch(`${API_URL}/api/store/get_stores`, {
         headers: {
           Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
         },
       });
       const storeResult = await storeRes.json();
-      const storeData = [
+      let storeData = [
         { key: -1, value: "", label: "Select store" },
         ...(storeResult?.data?.map((item, key) => ({
           key,
@@ -75,6 +87,11 @@ const EditSale = () => {
           label: item?.name,
         })) ?? []),
       ];
+
+      storeData = storeData.filter(
+        (item) => item.value === Number(data.store_id),
+      );
+
       setStores(storeData);
 
       const userRes = await fetch(`${API_URL}/api/users`, {
@@ -91,6 +108,7 @@ const EditSale = () => {
           label: `${item.first_name} ${item.last_name}`,
         })) ?? []),
       ];
+
       setUsers(userData);
 
       const customerRes = await fetch(
@@ -114,17 +132,6 @@ const EditSale = () => {
       ];
       setCustomer(customerData);
 
-      if (!id) return;
-      const res = await fetch(`${API_URL}/api/sales/get_detail?saleId=${id}`, {
-        headers: {
-          Authorization: cookie?.authToken ? `Bearer ${cookie.authToken}` : "",
-        },
-      });
-      const result = await res.json();
-      if (!res.ok) return;
-
-      const data = result.data;
-
       const mappedOrders =
         data.orders.map((item) => ({
           product_name: item.product_id,
@@ -140,7 +147,9 @@ const EditSale = () => {
         sale_date: dayjs(data.timestamp).format("YYYY-MM-DD"),
         reference_no: data.reference_no || "",
         store: data.store_id?.toString() || "",
-        user_id: data.user_id?.toString() || "",
+        user_id:
+          users.find((user) => user.value === Number(data.user_id))?.label ||
+          "",
         customer_id: data.customer_id?.toString() || "",
         attachment: imagePaths,
         note: data.note || "",
@@ -150,7 +159,7 @@ const EditSale = () => {
     };
 
     init();
-  }, [id, reset, cookie.authToken, t]);
+  }, [id, reset, cookie.authToken, t, users]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -279,9 +288,9 @@ const EditSale = () => {
                     error={errors?.reference_no?.message}
                   />
 
-                  <Select
+                  <Input
                     label={t("nav.people.user")}
-                    data={users}
+                    placeholder={t("nav.people.user")}
                     {...register("user_id")}
                     error={errors?.user_id?.message}
                     disabled
