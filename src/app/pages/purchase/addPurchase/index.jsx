@@ -91,7 +91,7 @@ const AddPurchase = () => {
     const fetchData = async () => {
       const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
       const storeResult = await storeRes.json();
-      const storeData = [
+      let storeData = [
         { key: -1, value: "", label: t("nav.select.select_store") },
         ...(storeResult?.data?.map((item, key) => ({
           key,
@@ -99,6 +99,13 @@ const AddPurchase = () => {
           label: item?.name,
         })) ?? []),
       ];
+
+      if (user?.role === "user" || user?.role === "secretary") {
+        storeData = storeData.filter(
+          (item) => item.value === Number(user.first_store_id),
+        );
+      }
+
       setStores(storeData);
 
       const supplierRes = await fetch(
@@ -325,6 +332,7 @@ const AddPurchase = () => {
 
                     <Input
                       label={t("nav.purchase.days_of_credit")}
+                      placeholder={t("nav.purchase.days_of_credit")}
                       type="number"
                       {...register("day_of_credit")}
                       error={errors?.day_of_credit?.message}

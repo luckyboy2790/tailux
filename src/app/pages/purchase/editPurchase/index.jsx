@@ -19,6 +19,7 @@ import { useCookies } from "react-cookie";
 import { Image } from "antd";
 
 import { IoCloseSharp } from "react-icons/io5";
+import { useAuthContext } from "app/contexts/auth/context";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
@@ -43,6 +44,8 @@ const EditPurchase = () => {
 
   const token = cookie.authToken;
 
+  const { user } = useAuthContext();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [imageEditable, setImageEditable] = useState(0);
@@ -65,7 +68,7 @@ const EditPurchase = () => {
     const init = async () => {
       const storeRes = await fetch(`${API_URL}/api/store/get_stores`);
       const storeResult = await storeRes.json();
-      const storeData = [
+      let storeData = [
         { key: -1, value: "", label: t("nav.select.select_store") },
         ...(storeResult?.data?.map((item, key) => ({
           key,
@@ -73,6 +76,13 @@ const EditPurchase = () => {
           label: item?.name,
         })) ?? []),
       ];
+
+      if (user?.role === "user" || user?.role === "secretary") {
+        storeData = storeData.filter(
+          (item) => item.value === Number(user.first_store_id),
+        );
+      }
+
       setStores(storeData);
 
       const supplierRes = await fetch(
@@ -278,6 +288,9 @@ const EditPurchase = () => {
                     data={stores}
                     {...register("store")}
                     error={errors?.store?.message}
+                    disabled={
+                      user?.role === "user" || user?.role === "secretary"
+                    }
                   />
                   <Controller
                     name="supplier_id"
