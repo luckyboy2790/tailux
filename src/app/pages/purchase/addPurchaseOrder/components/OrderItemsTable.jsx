@@ -388,18 +388,6 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
               ))}
             </THead>
             <TBody>
-              {table.getRowModel().rows.map((row) => (
-                <Tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <Td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </Td>
-                  ))}
-                </Tr>
-              ))}
               <Tr>
                 <Td colSpan={1}>Total</Td>
                 <Td colSpan={1}>
@@ -452,6 +440,18 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
                 </Td>
                 <Td colSpan={1}></Td>
               </Tr>
+              {table.getRowModel().rows.map((row) => (
+                <Tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <Td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
             </TBody>
           </Table>
         </div>
