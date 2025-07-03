@@ -400,6 +400,58 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
                   ))}
                 </Tr>
               ))}
+              <Tr>
+                <Td colSpan={1}>Total</Td>
+                <Td colSpan={1}>
+                  {orders
+                    .reduce(
+                      (acc, row) => acc + (Number(row.product_cost) || 0),
+                      0,
+                    )
+                    .toLocaleString()}
+                </Td>
+                <Td colSpan={1}>
+                  {orders
+                    .reduce((acc, row) => acc + (Number(row.quantity) || 0), 0)
+                    .toLocaleString()}
+                </Td>
+                <Td colSpan={3}></Td>
+                <Td colSpan={1}>
+                  <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                    {Number(
+                      orders
+                        .reduce((acc, row) => {
+                          const cost = Number(row.product_cost) || 0;
+                          const qty = Number(row.quantity) || 0;
+                          const rawDiscount = row.discount;
+
+                          let discountAmount = 0;
+
+                          if (
+                            typeof rawDiscount === "string" &&
+                            rawDiscount.trim().endsWith("%")
+                          ) {
+                            const percent = parseFloat(
+                              rawDiscount.trim().replace("%", ""),
+                            );
+                            if (!isNaN(percent)) {
+                              discountAmount = (cost * percent) / 100;
+                            }
+                          } else {
+                            const flat = Number(rawDiscount);
+                            if (!isNaN(flat)) {
+                              discountAmount = flat;
+                            }
+                          }
+
+                          return acc + (cost - discountAmount) * qty;
+                        }, 0)
+                        .toFixed(),
+                    ).toLocaleString()}
+                  </div>
+                </Td>
+                <Td colSpan={1}></Td>
+              </Tr>
             </TBody>
           </Table>
         </div>
