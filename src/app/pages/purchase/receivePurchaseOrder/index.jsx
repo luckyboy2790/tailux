@@ -57,11 +57,13 @@ const AddPurchaseOrder = () => {
       const storeResult = await storeRes.json();
       const storeData = [
         { key: -1, value: "", label: "" },
-        ...(storeResult?.data?.map((item, key) => ({
-          key,
-          value: item?.id,
-          label: item?.name,
-        })) ?? []),
+        ...(storeResult?.data
+          ?.filter((item) => item.id === Number(user.first_store_id))
+          .map((item, key) => ({
+            key,
+            value: item?.id,
+            label: item?.name,
+          })) ?? []),
       ];
       setStores(storeData);
 
