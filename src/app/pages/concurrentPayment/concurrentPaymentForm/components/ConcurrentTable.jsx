@@ -80,10 +80,27 @@ export function ConcurrentTable({ tableData, checkedRows, setCheckedRows }) {
         <TBody>
           {tableData.map((tr) => {
             const id = tr.id;
+
+            const shipping = Number(tr?.shipping) || 0;
+
+            const rawDiscount = tr?.discount_string?.toString() || "0";
+
+            const discount = rawDiscount.includes("%")
+              ? (Number(tr.grand_total || 0) *
+                  parseFloat(rawDiscount.replace("%", ""))) /
+                100
+              : Number(rawDiscount);
+
+            const formatted = Math.abs(
+              Number(tr.grand_total || 0) - discount.toFixed(0) + shipping,
+            ).toLocaleString();
+
             const balance =
-              Number(tr.grand_total || 0) - Number(tr.paid_amount || 0);
+              Number(tr.grand_total || 0) -
+              Number(tr.paid_amount || 0) -
+              discount.toFixed(0) +
+              shipping;
             const isChecked = checkedRows[id]?.checked || false;
-            const amount = checkedRows[id]?.amount || balance;
 
             return (
               <Tr
@@ -101,7 +118,7 @@ export function ConcurrentTable({ tableData, checkedRows, setCheckedRows }) {
                     ?.map((o) => `${o.product.name}(${o.quantity})`)
                     .join(", ")}
                 </Td>
-                <Td>{tr.grand_total.toLocaleString()}</Td>
+                <Td>{formatted}</Td>
                 <Td>{tr.paid_amount.toLocaleString()}</Td>
                 <Td>
                   <p
@@ -113,12 +130,12 @@ export function ConcurrentTable({ tableData, checkedRows, setCheckedRows }) {
                 <Td>
                   <div className="flex items-center gap-3">
                     <EditableInput
-                      value={amount}
+                      value={balance}
                       onChange={(val) => toggleRow(id, val, isChecked)}
                     />
                     <Checkbox
                       checked={isChecked}
-                      onChange={(e) => toggleRow(id, amount, e.target.checked)}
+                      onChange={(e) => toggleRow(id, balance, e.target.checked)}
                     />
                   </div>
                 </Td>

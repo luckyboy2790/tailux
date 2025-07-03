@@ -110,6 +110,19 @@ export function TotalCell({ getValue, row }) {
 export function ProfitCell({ getValue, row }) {
   const value = Number(getValue());
 
+  const original = row.original;
+
+  const total = Number(original?.total_amount) || 0;
+  const shipping = Number(original?.shipping) || 0;
+
+  const rawDiscount = original?.discount_string?.toString() || "0";
+
+  const discount = rawDiscount.includes("%")
+    ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+    : Number(rawDiscount);
+
+  const balance = total - discount.toFixed(0) + shipping;
+
   return (
     <div className="flex items-center space-x-2">
       <p
@@ -122,9 +135,7 @@ export function ProfitCell({ getValue, row }) {
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
         {Math.round(
-          (Number(row.original?.paid_amount) /
-            Number(row.original?.grand_total)) *
-            100,
+          (Number(row.original?.paid_amount) / Number(balance)) * 100,
         )}
         %
       </Badge>
