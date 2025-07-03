@@ -115,16 +115,22 @@ export const getBaseNavigation = (role) => {
       transKey: "nav.people.people",
       Icon: PeopleIcon,
     },
-    {
+  ];
+
+  if (role === "admin" || role === "user") {
+    baseNavigation.push({
       id: "setting",
       type: NAV_TYPE_ITEM,
-      path: "/setting",
+      path: role === "admin" ? "/setting" : "/setting/site_status",
       title: "Setting",
       title_translate: "Configuración",
       transKey: "nav.setting.setting",
       Icon: SettingIcon,
-    },
-    {
+    });
+  }
+
+  if (role !== "buyer") {
+    baseNavigation.push({
       id: "payments",
       type: NAV_TYPE_ITEM,
       path: "/concurrent_payments",
@@ -132,8 +138,8 @@ export const getBaseNavigation = (role) => {
       title_translate: "Pago concurrente",
       transKey: "nav.payment.concurrent_payments",
       Icon: PaymentIcon,
-    },
-  ];
+    });
+  }
 
   if (role === "admin") {
     baseNavigation.push({

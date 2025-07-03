@@ -9,7 +9,7 @@ import { product } from "./product";
 import { purchase } from "./purchase";
 import { getPurchaseOrder } from "./purchaseOrder";
 import { received } from "./receivedOrder";
-import { report } from "./report";
+import { getReportNav } from "./report";
 import { getSaleNav } from "./sale";
 import { getSettingNav } from "./setting";
 import { category } from "./category";
@@ -29,7 +29,7 @@ export const useNavigation = () => {
     getPurchaseOrder(role),
     received,
     category,
-    report,
+    getReportNav(role),
     getPeopleNav(role),
   ];
 

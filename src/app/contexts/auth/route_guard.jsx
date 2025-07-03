@@ -10,6 +10,29 @@ const buyerPermissions = [
   /^\/received-order\/edit\/[^/]+$/,
 ];
 
+const adminDenied = [
+  "/sale/add",
+  /^\/sale\/edit\/[^/]+$/,
+  "/purchase-order/add",
+  /^\/purchase-order\/edit\/[^/]+$/,
+];
+
+const userDenied = [
+  "/people/user",
+  "/setting/company",
+  "/setting/store",
+  "/report/users_report",
+];
+
+const secretaryDenied = [
+  "/people/user",
+  "/setting/company",
+  "/setting/store",
+  "/setting/site_status",
+  "/advanced_delete/form",
+  "/report/users_report",
+];
+
 const buyerRedirect = "/purchase-order/list";
 
 export default function RoleRouteGuard({ children }) {
@@ -18,16 +41,35 @@ export default function RoleRouteGuard({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isInitialized || user?.role !== "buyer") return;
+    if (!isInitialized || !user) return;
 
     const currentPath = location.pathname.replace(/\/$/, "");
+    const role = user?.role;
 
-    const isAllowed = buyerPermissions.some((p) =>
-      typeof p === "string" ? p === currentPath : p.test(currentPath),
-    );
+    let isAllowed = true;
+
+    if (role === "buyer") {
+      isAllowed = buyerPermissions.some((p) =>
+        typeof p === "string" ? p === currentPath : p.test(currentPath),
+      );
+    } else if (role === "admin") {
+      isAllowed = !adminDenied.some((p) =>
+        typeof p === "string" ? p === currentPath : p.test(currentPath),
+      );
+    } else if (role === "user") {
+      isAllowed = !userDenied.some((p) =>
+        typeof p === "string" ? p === currentPath : p.test(currentPath),
+      );
+    } else if (role === "secretary") {
+      isAllowed = !secretaryDenied.some((p) =>
+        typeof p === "string" ? p === currentPath : p.test(currentPath),
+      );
+    }
 
     if (!isAllowed) {
-      navigate(buyerRedirect, { replace: true });
+      navigate(role === "buyer" ? buyerRedirect : "/dashboards/home", {
+        replace: true,
+      });
     }
   }, [isInitialized, location.pathname, user, navigate]);
 

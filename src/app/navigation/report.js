@@ -17,15 +17,8 @@ const ROOT_REPORT = "/report";
 
 const path = (root, item) => `${root}${item}`;
 
-export const report = {
-  id: "report",
-  type: NAV_TYPE_ROOT,
-  path: "/report",
-  title: "Reports",
-  title_translate: "Reporte",
-  transKey: "nav.report.report",
-  Icon: ReportIcon,
-  childs: [
+export const getReportNav = (role) => {
+  const childs = [
     {
       id: "report.overview_chart",
       path: path(ROOT_REPORT, "/overview_chart"),
@@ -143,7 +136,10 @@ export const report = {
       transKey: "nav.report.suppliers_report",
       Icon: SupplierIcon,
     },
-    {
+  ];
+
+  if (role === "admin") {
+    childs.push({
       id: "report.users_report",
       path: path(ROOT_REPORT, "/users_report"),
       type: NAV_TYPE_ITEM,
@@ -151,6 +147,17 @@ export const report = {
       title_translate: "Reporte de Usuarios",
       transKey: "nav.report.users_report",
       Icon: UsersIcon,
-    },
-  ],
+    });
+  }
+
+  return {
+    id: "report",
+    type: NAV_TYPE_ROOT,
+    path: "/report",
+    title: "Reports",
+    title_translate: "Reporte",
+    transKey: "nav.report.report",
+    Icon: ReportIcon,
+    childs: childs,
+  };
 };
