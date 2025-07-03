@@ -261,7 +261,8 @@
         },
         "failed": {
           "title": "Orden de Compra Eliminada",
-          "impossible_delete": "Orden de Compra cannot be deleted"
+          "impossible_delete": "Orden de Compra cannot be deleted",
+          "not_allowed_on_your_role": "No tienes permiso para eliminar orden de compra(s) en tu rol"
         },
         "success": {
           "title": "Orden de Compra Eliminada"

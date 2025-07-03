@@ -99,8 +99,13 @@ export function RowActions({ row, table }) {
       },
     );
 
+    const result = await response.json();
+
     if (!response.ok) {
-      toast.error(t("nav.purchase.confirmPurchaseOrderDelete.failed.title"));
+      toast.error(
+        t(`nav.purchase.confirmPurchaseOrderDelete.failed.${result.error}`) ||
+          t("nav.purchase.confirmPurchaseOrderDelete.failed.title"),
+      );
 
       setConfirmDeleteLoading(false);
 

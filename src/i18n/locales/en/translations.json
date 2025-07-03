@@ -253,7 +253,8 @@
         },
         "failed": {
           "title": "Purchase Order Delete Failed",
-          "impossible_delete": "Purchase Order cannot be deleted"
+          "impossible_delete": "Purchase Order cannot be deleted",
+          "not_allowed_on_your_role": "You are not allowed to delete purchase order(s) on your role"
         },
         "success": {
           "title": "Purchase Order Deleted"
