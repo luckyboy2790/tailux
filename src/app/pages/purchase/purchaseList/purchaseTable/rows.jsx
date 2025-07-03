@@ -151,7 +151,20 @@ export function OrderStatusCell({ getValue, row, column, table }) {
 
   let purchaseStatus;
 
-  if (val?.paid_amount < val?.grand_total) {
+  const original = row.original;
+
+  const total = Number(original?.total_amount) || 0;
+  const shipping = Number(original?.shipping) || 0;
+
+  const rawDiscount = original?.discount_string?.toString() || "0";
+
+  const discount = rawDiscount.includes("%")
+    ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+    : Number(rawDiscount);
+
+  const balance = total - discount.toFixed(0) + shipping;
+
+  if (val?.paid_amount < balance) {
     purchaseStatus = "pending";
   } else if (val?.paid_amount === 0) {
     purchaseStatus = "partial";

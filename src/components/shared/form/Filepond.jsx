@@ -14,6 +14,7 @@ import {
   insertStylesToHead,
   makeStyleTag,
 } from "utils/dom/injectStylesToHead";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ const FilePond = forwardRef(
     },
     ref,
   ) => {
+    const { t } = useTranslation();
+
     return (
       <div
         className={clsx(
@@ -58,6 +61,7 @@ const FilePond = forwardRef(
           acceptedFileTypes={["image/*"]}
           ref={ref}
           {...rest}
+          labelIdle={t("nav.upload.labelIdle")}
         />
       </div>
     );

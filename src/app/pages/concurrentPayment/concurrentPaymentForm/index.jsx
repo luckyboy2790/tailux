@@ -2,7 +2,7 @@ import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import CompanyIcon from "assets/dualicons/company.svg?react";
 import { useTranslation } from "react-i18next";
-import { Box, Button, Input } from "components/ui";
+import { Box, Button, GhostSpinner, Input } from "components/ui";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { FilePond } from "components/shared/form/Filepond";
 import { ConcurrentTable } from "./components/ConcurrentTable";
@@ -27,6 +27,8 @@ const ConcurrentPage = () => {
   const [date, setDate] = useState(null);
   const [attachment, setAttachment] = useState(null);
   const [checkedRows, setCheckedRows] = useState({});
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -132,11 +134,15 @@ const ConcurrentPage = () => {
 
     formData.append("purchases", JSON.stringify(purchases));
 
-    if (attachment) {
-      formData.append("attachment", attachment);
+    if (attachment?.length) {
+      attachment.forEach((file) => {
+        formData.append("attachment", file);
+      });
     }
 
     try {
+      setIsLoading(true);
+
       const response = await fetch(`${API_URL}/api/payment/concurrent/create`, {
         method: "POST",
         body: formData,
@@ -147,13 +153,17 @@ const ConcurrentPage = () => {
 
       if (!response.ok) {
         toast.error(t("nav.payment.confirmCreate.failed.title"));
+        setIsLoading(false);
         return;
       }
 
       toast.success(t("nav.payment.confirmCreate.success.title"));
 
+      setIsLoading(false);
+
       navigate(role === "secretary" ? "/payment/pending" : "/purchase/list");
     } catch (error) {
+      setIsLoading(false);
       console.error("Upload error:", error);
     }
   };
@@ -190,20 +200,20 @@ const ConcurrentPage = () => {
             <Box className="shadow-soft dark:bg-dark-700 flex flex-col gap-4 rounded-lg bg-white px-4 py-4 sm:gap-5 sm:px-5 dark:shadow-none">
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
                 <DatePicker
-                  label="Date"
-                  placeholder="Date"
+                  label={t("nav.payment.date")}
+                  placeholder={t("nav.payment.date")}
                   onChange={setDate}
                   value={date}
                 />
                 <Input
-                  label="Reference No"
-                  placeholder="Reference No"
+                  label={t("nav.payment.reference_no")}
+                  placeholder={t("nav.payment.reference_no")}
                   value={referenceNo}
                   onChange={(e) => setReferenceNo(e.target.value)}
                 />
                 <Input
-                  label="Note"
-                  placeholder="Note"
+                  label={t("nav.payment.note")}
+                  placeholder={t("nav.payment.note")}
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                 />
@@ -231,7 +241,19 @@ const ConcurrentPage = () => {
                   className="flex items-center gap-2"
                   onClick={handleSubmit}
                 >
-                  <FaFileInvoice /> {t("nav.advanced_delete.submit")}
+                  {isLoading ? (
+                    <>
+                      <GhostSpinner
+                        variant="soft"
+                        className="size-4 border-2"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <FaFileInvoice />
+                      {t("nav.advanced_delete.submit")}
+                    </>
+                  )}
                 </Button>
               </div>
             </Box>

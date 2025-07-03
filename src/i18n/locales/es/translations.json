@@ -450,6 +450,7 @@
       "approving": "Aprobando",
       "payment_date_range": "Rango de fechas de pago",
       "select_purchase": "Seleccionar Comprar",
+
       "confirmDelete": {
         "pending": {
           "description": "¿Está seguro de que desea eliminar esta fila? Una vez eliminada, no se puede restaurar."
@@ -472,6 +473,14 @@
         },
         "success": {
           "title": "Pago Aprobado"
+        }
+      },
+      "confirmCreate": {
+        "success": {
+          "title": "Pago Creado"
+        },
+        "failed": {
+          "title": "Pago Creado Fallido"
         }
       }
     },
@@ -895,6 +904,9 @@
       "reference_already_taken": "El número de referencia ya está tomado.",
       "missing_required_fields": "Faltan campos obligatorios.",
       "select_at_least_one_product": "Seleccione al menos un producto."
+    },
+    "upload": {
+      "labelIdle": "Arrastra y suelta tus archivos o <span class=\"filepond--label-action\">Navegar</span>"
     }
   }
 }
