@@ -256,10 +256,10 @@ export function OrdersDrawer({ isOpen, close, row }) {
                     </Td>
                     <Td>{tr?.product_id}</Td>
                     <Td>{tr?.product_name}</Td>
-                    <Td>{tr?.cost}</Td>
+                    <Td>{Number(tr?.cost).toLocaleString()}</Td>
                     <Td>{tr?.quantity}</Td>
                     <Td className="dark:text-dark-100 px-0 font-medium text-gray-800 ltr:rounded-r-lg rtl:rounded-l-lg">
-                      {tr.subtotal.toLocaleString()}
+                      {Number(tr.subtotal).toLocaleString()}
                     </Td>
                   </Tr>
                 ))}
