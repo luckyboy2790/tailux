@@ -74,7 +74,7 @@ export default function PurchaseTable() {
   const [sorting, setSorting] = useState(filters.sorting);
 
   const [companyId, setCompanyId] = useState(filters.companyId);
-  const [supplierId, setSupplierId] = useState(filters.supplierId);
+  const [customerId, setCustomerId] = useState(filters.customerId);
 
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
     "column-visibility-orders-1",
@@ -96,7 +96,7 @@ export default function PurchaseTable() {
       startDate,
       endDate,
       companyId,
-      supplierId,
+      customerId,
       globalFilter,
     });
   }, [
@@ -107,7 +107,7 @@ export default function PurchaseTable() {
     startDate,
     endDate,
     companyId,
-    supplierId,
+    customerId,
     globalFilter,
   ]);
 
@@ -196,7 +196,7 @@ export default function PurchaseTable() {
           sort_by_date: sortDirection,
           startDate,
           endDate,
-          supplier_id: supplierId,
+          customer_id: customerId,
           type: "sale",
         }).toString();
 
@@ -228,7 +228,7 @@ export default function PurchaseTable() {
     startDate,
     endDate,
     companyId,
-    supplierId,
+    customerId,
     sorting,
     token,
   ]);
@@ -257,9 +257,9 @@ export default function PurchaseTable() {
               setCompanyId(id);
               setPageIndex(0);
             }}
-            supplierId={supplierId}
-            setSupplierId={(id) => {
-              setSupplierId(id);
+            customerId={customerId}
+            setCustomerId={(id) => {
+              setCustomerId(id);
               setPageIndex(0);
             }}
           />

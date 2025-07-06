@@ -11,6 +11,7 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "app/contexts/auth/context";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,8 +22,8 @@ export function Toolbar({
   endDate,
   companyId,
   setCompanyId,
-  supplierId,
-  setSupplierId,
+  customerId,
+  setCustomerId,
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -53,8 +54,8 @@ export function Toolbar({
               endDate={endDate}
               companyId={companyId}
               setCompanyId={setCompanyId}
-              supplierId={supplierId}
-              setSupplierId={setSupplierId}
+              customerId={customerId}
+              setCustomerId={setCustomerId}
             />
           </div>
         </>
@@ -79,8 +80,8 @@ export function Toolbar({
               endDate={endDate}
               companyId={companyId}
               setCompanyId={setCompanyId}
-              supplierId={supplierId}
-              setSupplierId={setSupplierId}
+              customerId={customerId}
+              setCustomerId={setCustomerId}
             />
           </div>
 
@@ -126,12 +127,12 @@ function Filters({
   endDate,
   companyId,
   setCompanyId,
-  supplierId,
-  setSupplierId,
+  customerId,
+  setCustomerId,
 }) {
   const [company, setCompany] = useState([]);
 
-  const [supplier, setSupplier] = useState([]);
+  const [customer, setCustomer] = useState([]);
 
   const { t } = useTranslation();
 
@@ -170,30 +171,30 @@ function Filters({
 
   useEffect(() => {
     const fetchData = async () => {
-      const supplierResponse = await fetch(
-        `${API_URL}/api/supplier/get_all_suppliers`,
+      const customerResponse = await fetch(
+        `${API_URL}/api/customer/get_all_customers`,
       );
 
-      const supplierResult = await supplierResponse.json();
+      const customerResult = await customerResponse.json();
 
-      const supplierData = [
+      const customerData = [
         {
           key: -1,
           value: "",
-          label: t("nav.select.select_supplier"),
+          label: "",
           disabled: false,
         },
-        ...(Array.isArray(supplierResult?.data) ? supplierResult.data : []).map(
+        ...(Array.isArray(customerResult?.data) ? customerResult.data : []).map(
           (item, key) => ({
             key,
             value: item?.id,
-            label: item?.name,
+            label: item?.company,
             disabled: false,
           }),
         ),
       ];
 
-      setSupplier(supplierData);
+      setCustomer(customerData);
     };
 
     fetchData();
@@ -223,13 +224,14 @@ function Filters({
         />
       )}
 
-      <Select
-        value={supplierId || ""}
-        data={supplier}
-        onChange={(e) => {
-          setSupplierId(e.target.value);
-        }}
-        className="h-8 min-w-30 py-1 text-xs"
+      <Combobox
+        data={customer}
+        value={customer.find((c) => c.value === customerId) || null}
+        onChange={(selected) => setCustomerId(selected?.value || "")}
+        placeholder={t("nav.all_customers")}
+        displayField="label"
+        searchFields={["label"]}
+        className="h-8 min-w-70 text-xs"
       />
     </>
   );
