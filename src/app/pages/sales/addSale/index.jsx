@@ -15,6 +15,7 @@ import { DatePicker } from "components/shared/form/Datepicker";
 import { OrderItemsTable } from "./components/OrderItemsTable";
 import { useAuthContext } from "app/contexts/auth/context";
 import { useCookies } from "react-cookie";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -34,6 +35,7 @@ const AddSale = () => {
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
   const [customer, setCustomer] = useState([]);
+  const [customerId, setCustomerId] = useState("");
 
   const [cookie] = useCookies();
 
@@ -90,7 +92,7 @@ const AddSale = () => {
       );
       const customerResult = await customerRes.json();
       const customerData = [
-        { key: -1, value: "", label: t("nav.select.select_customer") },
+        { key: -1, value: "", label: "" },
         ...(customerResult?.data?.map((item, key) => ({
           key,
           value: item?.id,
@@ -249,11 +251,31 @@ const AddSale = () => {
                     disabled
                   />
 
-                  <Select
-                    label={t("nav.people.customer")}
-                    data={customer}
-                    {...register("customer_id")}
-                    error={errors?.customer_id?.message}
+                  <Controller
+                    name="customer_id"
+                    control={control}
+                    render={({
+                      field: { onChange },
+                      fieldState: { error },
+                    }) => (
+                      <Combobox
+                        label={t("nav.people.customer")}
+                        data={customer}
+                        value={
+                          customer.find((c) => c.value === customerId) || null
+                        }
+                        onChange={(selected) => {
+                          const val = selected?.value || "";
+                          setCustomerId(val);
+                          onChange(val);
+                        }}
+                        placeholder={t("nav.all_customers")}
+                        displayField="label"
+                        searchFields={["label"]}
+                        error={error?.message}
+                        className="h-8 min-w-70 text-xs"
+                      />
+                    )}
                   />
 
                   <Controller
