@@ -167,7 +167,7 @@ export function ApprovePaymentModal({
                     <div className="font-semibold">Amount:</div>
 
                     <div className="dark:text-dark-50 text-lg font-medium text-gray-800">
-                      {data.amount}
+                      {Number(data.amount).toLocaleString()}
                     </div>
                   </div>
 
