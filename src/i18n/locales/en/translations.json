@@ -215,6 +215,9 @@
       "p_payment": "P-Payment",
       "p_return": "P-Return",
       "status": "Status",
+      "number_of_references": "Number of references",
+      "total_quantity": "Total quantity",
+      "total_subtotal": "Total subtotal",
       "select_supplier_message": "Please select a supplier",
       "invalid_row_message": "Category, Product Name, and Product Cost are required for each item",
       "confirmDelete": {
@@ -899,7 +902,7 @@
       "select_at_least_one_product": "Select at least one product."
     },
     "upload": {
-      "labelIdle": "Drag & Drop your files or <span class=\"filepond--label-action\">Browse</span>"  
+      "labelIdle": "Drag & Drop your files or <span class=\"filepond--label-action\">Browse</span>"
     }
   }
 }

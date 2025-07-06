@@ -215,6 +215,9 @@
       "p_payment": "P-Pendiente",
       "p_return": "D-Pendiente",
       "status": "Estado",
+      "number_of_references": "Número de referencias",
+      "total_quantity": "Cantidad total",
+      "total_subtotal": "Subtotal total",
       "select_supplier_message": "Seleccione un proveedor",
       "invalid_row_message": "Categoría, Nombre del Producto y Costo del Producto son obligatorios para cada fila",
       "confirmDelete": {

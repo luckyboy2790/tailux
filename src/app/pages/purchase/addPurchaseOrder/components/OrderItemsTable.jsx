@@ -360,6 +360,59 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
 
   return (
     <div>
+      <Card className="my-3">
+        <Table hoverable className="w-full text-left rtl:text-right">
+          <THead>
+            <Tr>
+              <Th>{t("nav.purchase.number_of_references")}</Th>
+              <Th>{t("nav.purchase.total_quantity")}</Th>
+              <Th>{t("nav.purchase.total_subtotal")}</Th>
+            </Tr>
+          </THead>
+          <TBody>
+            <Tr>
+              <Td>{Number(orders.length).toLocaleString()}</Td>
+              <Td>
+                {orders
+                  .reduce((acc, row) => acc + (Number(row.quantity) || 0), 0)
+                  .toLocaleString()}
+              </Td>
+              <Td>
+                {Number(
+                  orders
+                    .reduce((acc, row) => {
+                      const cost = Number(row.product_cost) || 0;
+                      const qty = Number(row.quantity) || 0;
+                      const rawDiscount = row.discount;
+
+                      let discountAmount = 0;
+
+                      if (
+                        typeof rawDiscount === "string" &&
+                        rawDiscount.trim().endsWith("%")
+                      ) {
+                        const percent = parseFloat(
+                          rawDiscount.trim().replace("%", ""),
+                        );
+                        if (!isNaN(percent)) {
+                          discountAmount = (cost * percent) / 100;
+                        }
+                      } else {
+                        const flat = Number(rawDiscount);
+                        if (!isNaN(flat)) {
+                          discountAmount = flat;
+                        }
+                      }
+
+                      return acc + (cost - discountAmount) * qty;
+                    }, 0)
+                    .toFixed(),
+                ).toLocaleString()}
+              </Td>
+            </Tr>
+          </TBody>
+        </Table>
+      </Card>
       <div className="flex items-center justify-end">
         <Button color="primary" className="rounded-full" onClick={handleAddRow}>
           <PlusIcon className="size-4.5" />
@@ -388,58 +441,6 @@ export function OrderItemsTable({ orders, setOrders, watch }) {
               ))}
             </THead>
             <TBody>
-              <Tr>
-                <Td colSpan={1}>Total</Td>
-                <Td colSpan={1}>
-                  {orders
-                    .reduce(
-                      (acc, row) => acc + (Number(row.product_cost) || 0),
-                      0,
-                    )
-                    .toLocaleString()}
-                </Td>
-                <Td colSpan={1}>
-                  {orders
-                    .reduce((acc, row) => acc + (Number(row.quantity) || 0), 0)
-                    .toLocaleString()}
-                </Td>
-                <Td colSpan={3}></Td>
-                <Td colSpan={1}>
-                  <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
-                    {Number(
-                      orders
-                        .reduce((acc, row) => {
-                          const cost = Number(row.product_cost) || 0;
-                          const qty = Number(row.quantity) || 0;
-                          const rawDiscount = row.discount;
-
-                          let discountAmount = 0;
-
-                          if (
-                            typeof rawDiscount === "string" &&
-                            rawDiscount.trim().endsWith("%")
-                          ) {
-                            const percent = parseFloat(
-                              rawDiscount.trim().replace("%", ""),
-                            );
-                            if (!isNaN(percent)) {
-                              discountAmount = (cost * percent) / 100;
-                            }
-                          } else {
-                            const flat = Number(rawDiscount);
-                            if (!isNaN(flat)) {
-                              discountAmount = flat;
-                            }
-                          }
-
-                          return acc + (cost - discountAmount) * qty;
-                        }, 0)
-                        .toFixed(),
-                    ).toLocaleString()}
-                  </div>
-                </Td>
-                <Td colSpan={1}></Td>
-              </Tr>
               {table.getRowModel().rows.map((row) => (
                 <Tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
