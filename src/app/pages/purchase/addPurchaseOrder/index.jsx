@@ -16,6 +16,7 @@ import { useNavigate } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
 import { useCookies } from "react-cookie";
 import { toast } from "sonner";
+import clsx from "clsx";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -49,6 +50,8 @@ const AddPurchaseOrder = () => {
   const token = cookie.authToken;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [enableFullScreen, setEnableFullScreen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -200,7 +203,14 @@ const AddPurchaseOrder = () => {
 
   return (
     <Page title="New Post Form">
-      <div className="transition-content px-(--margin-x) pb-6">
+      <div
+        className={clsx(
+          "transition-content pb-6",
+          enableFullScreen
+            ? "dark:bg-dark-900 fixed inset-0 z-50 overflow-y-auto bg-white px-4 pt-6 sm:px-5"
+            : "px-(--margin-x)",
+        )}
+      >
         <div className="flex flex-col items-center justify-between space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="size-6" />
@@ -208,20 +218,31 @@ const AddPurchaseOrder = () => {
               {t("nav.purchase.add_purchase_order")}
             </h2>
           </div>
-          <Button
-            className="min-w-[7rem]"
-            color="primary"
-            type="submit"
-            form="new-post-form"
-          >
-            {isLoading ? (
-              <>
-                <GhostSpinner variant="soft" className="size-4 border-2" />
-              </>
-            ) : (
-              <>{t("nav.purchase.save")}</>
-            )}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              className="min-w-[7rem]"
+              variant="outlined"
+              onClick={() => setEnableFullScreen((prev) => !prev)}
+            >
+              {enableFullScreen
+                ? t("nav.view.exit_full_screen")
+                : t("nav.view.full_screen")}
+            </Button>
+            <Button
+              className="min-w-[7rem]"
+              color="primary"
+              type="submit"
+              form="new-post-form"
+            >
+              {isLoading ? (
+                <>
+                  <GhostSpinner variant="soft" className="size-4 border-2" />
+                </>
+              ) : (
+                <>{t("nav.purchase.save")}</>
+              )}
+            </Button>
+          </div>
         </div>
 
         <FormProvider {...methods}>

@@ -762,6 +762,7 @@
       "view": "Ver",
       "table_view": "Vista de tabla",
       "full_screen": "Pantalla completa",
+      "exit_full_screen": "Salir de pantalla completa",
       "row_dense": "Hilera densa",
       "column_visibility": "Visibilidad de columna",
       "show_all_columns": "Mostrar todas las columnas"

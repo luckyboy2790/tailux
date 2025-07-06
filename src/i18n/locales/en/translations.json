@@ -754,6 +754,7 @@
       "view": "View",
       "table_view": "Table View",
       "full_screen": "Full Screen",
+      "exit_full_screen": "Exit Full Screen",
       "row_dense": "Row Dense",
       "column_visibility": "Column Visibility",
       "show_all_columns": "Show All Columns"
