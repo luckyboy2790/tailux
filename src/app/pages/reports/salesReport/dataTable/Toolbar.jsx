@@ -11,6 +11,7 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "app/contexts/auth/context";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -182,7 +183,7 @@ function Filters({
         {
           key: -1,
           value: "",
-          label: t("nav.select.select_customer"),
+          label: "",
           disabled: false,
         },
         ...(Array.isArray(customerResult?.data) ? customerResult.data : []).map(
@@ -225,13 +226,14 @@ function Filters({
         />
       )}
 
-      <Select
-        value={customerId || ""}
+      <Combobox
         data={customer}
-        onChange={(e) => {
-          setCustomerId(e.target.value);
-        }}
-        className="h-8 min-w-30 py-1 text-xs"
+        value={customer.find((c) => c.value === customerId) || null}
+        onChange={(selected) => setCustomerId(selected?.value || "")}
+        placeholder={t("nav.all_customers")}
+        displayField="label"
+        searchFields={["label"]}
+        className="h-8 min-w-70 text-xs"
       />
 
       {isFiltered && (
