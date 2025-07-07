@@ -489,6 +489,67 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
             role="none"
           />
 
+          <p className="dark:text-dark-100 px-4 font-medium text-gray-800 sm:px-5">
+            {t("nav.table_fields.return_list")}
+          </p>
+
+          <div className="mt-1 h-auto min-h-50 overflow-x-auto overscroll-x-contain px-4 sm:px-5">
+            <Table
+              hoverable
+              className="text-xs-plus w-full text-left rtl:text-right [&_.table-td]:py-2"
+            >
+              <THead>
+                <Tr className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200">
+                  {paymentCols.map((title, index) => (
+                    <Th
+                      key={index}
+                      className="dark:text-dark-100 py-2 font-semibold text-gray-800 uppercase first:px-0 last:px-0"
+                    >
+                      {title}
+                    </Th>
+                  ))}
+                </Tr>
+              </THead>
+              <TBody>
+                {row.original.preturns?.map((tr, index) => (
+                  <Tr
+                    key={tr.id}
+                    className="dark:border-b-dark-500 border-y border-transparent border-b-gray-200"
+                  >
+                    <Td className="px-0 font-medium ltr:rounded-l-lg rtl:rounded-r-lg">
+                      {index + 1}
+                    </Td>
+                    <Td>
+                      {dayjs(tr?.timestamp)
+                        .locale(locale)
+                        .format("DD MMM YYYY")}
+                    </Td>
+                    <Td>{tr?.reference_no}</Td>
+                    <Td>{tr?.amount.toLocaleString()}</Td>
+                    <Td>
+                      <div className="flex items-center justify-start gap-2">
+                        {tr?.attachment && (
+                          <Image
+                            src={`${IMG_URL}${tr?.attachment}`}
+                            alt={tr?.attachment}
+                            width={35}
+                            height={35}
+                          />
+                        )}
+                        {tr?.note || ""}
+                      </div>
+                    </Td>
+                  </Tr>
+                ))}
+              </TBody>
+            </Table>
+          </div>
+
+          <hr
+            className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
+            role="none"
+          />
+
           <div className="mt-3 flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
               <div className="mb-1.5 font-semibold">Created By:</div>

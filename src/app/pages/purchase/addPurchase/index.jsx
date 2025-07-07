@@ -139,7 +139,7 @@ const AddPurchase = () => {
       shipping: 0,
       returns: 0,
     });
-  }, [t, close, isOpen, user, reset]);
+  }, [t, close, isOpen, user, reset, token]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
