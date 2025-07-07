@@ -52,7 +52,7 @@ export const getColumns = (t) => [
     cell: CustomerCell,
     enableSorting: false,
   }),
-  columnHelper.accessor((row) => row?.supplier.company, {
+  columnHelper.accessor((row) => row?.supplier.name, {
     id: "supplier",
     label: t("nav.supplier"),
     header: t("nav.supplier"),
