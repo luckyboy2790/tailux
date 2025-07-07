@@ -23,7 +23,7 @@ import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Combobox } from "components/shared/form/Combobox";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
@@ -63,37 +63,58 @@ export function Toolbar({
 
     const purchases = result || [];
 
-    const data = purchases.map((p, index) => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Purchases");
+
+    worksheet.columns = [
+      { header: "No", key: "No", width: 6 },
+      { header: "Date", key: "Date", width: 15 },
+      { header: "Reference No", key: "Reference_No", width: 20 },
+      { header: "Supplier", key: "Supplier", width: 20 },
+      { header: "Grand Total", key: "Grand_Total", width: 15 },
+      { header: "Paid Amount", key: "Paid_Amount", width: 15 },
+      { header: "Balance", key: "Balance", width: 15 },
+      { header: "Order Status", key: "Order_Status", width: 15 },
+    ];
+
+    purchases.forEach((p, index) => {
+      const total = Number(p?.total_amount) || 0;
+      const shipping = Number(p?.shipping) || 0;
+
+      const rawDiscount = p?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const totalValue = total - discount.toFixed(0) + shipping;
+
       let status = "paid";
+
       if (p.paid_amount === 0) {
-        status = "partial";
-      } else if (p.paid_amount < p.total_amount) {
         status = "pending";
+      } else if (p.paid_amount < totalValue) {
+        status = "partial";
+      } else {
+        status = "paid";
       }
 
-      return {
+      worksheet.addRow({
         No: index + 1,
         Date: dayjs(p.timestamp).format("YYYY-MM-DD"),
         Reference_No: p.reference_no,
-        Supplier: p.supplier_company || "",
-        Grand_Total: p.total_amount,
+        Supplier: p.supplier_name || "",
+        Grand_Total: totalValue,
         Paid_Amount: p.paid_amount,
-        Balance: p.total_amount - p.paid_amount,
+        Balance: totalValue - p.paid_amount,
         Order_Status: status,
-      };
+      });
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Purchases");
+    const buffer = await workbook.xlsx.writeBuffer();
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-
-    const blob = new Blob([excelBuffer], {
-      type: "application/octet-stream",
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
     saveAs(blob, "PurchaseReport.xlsx");

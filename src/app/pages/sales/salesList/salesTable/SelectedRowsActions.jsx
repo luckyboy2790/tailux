@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
 import { toast } from "sonner";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useCookies } from "react-cookie";
@@ -76,7 +76,7 @@ export function SelectedRowsActions({ table }) {
         No: index + 1,
         Date: dayjs(s.original?.timestamp).format("YYYY-MM-DD"),
         Reference_No: s.original?.reference_no,
-        Customer: s.original?.customer.company || "",
+        Customer: s.original?.customer?.company || "",
         Grand_Total: s.original?.grand_total,
         Paid_Amount: s.original?.paid_amount,
         Balance: s.original?.grand_total - s.original?.paid_amount,
@@ -84,20 +84,26 @@ export function SelectedRowsActions({ table }) {
       };
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sales");
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sales");
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+    if (data.length > 0) {
+      worksheet.columns = Object.keys(data[0]).map((key) => ({
+        header: key,
+        key: key,
+        width: 20,
+      }));
+
+      data.forEach((row) => {
+        worksheet.addRow(row);
+      });
+    }
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-
-    const blob = new Blob([excelBuffer], {
-      type: "application/octet-stream",
-    });
-
-    saveAs(blob, "SalesReport.xlsx");
+    saveAs(blob, `SalesReport_${dayjs().format("YYYY-MM-DD")}.xlsx`);
   };
 
   return (

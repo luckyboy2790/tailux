@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useDisclosure } from "hooks";
 import { CustomerModal } from "components/shared/CustomerModal";
 import { toast } from "sonner";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 // import { OrdersDrawer } from "./OrdersDrawer";
@@ -72,32 +72,34 @@ export function RowActions({ row, table }) {
     const rowData = row.original;
     if (!rowData) return;
 
-    // Only include specific fields
-    const data = [
-      {
-        company: rowData.company || "",
-        name: rowData.name || "",
-        "phone number": rowData.phone_number || "",
-        email: rowData.email || "",
-        city: rowData.city || "",
-        address: rowData.address || "",
-      },
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Report");
+
+    worksheet.columns = [
+      { header: "Company", key: "company", width: 20 },
+      { header: "Name", key: "name", width: 20 },
+      { header: "Phone Number", key: "phone_number", width: 18 },
+      { header: "Email", key: "email", width: 25 },
+      { header: "City", key: "city", width: 15 },
+      { header: "Address", key: "address", width: 30 },
     ];
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+    worksheet.addRow({
+      company: rowData.company || "",
+      name: rowData.name || "",
+      phone_number: rowData.phone_number || "",
+      email: rowData.email || "",
+      city: rowData.city || "",
+      address: rowData.address || "",
     });
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/octet-stream",
-    });
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
 
-    saveAs(blob, `Customer_Report_${dayjs().format("YYYY-MM-DD")}.xlsx`);
+      saveAs(blob, `Customer_Report_${dayjs().format("YYYY-MM-DD")}.xlsx`);
+    });
   };
 
   const handleDeleteRows = async () => {

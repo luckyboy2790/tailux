@@ -23,7 +23,7 @@ import { Button } from "components/ui";
 import { useTranslation } from "react-i18next";
 import { useDisclosure } from "hooks";
 import { toast } from "sonner";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { UserModal } from "components/shared/UserModal";
@@ -72,33 +72,42 @@ export function RowActions({ row, table }) {
     const rowData = row.original;
     if (!rowData) return;
 
-    // Only include specific fields
-    const data = [
-      {
-        username: rowData.username || "",
-        "first name": rowData.first_name || "",
-        "last name": rowData.last_name || "",
-        "company name": rowData.company_name || "",
-        "phone number": rowData.phone_number || "",
-        role: rowData.role || "",
-        "ip address": rowData.ip_address || "",
-      },
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Report");
+
+    // Define the columns with headers and keys
+    worksheet.columns = [
+      { header: "Username", key: "username", width: 20 },
+      { header: "First Name", key: "first_name", width: 20 },
+      { header: "Last Name", key: "last_name", width: 20 },
+      { header: "Company Name", key: "company_name", width: 25 },
+      { header: "Phone Number", key: "phone_number", width: 18 },
+      { header: "Role", key: "role", width: 15 },
+      { header: "IP Address", key: "ip_address", width: 18 },
     ];
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+    // Add the row data
+    worksheet.addRow({
+      username: rowData.username || "",
+      first_name: rowData.first_name || "",
+      last_name: rowData.last_name || "",
+      company_name: rowData.company_name || "",
+      phone_number: rowData.phone_number || "",
+      role: rowData.role || "",
+      ip_address: rowData.ip_address || "",
     });
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/octet-stream",
-    });
+    // Bold header row
+    worksheet.getRow(1).font = { bold: true };
 
-    saveAs(blob, `User_Report_${dayjs().format("YYYY-MM-DD")}.xlsx`);
+    // Write and save the file
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      saveAs(blob, `User_Report_${dayjs().format("YYYY-MM-DD")}.xlsx`);
+    });
   };
 
   const handleDeleteRows = async () => {

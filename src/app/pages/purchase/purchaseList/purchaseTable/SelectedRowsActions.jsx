@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 // Local Imports
 import { Button, GhostSpinner } from "components/ui";
 import { toast } from "sonner";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useCookies } from "react-cookie";
@@ -64,37 +64,65 @@ export function SelectedRowsActions({ table }) {
   const exportTableToExcel = async (table) => {
     const purchases = table || [];
 
-    const data = purchases.map((p, index) => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Purchases");
+
+    // Define column headers and keys
+    worksheet.columns = [
+      { header: "No", key: "No", width: 6 },
+      { header: "Date", key: "Date", width: 15 },
+      { header: "Reference No", key: "Reference_No", width: 20 },
+      { header: "Supplier", key: "Supplier", width: 25 },
+      { header: "Grand Total", key: "Grand_Total", width: 15 },
+      { header: "Paid Amount", key: "Paid_Amount", width: 15 },
+      { header: "Balance", key: "Balance", width: 15 },
+      { header: "Order Status", key: "Order_Status", width: 15 },
+    ];
+
+    // Add each row
+    purchases.forEach((p, index) => {
+      const paid = p.original?.paid_amount ?? 0;
+
+      const total = Number(p?.original?.total_amount) || 0;
+      const shipping = Number(p?.original?.shipping) || 0;
+
+      const rawDiscount = p?.original?.discount_string?.toString() || "0";
+
+      const discount = rawDiscount.includes("%")
+        ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+        : Number(rawDiscount);
+
+      const totalValue = total - discount.toFixed(0) + shipping;
+
       let status = "paid";
-      if (p.original?.paid_amount === 0) {
-        status = "partial";
-      } else if (p.original?.paid_amount < p.original?.total_amount) {
+
+      if (paid === 0) {
         status = "pending";
+      } else if (paid < totalValue) {
+        status = "partial";
+      } else {
+        status = "paid";
       }
 
-      return {
+      worksheet.addRow({
         No: index + 1,
         Date: dayjs(p.original?.timestamp).format("YYYY-MM-DD"),
-        Reference_No: p.original?.reference_no,
+        Reference_No: p.original?.reference_no || "",
         Supplier: p.original?.supplier_company || "",
-        Grand_Total: p.original?.total_amount,
-        Paid_Amount: p.original?.paid_amount,
-        Balance: p.original?.total_amount - p.original?.paid_amount,
+        Grand_Total: totalValue,
+        Paid_Amount: paid,
+        Balance: totalValue - paid,
         Order_Status: status,
-      };
+      });
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Purchases");
+    // Style header row
+    worksheet.getRow(1).font = { bold: true };
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+    const buffer = await workbook.xlsx.writeBuffer();
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/octet-stream",
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
     saveAs(blob, "PurchaseReport.xlsx");

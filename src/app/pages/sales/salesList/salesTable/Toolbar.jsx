@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 import { Combobox } from "components/shared/form/Combobox";
 import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import dayjs from "dayjs";
 import { useAuthContext } from "app/contexts/auth/context";
@@ -59,8 +59,8 @@ export function Toolbar({
         Authorization: `Bearer ${token}`,
       },
     });
-    const result = await response.json();
 
+    const result = await response.json();
     const sales = result?.data || [];
 
     const data = sales.map((s, index) => {
@@ -75,7 +75,7 @@ export function Toolbar({
         No: index + 1,
         Date: dayjs(s.timestamp).format("YYYY-MM-DD"),
         Reference_No: s.reference_no,
-        customer: s.customer_name || "",
+        Customer: s.customer_name || "",
         Grand_Total: s.total_amount,
         Paid_Amount: s.paid_amount,
         Balance: s.total_amount - s.paid_amount,
@@ -83,20 +83,27 @@ export function Toolbar({
       };
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sales");
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sales");
 
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+    if (data.length > 0) {
+      worksheet.columns = Object.keys(data[0]).map((key) => ({
+        header: key,
+        key: key,
+        width: 20,
+      }));
+
+      data.forEach((row) => {
+        worksheet.addRow(row);
+      });
+    }
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    const blob = new Blob([excelBuffer], {
-      type: "application/octet-stream",
-    });
-
-    saveAs(blob, "SalesReport.xlsx");
+    saveAs(blob, `SalesReport_${dayjs().format("YYYY-MM-DD")}.xlsx`);
   };
 
   return (

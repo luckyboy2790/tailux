@@ -164,9 +164,9 @@ export function OrderStatusCell({ getValue, row, column, table }) {
 
   const balance = total - discount.toFixed(0) + shipping;
 
-  if (val?.paid_amount < balance) {
+  if (val?.paid_amount === 0) {
     purchaseStatus = "pending";
-  } else if (val?.paid_amount === 0) {
+  } else if (val?.paid_amount < balance) {
     purchaseStatus = "partial";
   } else {
     purchaseStatus = "paid";
