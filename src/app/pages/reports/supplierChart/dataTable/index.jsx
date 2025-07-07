@@ -3,12 +3,12 @@ import {
   getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
-  getFilteredRowModel,
+  // getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -38,6 +38,8 @@ export default function PurchaseTable() {
   const columns = getColumns(t);
 
   const [orders, setOrders] = useState([]);
+
+  const didMountRef = useRef(false);
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -73,12 +75,16 @@ export default function PurchaseTable() {
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   useEffect(() => {
-    setFilters({
-      pageIndex,
-      pageSize,
-      globalFilter,
-    });
-  }, [setFilters, pageIndex, pageSize, globalFilter]);
+    if (didMountRef.current) {
+      setFilters({
+        pageIndex,
+        pageSize,
+        globalFilter,
+      });
+    } else {
+      didMountRef.current = true;
+    }
+  }, [pageIndex, pageSize, globalFilter]);
 
   const table = useReactTable({
     data: orders,
@@ -88,6 +94,7 @@ export default function PurchaseTable() {
       columnVisibility,
       columnPinning,
       tableSettings,
+      globalFilter,
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {
@@ -128,10 +135,8 @@ export default function PurchaseTable() {
       setGlobalFilter(value);
       setPageIndex(0);
     },
-    getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    globalFilterFn: fuzzyFilter,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
