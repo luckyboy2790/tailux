@@ -17,6 +17,7 @@ import { Badge, Tag } from "components/ui";
 import { useLocaleContext } from "app/contexts/locale/context";
 import { ensureString } from "utils/ensureString";
 import { getOrderStatusOptions } from "./data";
+import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
@@ -73,16 +74,32 @@ export function TotalCell({ getValue }) {
 export function ProfitCell({ getValue, row }) {
   const value = Number(getValue());
 
+  const original = row.original;
+
+  const total = Number(original?.total_amount) || 0;
+  const shipping = Number(original?.shipping) || 0;
+
+  const rawDiscount = original?.discount_string?.toString() || "0";
+
+  const discount = rawDiscount.includes("%")
+    ? (total * parseFloat(rawDiscount.replace("%", ""))) / 100
+    : Number(rawDiscount);
+
+  const balance = total - discount.toFixed(0) + shipping;
+
   return (
     <div className="flex items-center space-x-2">
-      <p className="dark:text-dark-100 text-gray-800">
+      <p
+        className={clsx(
+          "text-gray-800",
+          row.original?.status === 0 ? "text-red-600" : "dark:text-dark-100",
+        )}
+      >
         ${!isNaN(value) ? Number(value).toLocaleString() : "0"}
       </p>
       <Badge className="rounded-full" color="success" variant="soft">
         {Math.round(
-          (Number(row.original?.paid_amount) /
-            Number(row.original?.grand_total)) *
-            100,
+          (Number(row.original?.paid_amount) / Number(balance)) * 100,
         )}
         %
       </Badge>
