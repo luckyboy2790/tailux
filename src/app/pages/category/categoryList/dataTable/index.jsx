@@ -3,12 +3,11 @@ import {
   getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
-  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import clsx from "clsx";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Table, Card, THead, TBody, Th, Tr, Td, Skeleton } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
@@ -43,6 +42,8 @@ export default function CategoryTable() {
     enableRowDense: false,
   });
 
+  const didMountRef = useRef(false);
+
   const [filters, setFilters] = useLocalStorage("categoryTableFilters", {
     pageIndex: 0,
     pageSize: 10,
@@ -70,11 +71,15 @@ export default function CategoryTable() {
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   useEffect(() => {
-    setFilters({
-      pageIndex,
-      pageSize,
-      globalFilter,
-    });
+    if (didMountRef.current) {
+      setFilters({
+        pageIndex,
+        pageSize,
+        globalFilter,
+      });
+    } else {
+      didMountRef.current = true;
+    }
   }, [setFilters, pageIndex, pageSize, globalFilter]);
 
   const fetchData = useCallback(async () => {
@@ -109,6 +114,7 @@ export default function CategoryTable() {
       columnVisibility,
       columnPinning,
       tableSettings,
+      globalFilter,
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {
@@ -150,10 +156,8 @@ export default function CategoryTable() {
       setGlobalFilter(value);
       setPageIndex(0);
     },
-    getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    globalFilterFn: fuzzyFilter,
     getSortedRowModel: getSortedRowModel(),
 
     onColumnVisibilityChange: setColumnVisibility,

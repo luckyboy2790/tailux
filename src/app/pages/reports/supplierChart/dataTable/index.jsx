@@ -84,7 +84,7 @@ export default function PurchaseTable() {
     } else {
       didMountRef.current = true;
     }
-  }, [pageIndex, pageSize, globalFilter]);
+  }, [pageIndex, pageSize, globalFilter, setFilters]);
 
   const table = useReactTable({
     data: orders,

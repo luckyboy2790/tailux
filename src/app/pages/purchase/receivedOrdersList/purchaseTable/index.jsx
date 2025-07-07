@@ -3,7 +3,6 @@ import {
   getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
-  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -176,6 +175,7 @@ export default function PurchaseTable() {
       columnVisibility,
       columnPinning,
       tableSettings,
+      globalFilter,
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {
@@ -217,10 +217,8 @@ export default function PurchaseTable() {
       setGlobalFilter(value);
       setPageIndex(0);
     },
-    getFilteredRowModel: getFilteredRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    globalFilterFn: fuzzyFilter,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
 
