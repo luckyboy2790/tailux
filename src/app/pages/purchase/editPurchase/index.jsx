@@ -154,7 +154,7 @@ const EditPurchase = () => {
     };
 
     init();
-  }, [id, reset, t, token]);
+  }, [id, reset, t, token, user]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
