@@ -189,6 +189,8 @@ const EditableDatePicker = ({
 export function OrderItemsTable({ orders, setOrders }) {
   const { t } = useTranslation();
 
+  const [filterValue, setFilterValue] = useState("");
+
   const defaultColumns = useMemo(
     () => [
       {
@@ -212,6 +214,7 @@ export function OrderItemsTable({ orders, setOrders }) {
         accessorKey: "product_name",
         id: "product_name",
         header: t("nav.purchase.product_name"),
+        filterFn: fuzzyFilter,
         cell: ({ row }) => (
           <div className="flex items-center gap-2 space-x-2 rtl:space-x-reverse">
             <span>{row.getValue("product_name")}</span>
@@ -325,13 +328,11 @@ export function OrderItemsTable({ orders, setOrders }) {
   );
 
   const data = orders;
-
   const setData = setOrders;
   const columns = useMemo(() => [...defaultColumns], [defaultColumns]);
 
   const [sorting, setSorting] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState("");
-  const deferredGlobalFilter = useDeferredValue(globalFilter);
+  const deferredFilter = useDeferredValue(filterValue);
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   const table = useReactTable({
@@ -339,7 +340,12 @@ export function OrderItemsTable({ orders, setOrders }) {
     columns,
     state: {
       sorting,
-      globalFilter: deferredGlobalFilter,
+      columnFilters: [
+        {
+          id: "product_name",
+          value: deferredFilter,
+        },
+      ],
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {
@@ -354,9 +360,7 @@ export function OrderItemsTable({ orders, setOrders }) {
         setData((old) => old.filter((_, index) => index !== rowIndex));
       },
     },
-    onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
-    globalFilterFn: fuzzyFilter,
     getSortedRowModel: getSortedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -365,6 +369,15 @@ export function OrderItemsTable({ orders, setOrders }) {
 
   return (
     <div>
+      <div className="mb-5 flex w-full justify-end">
+        <div className="w-72">
+          <Input
+            value={filterValue}
+            onChange={(e) => setFilterValue(e.target.value)}
+            placeholder={t("nav.purchase.search_product")}
+          />
+        </div>
+      </div>
       <Card className="mt-3">
         <div className="min-w-full overflow-x-auto">
           <Table hoverable className="w-full text-left rtl:text-right">

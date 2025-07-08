@@ -214,6 +214,7 @@
       "shipping_carrier": "Transportista",
       "p_payment": "P-Pendiente",
       "p_return": "D-Pendiente",
+      "search_product": "Buscar Producto",
       "status": "Estado",
       "number_of_references": "Número de referencias",
       "total_quantity": "Cantidad total",
