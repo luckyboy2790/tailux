@@ -48,7 +48,7 @@ export function Sidebar() {
   }, [name]);
 
   return (
-    <>
+    <div className="dark">
       <MainPanel
         nav={navigation}
         activeSegment={activeSegmentPath}
@@ -59,6 +59,6 @@ export function Sidebar() {
         currentSegment={currentSegment}
         pathname={pathname}
       />
-    </>
+    </div>
   );
 }
