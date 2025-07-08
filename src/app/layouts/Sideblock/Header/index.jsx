@@ -28,70 +28,72 @@ export function Header() {
   const { user } = useAuthContext();
 
   return (
-    <header
-      className={clsx(
-        "app-header transition-content dark:border-dark-600 sticky top-0 z-20 flex h-[65px] items-center gap-1 border-b border-gray-200 bg-white/80 px-(--margin-x) backdrop-blur-sm backdrop-saturate-150 max-sm:justify-between",
-        cardSkin === "bordered" ? "dark:bg-dark-900/80" : "dark:bg-dark-700/80",
-      )}
-    >
-      <div className="contents xl:hidden">
-        <SidebarToggleBtn />
-      </div>
-
-      <div className="flex items-center gap-2 sm:flex-1">
-        <div className="flex-1">
-          <Search
-            renderButton={(open) => (
-              <>
-                {smAndUp && (
-                  <button
-                    onClick={open}
-                    className="flex cursor-pointer items-center gap-4 outline-hidden max-sm:hidden"
-                  >
-                    <div className="flex items-center gap-2">
-                      <MagnifyingGlassIcon className="size-5" />
-                      <span>{t("nav.search_here_placeholder")}</span>
-                    </div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="20"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill="none"
-                        stroke="currentColor"
-                        d="M3.5.5h12c1.7 0 3 1.3 3 3v13c0 1.7-1.3 3-3 3h-12c-1.7 0-3-1.3-3-3v-13c0-1.7 1.3-3 3-3z"
-                        opacity="0.4"
-                      ></path>
-                      <path
-                        fill="currentColor"
-                        d="M11.8 6L8 15.1h-.9L10.8 6h1z"
-                      ></path>
-                    </svg>
-                  </button>
-                )}
-                <Button
-                  onClick={open}
-                  variant="flat"
-                  isIcon
-                  className="relative size-9 rounded-full sm:hidden"
-                >
-                  <SearchIcon className="dark:text-dark-100 size-6 text-gray-900" />
-                </Button>
-              </>
-            )}
-          />
-        </div>
-        {user?.role !== "admin" && (
-          <div className="pr-3 text-lg">{user?.company?.name || ""}</div>
+    <div className="dark">
+      <header
+        className={clsx(
+          "app-header transition-content dark:border-dark-600 sticky top-0 z-20 flex h-[65px] items-center gap-1 border-b border-gray-200 bg-white/80 px-(--margin-x) backdrop-blur-sm backdrop-saturate-150 max-sm:justify-between",
+          cardSkin === "bordered" ? "dark:bg-dark-900" : "dark:bg-dark-700",
         )}
-        <Customizer />
-        <Notifications />
-        {/* <RightSidebar /> */}
-        <LanguageSelector />
-        <Profile />
-      </div>
-    </header>
+      >
+        <div className="contents xl:hidden">
+          <SidebarToggleBtn />
+        </div>
+
+        <div className="flex items-center gap-2 sm:flex-1">
+          <div className="flex-1">
+            <Search
+              renderButton={(open) => (
+                <>
+                  {smAndUp && (
+                    <button
+                      onClick={open}
+                      className="flex cursor-pointer items-center gap-4 text-[#c5c5cc] outline-hidden max-sm:hidden"
+                    >
+                      <div className="flex items-center gap-2">
+                        <MagnifyingGlassIcon className="size-5" />
+                        <span>{t("nav.search_here_placeholder")}</span>
+                      </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="20"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill="none"
+                          stroke="currentColor"
+                          d="M3.5.5h12c1.7 0 3 1.3 3 3v13c0 1.7-1.3 3-3 3h-12c-1.7 0-3-1.3-3-3v-13c0-1.7 1.3-3 3-3z"
+                          opacity="0.4"
+                        ></path>
+                        <path
+                          fill="currentColor"
+                          d="M11.8 6L8 15.1h-.9L10.8 6h1z"
+                        ></path>
+                      </svg>
+                    </button>
+                  )}
+                  <Button
+                    onClick={open}
+                    variant="flat"
+                    isIcon
+                    className="relative size-9 rounded-full sm:hidden"
+                  >
+                    <SearchIcon className="dark:text-dark-100 size-6 text-gray-900" />
+                  </Button>
+                </>
+              )}
+            />
+          </div>
+          {user?.role !== "admin" && (
+            <div className="pr-3 text-lg">{user?.company?.name || ""}</div>
+          )}
+          <Customizer />
+          <Notifications />
+          {/* <RightSidebar /> */}
+          <LanguageSelector />
+          <Profile />
+        </div>
+      </header>
+    </div>
   );
 }
