@@ -136,6 +136,25 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
     }
   };
 
+  const formatAmount = (amount) => {
+    return amount.toLocaleString();
+  };
+
+  const handleAmountChange = (e) => {
+    let rawValue = e.target.value;
+
+    rawValue = rawValue.replace(/[^0-9.,]/g, "");
+
+    rawValue = rawValue.replace(/,/g, "");
+
+    const numericValue = rawValue ? Number(rawValue.replace(".", "")) : "";
+
+    setData({
+      ...data,
+      amount: numericValue,
+    });
+  };
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -211,17 +230,11 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder={t("nav.payment.amount")}
-                    label={t("nav.payment.amount")}
+                    placeholder="Amount"
+                    label="Amount"
                     type="text"
-                    value={data.amount.toLocaleString()}
-                    onChange={(e) => {
-                      const rawValue = e.target.value.replace(/[^0-9.]/g, "");
-                      setData({
-                        ...data,
-                        amount: rawValue ? Number(rawValue) : "",
-                      });
-                    }}
+                    value={formatAmount(data.amount)}
+                    onChange={handleAmountChange}
                   />
 
                   <Upload
