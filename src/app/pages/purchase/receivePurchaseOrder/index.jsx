@@ -59,16 +59,21 @@ const AddPurchaseOrder = () => {
         },
       });
       const storeResult = await storeRes.json();
-      const storeData = [
-        { key: -1, value: "", label: "" },
-        ...(storeResult?.data
-          ?.filter((item) => item.id === Number(user.first_store_id))
-          .map((item, key) => ({
-            key,
-            value: item?.id,
-            label: item?.name,
-          })) ?? []),
+      let storeData = [
+        { key: -1, value: "", label: t("nav.select.select_store") },
+        ...(storeResult?.data?.map((item, key) => ({
+          key,
+          value: item?.id,
+          label: item?.name,
+        })) ?? []),
       ];
+
+      if (user?.role === "user" || user?.role === "secretary") {
+        storeData = storeData.filter(
+          (item) => item.value === Number(user.first_store_id),
+        );
+      }
+
       setStores(storeData);
 
       const res = await fetch(
