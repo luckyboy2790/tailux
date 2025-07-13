@@ -32,10 +32,12 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
 
   const [data, setData] = useState({
     date: "",
-    amount: 0,
+    amount: "",
     attachment: [],
     reference_no: "",
   });
+
+  const [amountInput, setAmountInput] = useState(data.amount);
 
   useEffect(() => {
     if (type === "edit") {
@@ -136,25 +138,6 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
     }
   };
 
-  const formatAmount = (amount) => {
-    return amount.toLocaleString();
-  };
-
-  const handleAmountChange = (e) => {
-    let rawValue = e.target.value;
-
-    rawValue = rawValue.replace(/[^0-9.,]/g, "");
-
-    rawValue = rawValue.replace(/,/g, "");
-
-    const numericValue = rawValue ? Number(rawValue.replace(".", "")) : "";
-
-    setData({
-      ...data,
-      amount: numericValue,
-    });
-  };
-
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -230,11 +213,13 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   />
 
                   <Input
-                    placeholder="Amount"
-                    label="Amount"
                     type="text"
-                    value={formatAmount(data.amount)}
-                    onChange={handleAmountChange}
+                    value={Number(amountInput || 0).toLocaleString()}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      setAmountInput(raw);
+                      setData({ ...data, amount: raw });
+                    }}
                   />
 
                   <Upload
