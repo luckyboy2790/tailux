@@ -6,7 +6,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useSkipper } from "utils/react-table/useSkipper";
 import {
@@ -186,10 +186,13 @@ const EditableDatePicker = ({
   );
 };
 
-export function OrderItemsTable({ orders, setOrders }) {
+export function OrderItemsTable({
+  orders,
+  setOrders,
+  filterValue,
+  setFilterValue,
+}) {
   const { t } = useTranslation();
-
-  const [filterValue, setFilterValue] = useState("");
 
   const defaultColumns = useMemo(
     () => [
@@ -332,7 +335,6 @@ export function OrderItemsTable({ orders, setOrders }) {
   const columns = useMemo(() => [...defaultColumns], [defaultColumns]);
 
   const [sorting, setSorting] = useState([]);
-  const deferredFilter = useDeferredValue(filterValue);
   const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   const table = useReactTable({
@@ -340,12 +342,6 @@ export function OrderItemsTable({ orders, setOrders }) {
     columns,
     state: {
       sorting,
-      columnFilters: [
-        {
-          id: "product_name",
-          value: deferredFilter,
-        },
-      ],
     },
     meta: {
       updateData: (rowIndex, columnId, value) => {

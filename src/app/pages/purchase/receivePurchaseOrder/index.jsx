@@ -23,6 +23,8 @@ const AddPurchaseOrder = () => {
   const [orders, setOrders] = useState([]);
   const [stores, setStores] = useState([]);
 
+  const [filterValue, setFilterValue] = useState("");
+
   const { id } = useParams();
 
   const [cookie] = useCookies();
@@ -95,6 +97,9 @@ const AddPurchaseOrder = () => {
         .filter(
           (item) => Number(item?.quantity) > Number(item?.received_quantity),
         )
+        .filter((item) =>
+          item.product.toLowerCase().includes(filterValue.toLowerCase()),
+        )
         .map((item) => ({
           id: item.id,
           product_name: item.product,
@@ -118,7 +123,7 @@ const AddPurchaseOrder = () => {
       }
     };
     fetchData();
-  }, [t, id, token, reset, user]);
+  }, [t, id, token, reset, user, filterValue]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -269,6 +274,8 @@ const AddPurchaseOrder = () => {
                     orders={orders}
                     setOrders={setOrders}
                     watch={watch}
+                    filterValue={filterValue}
+                    setFilterValue={setFilterValue}
                   />
                 </div>
 
