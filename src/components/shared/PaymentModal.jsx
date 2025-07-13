@@ -43,6 +43,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
     if (type === "edit") {
       const rowData = row.original;
 
+      console.log(rowData);
+
       setData({
         date: dayjs(rowData?.timestamp).format("YYYY-MM-DD"),
         amount: Number(rowData?.amount),
@@ -50,6 +52,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
         reference_no: rowData.reference_no,
         note: rowData.note || "",
       });
+
+      setAmountInput(Number(rowData?.amount));
     } else {
       const original = row.original;
 
@@ -73,6 +77,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
         reference_no: "",
         note: "",
       });
+
+      setAmountInput(balance);
     }
   }, [type, row.original, paymentType]);
 
