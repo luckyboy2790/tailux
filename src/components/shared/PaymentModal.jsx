@@ -94,7 +94,7 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
     setLoading(true);
     const formData = new FormData();
     formData.append("date", data.date);
-    formData.append("amount", data.amount);
+    formData.append("amount", Number(amountInput || 0));
     formData.append("reference_no", data.reference_no);
     formData.append("note", data.note || "");
 

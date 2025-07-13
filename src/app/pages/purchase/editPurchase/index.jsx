@@ -129,6 +129,8 @@ const EditPurchase = () => {
         data.images?.map((img) => img.path.split("/").pop()) || [];
       setImages(data.images?.map((img) => img.path)) || [];
 
+      console.log(data);
+
       reset({
         title: data.title || "",
         caption: data.caption || "",
@@ -144,7 +146,7 @@ const EditPurchase = () => {
         supplier_id: data.supplier_id?.toString() || "",
         day_of_credit: Number(data.credit_days) || 0,
         attachment: imagePaths,
-        discount: Number(data.discount) || 0,
+        discount: data.discount_string || 0,
         shipping: Number(data.shipping_string) || 0,
         returns: Number(data.returns) || 0,
         note: data.note || "",
@@ -307,10 +309,13 @@ const EditPurchase = () => {
                         label={t("nav.purchase.supplier")}
                         data={supplier}
                         value={
-                          supplier.find((s) => s.value?.toString() === value) ||
-                          null
+                          supplier.find((s) => {
+                            return Number(s.value) === Number(value);
+                          }) || null
                         }
-                        onChange={(selected) => onChange(selected?.value || "")}
+                        onChange={(selected) => {
+                          onChange(selected?.value || "");
+                        }}
                         placeholder="Select supplier"
                         displayField="label"
                         searchFields={["label"]}
@@ -384,13 +389,9 @@ const EditPurchase = () => {
                       <Input
                         label={t("nav.purchase.discount")}
                         type="text"
-                        value={(field.value || 0).toLocaleString()}
+                        value={(field.value || "").toLocaleString()}
                         onChange={(e) => {
-                          const rawValue = e.target.value.replace(
-                            /[^0-9]/g,
-                            "",
-                          );
-                          field.onChange(rawValue ? Number(rawValue) : "");
+                          field.onChange(e.target.value);
                         }}
                         error={errors?.discount?.message}
                       />
