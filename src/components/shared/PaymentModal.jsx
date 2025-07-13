@@ -213,6 +213,8 @@ export function PaymentModal({ type, paymentType, row, isOpen, close }) {
                   />
 
                   <Input
+                    placeholder={t("nav.payment.amount")}
+                    label={t("nav.payment.amount")}
                     type="text"
                     value={Number(amountInput || 0).toLocaleString()}
                     onChange={(e) => {

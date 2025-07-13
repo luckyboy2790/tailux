@@ -37,6 +37,8 @@ export function PreturnModal({ type, row, isOpen, close }) {
     reference_no: "",
   });
 
+  const [amountInput, setAmountInput] = useState(data.amount);
+
   useEffect(() => {
     if (type === "edit") {
       const rowData = row.original;
@@ -196,13 +198,11 @@ export function PreturnModal({ type, row, isOpen, close }) {
                     placeholder={t("nav.payment.amount")}
                     label={t("nav.payment.amount")}
                     type="text"
-                    value={data.amount.toLocaleString()}
+                    value={Number(amountInput || 0).toLocaleString()}
                     onChange={(e) => {
-                      const rawValue = e.target.value.replace(/[^0-9.]/g, "");
-                      setData({
-                        ...data,
-                        amount: rawValue ? Number(rawValue) : "",
-                      });
+                      const raw = e.target.value.replace(/[^0-9]/g, "");
+                      setAmountInput(raw);
+                      setData({ ...data, amount: raw });
                     }}
                   />
 
