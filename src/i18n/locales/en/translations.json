@@ -413,7 +413,7 @@
       },
       "confirmApprove": {
         "pending": {
-          "description": "",
+          "description": "Are you sure you want to approve this sale?",
           "actionText": "Approve"
         },
         "failed": {

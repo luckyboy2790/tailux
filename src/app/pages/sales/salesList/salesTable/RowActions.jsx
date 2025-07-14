@@ -213,7 +213,12 @@ export function RowActions({ row, table }) {
         close={close}
       />
 
-      <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} />
+      <OrdersDrawer
+        row={row}
+        close={closeDrawer}
+        isOpen={isDrawerOpen}
+        table={table}
+      />
     </>
   );
 }

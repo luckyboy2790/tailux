@@ -247,6 +247,7 @@ export function OrdersDrawer({ isOpen, close, row, table }) {
             className="border-gray-150 dark:border-dark-500 mx-4 my-4 h-px sm:mx-5"
             role="none"
           />
+          
           <div className="flex w-full justify-between px-4 sm:px-5">
             <div className="flex flex-col">
               <div className="mb-1.5 font-semibold">

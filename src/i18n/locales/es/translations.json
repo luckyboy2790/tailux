@@ -421,7 +421,7 @@
       },
       "confirmApprove": {
         "pending": {
-          "description": "",
+          "description": "¿Está seguro de que desea aprobar esta venta?",
           "actionText": "Aprobar"
         },
         "failed": {
