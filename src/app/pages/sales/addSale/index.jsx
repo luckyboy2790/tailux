@@ -273,7 +273,6 @@ const AddSale = () => {
                         displayField="label"
                         searchFields={["label"]}
                         error={error?.message}
-                        className="h-8 min-w-70 text-xs"
                       />
                     )}
                   />
