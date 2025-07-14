@@ -24,6 +24,7 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "app/contexts/auth/context";
+import { useCookies } from "react-cookie";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -35,6 +36,11 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const [approveModalOpen, setApproveModalOpen] = useState(false);
+  const [confirmApproveLoading, setConfirmApproveLoading] = useState(false);
+  const [approveSuccess, setApproveSuccess] = useState(false);
+  const [approveError, setApproveError] = useState(false);
 
   const { user } = useAuthContext();
 
@@ -48,6 +54,20 @@ export function RowActions({ row, table }) {
       title: t("nav.sale.confirmDelete.success.title"),
     },
   };
+
+  const approveConfirmMessages = {
+    pending: {
+      description: t("nav.purchase.confirmApprove.pending.description"),
+      actionText: t("nav.purchase.confirmApprove.pending.actionText"),
+    },
+    success: {
+      title: t("nav.purchase.confirmApprove.success.title"),
+    },
+  };
+
+  const [cookies] = useCookies(["authToken"]);
+
+  const token = cookies.authToken;
 
   const navigate = useNavigate();
 
@@ -64,6 +84,16 @@ export function RowActions({ row, table }) {
     setDeleteModalOpen(true);
     setDeleteError(false);
     setDeleteSuccess(false);
+  };
+
+  const openApproveModal = () => {
+    setApproveModalOpen(true);
+    setApproveError(false);
+    setApproveSuccess(false);
+  };
+
+  const closeApproveModal = () => {
+    setApproveModalOpen(false);
   };
 
   const handleDeleteRows = async () => {
@@ -102,6 +132,53 @@ export function RowActions({ row, table }) {
 
   const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
 
+  const approveState = approveError
+    ? "error"
+    : approveSuccess
+      ? "success"
+      : "pending";
+
+  const handleApprove = async () => {
+    try {
+      setConfirmApproveLoading(true);
+
+      const response = await fetch(
+        `${API_URL}/api/sales/approve/${row.original?.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        toast.error(t("nav.sale.confirmApprove.failed.title"));
+
+        setConfirmApproveLoading(false);
+
+        closeApproveModal();
+
+        throw new Error("Something went wrong");
+      }
+
+      toast.success(t("nav.sale.confirmApprove.success.title"));
+
+      setApproveSuccess(true);
+      setConfirmApproveLoading(false);
+
+      closeApproveModal();
+
+      if (typeof table.options.meta?.refetch === "function") {
+        await table.options.meta.refetch();
+      } else {
+        console.warn("Refetch function not available in table meta.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="flex justify-center space-x-1.5">
@@ -130,6 +207,22 @@ export function RowActions({ row, table }) {
               anchor={{ to: "bottom end", gap: 12 }}
               className="dark:border-dark-500 dark:bg-dark-750 absolute z-100 w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-hidden focus-visible:outline-hidden ltr:right-0 rtl:left-0 dark:shadow-none"
             >
+              {(user?.role === "admin" || user?.role === "user") && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openApproveModal}
+                      className={clsx(
+                        "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-hidden transition-colors",
+                        focus &&
+                          "dark:bg-dark-600 dark:text-dark-100 bg-gray-100 text-gray-800",
+                      )}
+                    >
+                      <span>{t("nav.table_fields.approve")}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               <MenuItem>
                 {({ focus }) => (
                   <button
@@ -203,6 +296,15 @@ export function RowActions({ row, table }) {
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+
+      <ConfirmModal
+        show={approveModalOpen}
+        onClose={closeApproveModal}
+        messages={approveConfirmMessages}
+        onOk={handleApprove}
+        confirmLoading={confirmApproveLoading}
+        state={approveState}
       />
 
       <PaymentModal
