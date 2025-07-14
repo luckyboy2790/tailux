@@ -17,6 +17,7 @@ import { useCookies } from "react-cookie";
 import { Image } from "antd";
 
 import { IoCloseSharp } from "react-icons/io5";
+import { Combobox } from "components/shared/form/Combobox";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMG_URL = import.meta.env.VITE_IMAGE_URL;
@@ -36,6 +37,7 @@ const EditSale = () => {
   const [orders, setOrders] = useState(initialData);
   const [stores, setStores] = useState([]);
   const [customer, setCustomer] = useState([]);
+  const [customerId, setCustomerId] = useState("");
 
   const [imageEditable, setImageEditable] = useState(0);
   const [images, setImages] = useState([]);
@@ -301,11 +303,30 @@ const EditSale = () => {
                     disabled
                   />
 
-                  <Select
-                    label={t("nav.people.customer")}
-                    data={customer}
-                    {...register("customer_id")}
-                    error={errors?.customer_id?.message}
+                  <Controller
+                    name="customer_id"
+                    control={control}
+                    render={({
+                      field: { onChange },
+                      fieldState: { error },
+                    }) => (
+                      <Combobox
+                        label={t("nav.people.customer")}
+                        data={customer}
+                        value={
+                          customer.find((c) => c.value === customerId) || null
+                        }
+                        onChange={(selected) => {
+                          const val = selected?.value || "";
+                          setCustomerId(val);
+                          onChange(val);
+                        }}
+                        placeholder={t("nav.all_customers")}
+                        displayField="label"
+                        searchFields={["label"]}
+                        error={error?.message}
+                      />
+                    )}
                   />
 
                   <div className="flex flex-col gap-2.5">
